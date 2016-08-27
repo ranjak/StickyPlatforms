@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 #include "SDL.h"
 #include "log.h"
 #include "inputhandler.h"
@@ -17,14 +18,26 @@ int main(int argc, char *argv[])
   display.init();
   glog(game::Log::Priority::DBG, "Initialization OK");
 
+  // Simulated game time. Increases by a fixed amount at every game update.
+  Uint32 gameTime = 0;
+  // Time at which the main loop was started.
+  Uint32 startTime = SDL_GetTicks();
+
   while (!input.quitRequested()) {
+
     input.handle();
     if (input.quitRequested())
       break;
 
-    game.update(game::TIMESTEP, input);
+    Uint32 realTimeElasped = SDL_GetTicks() - startTime;
+    while (realTimeElasped > gameTime) {
+      game.update(game::TIMESTEP, input);
+      gameTime += game::TIMESTEP;
+    }
+
     display.render(game);
-    SDL_Delay(10);
+
+    std::this_thread::yield();
   }
 
   return 0;

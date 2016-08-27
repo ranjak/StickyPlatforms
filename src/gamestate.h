@@ -31,8 +31,9 @@ public:
   void update(std::uint32_t step, const InputHandler& input);
 
 private:
+  // Key bindings to game commands
   GameCommands bindings;
-
+  // Entites populating the game world
   std::vector<Entity*> entities;
 };
 
