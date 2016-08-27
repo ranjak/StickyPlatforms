@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include "SDL.h"
+#include "gamestate.h"
 
 namespace game {
 
@@ -20,7 +21,7 @@ public:
   /**
    * @brief render one frame.
    */
-  void render();
+  void render(const GameState& game);
 
 private:
   SDL_Window* window;

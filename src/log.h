@@ -19,6 +19,9 @@ namespace game {
 class Log
 {
 public:
+  /**
+   * @brief The Priority enum defines the possible priorities for a log message.
+   */
   enum class Priority {
     ERROR,
     WARNING,
@@ -33,12 +36,22 @@ public:
    */
   static Log& getGlobal();
 
+  /**
+   * @brief log Print a log message with the given priority.
+   */
   void log(Priority, const std::string&);
+
+  /**
+   * @brief setLevel Set the maximum log level for the given logger.
+   * Log messages below this level will be ignored.
+   * @param maxLevel Maximum priority level for this logger.
+   */
   void setLevel(Priority maxLevel);
 
   Log();
   Log(std::ostream &output);
-  // Our log singlenton can't be copied
+
+  // It doesn't make sense to copy loggers
   Log(Log const&) = delete;
   void operator=(Log const&) = delete;
 

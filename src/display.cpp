@@ -1,4 +1,4 @@
-#include "renderer.h"
+#include "display.h"
 #include "log.h"
 #include "SDL.h"
 
@@ -32,7 +32,7 @@ void Display::init()
   }
 }
 
-void Display::render()
+void Display::render(const GameState &game)
 {
   SDL_RenderClear(renderer);
   SDL_RenderPresent(renderer);

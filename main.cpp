@@ -2,7 +2,8 @@
 #include "SDL.h"
 #include "log.h"
 #include "inputhandler.h"
-#include "renderer.h"
+#include "gamestate.h"
+#include "display.h"
 
 
 int main(int argc, char *argv[])
@@ -11,14 +12,18 @@ int main(int argc, char *argv[])
 
   game::Display display;
   game::InputHandler input;
+  game::GameState game;
 
   display.init();
   glog(game::Log::Priority::DBG, "Initialization OK");
 
   while (!input.quitRequested()) {
     input.handle();
-    // Logic
-    display.render();
+    if (input.quitRequested())
+      break;
+
+    game.update(game::TIMESTEP, input);
+    display.render(game);
     SDL_Delay(10);
   }
 

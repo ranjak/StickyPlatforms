@@ -14,7 +14,12 @@ set(SRC_LIST
     main.cpp
     src/inputhandler.cpp
     src/log.cpp
-    src/renderer.cpp
+    src/display.cpp
+    src/gamestate.cpp
+    src/gamecommands.cpp
+    src/entity.cpp
+    src/hero.cpp
+    src/graphics.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SRC_LIST})
