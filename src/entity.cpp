@@ -3,12 +3,8 @@
 namespace game {
 
 
-Entity::Entity()
-{
-
-}
-
-void Entity::update(uint32_t step, GameState &game)
+Entity::Entity() :
+  pos()
 {
 
 }

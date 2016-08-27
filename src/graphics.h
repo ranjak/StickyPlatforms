@@ -2,6 +2,7 @@
 #define GRAPHICS_H
 
 #include "display.h"
+#include "SDL.h"
 
 namespace game {
 
@@ -11,7 +12,8 @@ class Graphics
 public:
   Graphics();
 
-  void draw(const Display& target);
+  virtual void draw(Display& target) const = 0;
+
 };
 
 } //namespace game

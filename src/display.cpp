@@ -34,8 +34,17 @@ void Display::init()
 
 void Display::render(const GameState &game)
 {
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_RenderClear(renderer);
+
+  game.drawEntities(*this);
+
   SDL_RenderPresent(renderer);
+}
+
+SDL_Renderer *Display::getRenderer()
+{
+  return renderer;
 }
 
 }

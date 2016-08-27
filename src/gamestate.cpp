@@ -1,5 +1,5 @@
 #include "gamestate.h"
-
+#include "hero.h"
 
 namespace game {
 
@@ -9,14 +9,34 @@ GameState::GameState() :
   bindings(),
   entities()
 {
-
+  addEntity(std::unique_ptr<Entity>(new Hero));
 }
 
 
-void GameState::update(uint32_t step, const InputHandler& input)
+void GameState::update(uint32_t step, const InputHandler *input)
 {
-  // Find out which commands are active
+  inputSnapshot = input;
 
+  for (std::unique_ptr<Entity>& entity : entities) {
+    entity->update(step, *this);
+  }
+}
+
+void GameState::drawEntities(Display &target) const
+{
+  for (const std::unique_ptr<Entity>& entity : entities) {
+    entity->draw(target);
+  }
+}
+
+bool GameState::isCommandPressed(Command cmd)
+{
+  return inputSnapshot->isKeyPressed(bindings.getBinding(cmd));
+}
+
+void GameState::addEntity(std::unique_ptr<Entity>&& entity)
+{
+  entities.push_back(std::move(entity));
 }
 
 

@@ -6,6 +6,7 @@
 
 namespace game {
 
+class GameState;
 
 class Display
 {
@@ -22,6 +23,8 @@ public:
    * @brief render one frame.
    */
   void render(const GameState& game);
+
+  SDL_Renderer* getRenderer();
 
 private:
   SDL_Window* window;

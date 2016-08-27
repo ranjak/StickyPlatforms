@@ -9,8 +9,6 @@
 
 int main(int argc, char *argv[])
 {
-  std::cout << "Hello World!" << std::endl;
-
   game::Display display;
   game::InputHandler input;
   game::GameState game;
@@ -31,7 +29,7 @@ int main(int argc, char *argv[])
 
     Uint32 realTimeElasped = SDL_GetTicks() - startTime;
     while (realTimeElasped > gameTime) {
-      game.update(game::TIMESTEP, input);
+      game.update(game::TIMESTEP, &input);
       gameTime += game::TIMESTEP;
     }
 

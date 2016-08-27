@@ -12,7 +12,7 @@ InputHandler::InputHandler() :
 }
 
 
-void InputHandler::handle()
+const std::vector<std::uint32_t>& InputHandler::handle()
 {
   // Place the scancode of all currently pressed keys in pressedKeys
 
@@ -31,11 +31,15 @@ void InputHandler::handle()
       break;
 
     case SDL_KEYUP:
-      if (!event.key.repeat)
-        std::remove_if(pressedKeys.begin(), pressedKeys.end(), [this] (std::uint32_t key) { return event.key.keysym.scancode == key; });
+      if (!event.key.repeat) {
+        auto keyPos = std::find(pressedKeys.begin(), pressedKeys.end(), event.key.keysym.scancode);
+        pressedKeys.erase(keyPos);
+      }
       break;
     }
   }
+
+  return pressedKeys;
 }
 
 

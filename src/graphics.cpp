@@ -8,9 +8,4 @@ Graphics::Graphics()
 
 }
 
-void Graphics::draw(const Display &target)
-{
-
-}
-
-}
+} // namespace game
