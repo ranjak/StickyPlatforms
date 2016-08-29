@@ -2,7 +2,7 @@
 #define HERO_H
 
 #include "entity.h"
-#include "playercube.h"
+#include "rectangle.h"
 
 namespace game {
 
@@ -20,7 +20,7 @@ private:
   // Velocity in pixels/sec
   Vector<float> velocity;
   // Visual representation (aka white cube)
-  PlayerCube cube;
+  Rectangle cube;
 };
 
 } //namespace game

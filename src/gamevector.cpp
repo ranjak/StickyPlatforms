@@ -17,4 +17,9 @@ Vector<T>::Vector(T x, T y) :
   y(y)
 {}
 
+
+// Template definitions for needed Vector specializations
+template class Vector<int>;
+template class Vector<float>;
+
 } // namespace game

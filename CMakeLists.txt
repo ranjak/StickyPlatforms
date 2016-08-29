@@ -20,7 +20,10 @@ set(SRC_LIST
     src/entity.cpp
     src/hero.cpp
     src/graphics.cpp
-    src/playercube.cpp
+    src/rectangle.cpp
+    src/platform.cpp
+    src/gamevector.cpp
+    src/color.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SRC_LIST})

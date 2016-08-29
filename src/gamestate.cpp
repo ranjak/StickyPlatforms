@@ -1,5 +1,6 @@
 #include "gamestate.h"
 #include "hero.h"
+#include "platform.h"
 
 namespace game {
 
@@ -10,6 +11,7 @@ GameState::GameState() :
   entities()
 {
   addEntity(std::unique_ptr<Entity>(new Hero));
+  addEntity(std::unique_ptr<Entity>(new Platform(150, 150)));
 }
 
 

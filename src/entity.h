@@ -15,10 +15,15 @@ class Entity
 {
 public:
   Entity();
+  Entity(int x, int y);
 
   virtual void update(std::uint32_t step, GameState& game) = 0;
 
   virtual void draw(Display& target) const = 0;
+
+  Vector<int> getPosition() const;
+
+  void setPosition(const Vector<int>& newPos);
 
 protected:
   Vector<int> pos;

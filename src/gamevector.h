@@ -11,26 +11,10 @@ public:
   Vector();
   Vector(T x, T y);
 
+
   T x;
   T y;
 };
-
-
-template<typename T>
-Vector<T>::Vector() :
-  x(),
-  y()
-{
-
-}
-
-
-template<typename T>
-Vector<T>::Vector(T x, T y) :
-  x(x),
-  y(y)
-{}
-
 
 } //namespace game
 
