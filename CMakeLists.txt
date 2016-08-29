@@ -11,7 +11,7 @@ find_package(SDL2_ttf REQUIRED)
 # Project setup
 
 set(SRC_LIST
-    main.cpp
+    src/main.cpp
     src/inputhandler.cpp
     src/log.cpp
     src/display.cpp
