@@ -27,12 +27,12 @@ void Hero::update(uint32_t step, GameState &game)
     velocity.y -= 100.f;
 
   // Move the hero according to its velocity
-  pos.x += (int) (velocity.x * step / 1000.f);
-  pos.y += (int) (velocity.y * step / 1000.f);
+  boundingBox.x += (int) (velocity.x * step / 1000.f);
+  boundingBox.y += (int) (velocity.y * step / 1000.f);
 
   // Update the graphics
   // TODO remove duplicate data ?
-  cube.setPos(pos.x, pos.y);
+  cube.setPos(boundingBox.x, boundingBox.y);
 }
 
 void Hero::draw(Display& target) const

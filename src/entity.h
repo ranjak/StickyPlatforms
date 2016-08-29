@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "gamevector.h"
 #include "display.h"
+#include "rect.h"
 
 namespace game {
 
@@ -15,7 +16,7 @@ class Entity
 {
 public:
   Entity();
-  Entity(int x, int y);
+  Entity(int x, int y, int w=0, int h=0);
 
   virtual void update(std::uint32_t step, GameState& game) = 0;
 
@@ -25,8 +26,10 @@ public:
 
   void setPosition(const Vector<int>& newPos);
 
+  const Rect& getBoundingBox();
+
 protected:
-  Vector<int> pos;
+  Rect boundingBox;
 };
 
 } // namespace game
