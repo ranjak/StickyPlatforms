@@ -1,6 +1,7 @@
 #include "gamestate.h"
 #include "hero.h"
 #include "platform.h"
+#include <algorithm>
 
 namespace game {
 
@@ -39,6 +40,19 @@ bool GameState::isCommandPressed(Command cmd)
 void GameState::addEntity(std::unique_ptr<Entity>&& entity)
 {
   entities.push_back(std::move(entity));
+}
+
+bool GameState::collides(const Entity &entity)
+{
+  // Check only the entities after the given entity in sequential order
+  auto entityPos = std::find_if(entities.begin(), entities.end(), [&] (std::unique_ptr<Entity>& vecEntity) { return vecEntity.get() == &entity; });
+
+  for (auto it = entityPos+1; it != entities.end(); it++) {
+    if (entity.getBoundingBox().intersects((*it)->getBoundingBox()))
+      return true;
+  }
+
+  return false;
 }
 
 

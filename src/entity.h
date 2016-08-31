@@ -26,7 +26,7 @@ public:
 
   void setPosition(const Vector<int>& newPos);
 
-  const Rect& getBoundingBox();
+  const Rect& getBoundingBox() const;
 
 protected:
   Rect boundingBox;

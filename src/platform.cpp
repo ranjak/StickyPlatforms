@@ -10,7 +10,7 @@ Platform::Platform() :
 }
 
 Platform::Platform(int x, int y, int w, int h) :
-  Entity(x, y),
+  Entity(x, y, w, h),
   graphics(x, y, w, h)
 {
 

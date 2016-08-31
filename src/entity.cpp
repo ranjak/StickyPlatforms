@@ -4,7 +4,7 @@ namespace game {
 
 
 Entity::Entity() :
-  boundingBox()
+  Entity(0, 0, 0, 0)
 {
 
 }
@@ -26,7 +26,7 @@ void Entity::setPosition(const Vector<int> &newPos)
   boundingBox.y = newPos.y;
 }
 
-const Rect &Entity::getBoundingBox()
+const Rect &Entity::getBoundingBox() const
 {
   return boundingBox;
 }

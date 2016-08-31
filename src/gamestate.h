@@ -38,6 +38,13 @@ public:
 
   void addEntity(std::unique_ptr<Entity> &&entity);
 
+  /**
+   * @brief collides Checks whether an entity is colliding with any other in the game world.
+   * @param entity Entity we want to check collisions for.
+   * @return true if entity collides with one or more other entities.
+   */
+  bool collides(const Entity& entity);
+
 private:
   // Key bindings to game commands
   GameCommands bindings;

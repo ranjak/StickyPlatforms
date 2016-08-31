@@ -16,6 +16,8 @@ public:
   Rect();
   Rect(int x, int y, int w, int h);
 
+  bool intersects(const Rect& other) const;
+
   int x, y, w, h;
 };
 

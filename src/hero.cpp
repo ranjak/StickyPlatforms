@@ -4,7 +4,7 @@ namespace game {
 
 
 Hero::Hero() :
-  Entity(),
+  Entity(0, 0, 20, 20),
   velocity(0.f, 0.f),
   cube(0, 0, 20, 20)
 {
@@ -26,9 +26,17 @@ void Hero::update(uint32_t step, GameState &game)
   if (game.isCommandPressed(Command::UP))
     velocity.y -= 100.f;
 
-  // Move the hero according to its velocity
+  // Compute the new position according to the velocity, and check that there are no collisions
+  int oldX = boundingBox.x;
+  int oldY = boundingBox.y;
+
   boundingBox.x += (int) (velocity.x * step / 1000.f);
   boundingBox.y += (int) (velocity.y * step / 1000.f);
+
+  if (game.collides(*this)) {
+    boundingBox.x = oldX;
+    boundingBox.y = oldY;
+  }
 
   // Update the graphics
   // TODO remove duplicate data ?
