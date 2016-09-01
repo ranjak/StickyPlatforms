@@ -5,7 +5,7 @@ namespace game {
 
 Hero::Hero() :
   Entity(0, 0, 20, 20),
-  velocity(0.f, 0.f),
+  physics(50),
   cube(0, 0, 20, 20)
 {
 
@@ -13,30 +13,24 @@ Hero::Hero() :
 
 void Hero::update(uint32_t step, GameState &game)
 {
-  // Set the velocity according to user input
-  velocity.x = 0.f;
-  velocity.y = 0.f;
+  // Compute the traction force corresponding to the user's input
+  Vector<int> inputForce(0, 0);
 
   if (game.isCommandPressed(Command::LEFT))
-    velocity.x -= 100.f;
+    inputForce.x -= 100;
   if (game.isCommandPressed(Command::RIGHT))
-    velocity.x += 100.f;
+    inputForce.x += 100;
   if (game.isCommandPressed(Command::DOWN))
-    velocity.y += 100.f;
+    inputForce.y += 100;
   if (game.isCommandPressed(Command::UP))
-    velocity.y -= 100.f;
+    inputForce.y -= 100;
 
-  // Compute the new position according to the velocity, and check that there are no collisions
-  int oldX = boundingBox.x;
-  int oldY = boundingBox.y;
+  // Compute the new position according to the velocity
+  physics.applyForce(inputForce);
+  physics.update(step);
 
-  boundingBox.x += (int) (velocity.x * step / 1000.f);
-  boundingBox.y += (int) (velocity.y * step / 1000.f);
-
-  if (game.collides(*this)) {
-    boundingBox.x = oldX;
-    boundingBox.y = oldY;
-  }
+  boundingBox.x += (int) (physics.getSpeed().x * step / 1000.f);
+  boundingBox.y += (int) (physics.getSpeed().y * step / 1000.f);
 
   // Update the graphics
   // TODO remove duplicate data ?

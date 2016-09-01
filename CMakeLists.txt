@@ -25,6 +25,7 @@ set(SRC_LIST
     src/gamevector.cpp
     src/color.cpp
     src/rect.cpp
+    src/physicsobject.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SRC_LIST})

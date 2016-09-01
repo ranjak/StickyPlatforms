@@ -3,6 +3,7 @@
 
 #include "entity.h"
 #include "rectangle.h"
+#include "physicsobject.h"
 
 namespace game {
 
@@ -17,8 +18,8 @@ public:
   void draw(Display& target) const override;
 
 private:
-  // Velocity in pixels/sec
-  Vector<float> velocity;
+  // Physics component for our hero
+  PhysicsObject physics;
   // Visual representation (aka white cube)
   Rectangle cube;
 };

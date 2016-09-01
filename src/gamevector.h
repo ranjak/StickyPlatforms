@@ -11,10 +11,12 @@ public:
   Vector();
   Vector(T x, T y);
 
+  void operator+=(const Vector& rhs);
 
   T x;
   T y;
 };
+
 
 } //namespace game
 
