@@ -1,5 +1,5 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 #include "SDL.h"
 #include "gamestate.h"
@@ -33,4 +33,4 @@ private:
 
 }
 
-#endif // RENDERER_H
+#endif // DISPLAY_H

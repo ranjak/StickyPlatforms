@@ -1,5 +1,5 @@
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef GAMEVECTOR_H
+#define GAMEVECTOR_H
 
 namespace game {
 
@@ -18,4 +18,4 @@ public:
 
 } //namespace game
 
-#endif // VECTOR_H
+#endif // GAMEVECTOR_H
