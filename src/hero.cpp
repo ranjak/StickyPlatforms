@@ -29,8 +29,8 @@ void Hero::update(uint32_t step, GameState &game)
   physics.applyForce(inputForce);
   physics.update(step);
 
-  boundingBox.x += (int) (physics.getSpeed().x * step / 1000.f);
-  boundingBox.y += (int) (physics.getSpeed().y * step / 1000.f);
+  boundingBox.x += (int) (physics.getVelocity().x * step / 1000.f);
+  boundingBox.y += (int) (physics.getVelocity().y * step / 1000.f);
 
   // Update the graphics
   // TODO remove duplicate data ?

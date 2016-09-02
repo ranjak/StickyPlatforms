@@ -17,8 +17,12 @@ Rect::Rect(int x, int y, int w, int h) :
 
 bool Rect::intersects(const Rect &other) const
 {
-  return !(x + w < other.x || x > other.x + other.w)
-      && !(y + h < other.y || y > other.y + other.h);
+  // Check intersection, first on x and then on y axis.
+  // Intersection must be true for both. Return early if a signle one isn't.
+  if (x + w < other.x || x > other.x + other.w)
+    return false;
+
+  return !(y + h < other.y || y > other.y + other.h);
 }
 
 

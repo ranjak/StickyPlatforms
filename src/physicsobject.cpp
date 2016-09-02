@@ -10,7 +10,7 @@ PhysicsObject::PhysicsObject(int mass) :
   mass(mass),
   gravityEnabled(true),
   gravity(0, mass*GRAVITY_ACCEL),
-  speed(0, 0)
+  velocity(0, 0)
 {
 
 }
@@ -35,8 +35,8 @@ void PhysicsObject::update(uint32_t timestep)
   accel.y /= mass;
 
   // Compute speed
-  speed.x += (float)accel.x * timestep / 1000.f;
-  speed.y += (float)accel.y * timestep / 1000.f;
+  velocity.x += (float)accel.x * timestep / 1000.f;
+  velocity.y += (float)accel.y * timestep / 1000.f;
 
   forces.clear();
 }
@@ -51,9 +51,9 @@ void PhysicsObject::setGravity(bool enabled)
   gravityEnabled = enabled;
 }
 
-const Vector<float> &PhysicsObject::getSpeed()
+const Vector<float> &PhysicsObject::getVelocity()
 {
-  return speed;
+  return velocity;
 }
 
 }

@@ -27,14 +27,14 @@ public:
   void update(std::uint32_t timestep);
   void applyForce(Vector<int>& force);
   void setGravity(bool enabled);
-  const Vector<float> &getSpeed();
+  const Vector<float> &getVelocity();
 
 private:
   std::vector<Vector<int>> forces;
   int mass;
   bool gravityEnabled;
   Vector<int> gravity;
-  Vector<float> speed;
+  Vector<float> velocity;
 };
 
 }
