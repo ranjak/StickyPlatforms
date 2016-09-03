@@ -5,4 +5,14 @@
 	This week: enrich the game, start making actual gameplay.
 	Current idea is a 2D platformer.
 	Milestone for week's end: have a playable platforming level. Scrolling is a plus, but not required.
-	
+
+O9/03/2016
+
+	POC collision detection mechanism implemented.
+	Tinkering about what to do with physics:
+	Should I use a "realistic" newtonian approach, or something more focused on my current use case?
+	1. Newtonian is probably more extensible, and could make more intersesting things possible "for free" once it's in place. However, it looks difficult to implement correctly; in particular, it is probably difficult to have it cater to the needs of a platformer with tight, responsive controls.
+	2. On the other hand, an ad-hoc solution could be more straightforward to implement initially, be more predictable and thus easier to deal with gameplay-wise. The downside being that it would need more work down the line in case I'd want richer physics interactions in the game.
+
+	I've started working on soution #1 on the "physics" branch, but all things considered I'm probably going to scrap it and start working on solution #2 instead.
+
