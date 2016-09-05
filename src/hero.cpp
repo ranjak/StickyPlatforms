@@ -4,16 +4,16 @@
 namespace game {
 
 
-float Hero::GRAVITY = 100.f;
+float Hero::GRAVITY = 2500.f;
 
 Hero::Hero() :
   Entity(0, 0, 20, 20),
-  fallSpeed(200.f),
+  fallSpeed(500.f),
   state(State::AIR),
   velocity(0.f, 0.f),
   cube(0, 0, 20, 20)
 {
-
+  cube.setColor(game::GREEN);
 }
 
 void Hero::update(uint32_t step, GameState &game)
@@ -21,9 +21,9 @@ void Hero::update(uint32_t step, GameState &game)
   velocity.x = 0.f;
   // These inputs work for both states
   if (game.isCommandPressed(Command::LEFT))
-    velocity.x -= 100.f;
+    velocity.x -= 300.f;
   if (game.isCommandPressed(Command::RIGHT))
-    velocity.x += 100.f;
+    velocity.x += 300.f;
 
   boundingBox.x += velocity.x * step / 1000.f;
 
@@ -32,7 +32,7 @@ void Hero::update(uint32_t step, GameState &game)
   case State::GROUND:
     // Jump: set initial jump speed
     if (game.isCommandPressed((Command::JUMP)))
-      velocity.y = - fallSpeed * 2;
+      velocity.y = - 1000;
 
     boundingBox.y += velocity.y * step / 1000.f;
     break;

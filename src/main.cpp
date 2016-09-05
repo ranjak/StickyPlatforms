@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <string>
 #include "SDL.h"
 #include "log.h"
 #include "inputhandler.h"
@@ -35,7 +36,10 @@ int main(int argc, char *argv[])
 
     display.render(game);
 
-    std::this_thread::yield();
+    // Sleep until it's time to update the game again
+    std::int32_t idleTime = gameTime - (SDL_GetTicks() - startTime);
+    if (idleTime > 0)
+      std::this_thread::sleep_for(std::chrono::milliseconds(idleTime));
   }
 
   return 0;
