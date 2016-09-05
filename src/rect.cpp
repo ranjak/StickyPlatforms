@@ -5,39 +5,44 @@
 namespace game {
 
 
-Rect::Rect() :
-  Rect(0, 0, 0, 0)
+template<typename T>
+Rect<T>::Rect() :
+  x(), y(), w(), h()
 {
 
 }
 
-Rect::Rect(int x, int y, int w, int h) :
+template<typename T>
+Rect<T>::Rect(T x, T y, T w, T h) :
   x(x), y(y), w(w), h(h)
 {
 
 }
 
-bool Rect::intersects(const Rect &other) const
+template<typename T>
+bool Rect<T>::intersects(const Rect &other) const
 {
   return !(x + w <= other.x || x >= other.x + other.w)
       && !(y + h <= other.y || y >= other.y + other.h);
 }
 
-Rect Rect::getIntersection(const Rect &other) const
+template<typename T>
+Rect<T> Rect<T>::getIntersection(const Rect &other) const
 {
   if (!intersects(other))
-    return Rect(0, 0, 0, 0);
+    return Rect();
 
   // Intersection coordinates
-  int ix = std::max(x, other.x);
-  int iy = std::max(y, other.y);
-  int iw = std::min(x+w, other.x+other.w) - ix;
-  int ih = std::min(y+h, other.y+other.h) - iy;
+  T ix = std::max(x, other.x);
+  T iy = std::max(y, other.y);
+  T iw = std::min(x+w, other.x+other.w) - ix;
+  T ih = std::min(y+h, other.y+other.h) - iy;
 
   return Rect(ix, iy, iw, ih);
 }
 
-Vector<int> Rect::getCollisionNormal(const Rect &other) const
+template<typename T>
+Vector<int> Rect<T>::getCollisionNormal(const Rect &other) const
 {
   Rect intersection = getIntersection(other);
 
@@ -53,5 +58,8 @@ Vector<int> Rect::getCollisionNormal(const Rect &other) const
     return Vector<int>(nx, 0);
 }
 
+// Template definitions for needed Rect specializations
+template class Rect<int>;
+template class Rect<float>;
 
 } // namespace game

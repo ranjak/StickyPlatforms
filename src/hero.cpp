@@ -25,7 +25,7 @@ void Hero::update(uint32_t step, GameState &game)
   if (game.isCommandPressed(Command::RIGHT))
     velocity.x += 100.f;
 
-  boundingBox.x += (int) (velocity.x * step / 1000.f);
+  boundingBox.x += velocity.x * step / 1000.f;
 
   switch (state) {
 
@@ -34,14 +34,14 @@ void Hero::update(uint32_t step, GameState &game)
     if (game.isCommandPressed((Command::JUMP)))
       velocity.y = - fallSpeed * 2;
 
-    boundingBox.y += (int) (velocity.y * step / 1000.f);
+    boundingBox.y += velocity.y * step / 1000.f;
     break;
 
   case State::AIR:
     // Apply gravity (accelerate until max fall speed)
     velocity.y = std::min(fallSpeed, velocity.y + (GRAVITY * step / 1000.f));
 
-    boundingBox.y += (int) (velocity.y * step / 1000.f);
+    boundingBox.y += velocity.y * step / 1000.f;
     break;
   }
 

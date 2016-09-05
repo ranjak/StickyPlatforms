@@ -26,7 +26,7 @@ void Entity::setPosition(const Vector<int> &newPos)
   boundingBox.y = newPos.y;
 }
 
-const Rect &Entity::getBoundingBox() const
+const Rect<float> &Entity::getBoundingBox() const
 {
   return boundingBox;
 }

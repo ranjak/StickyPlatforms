@@ -26,10 +26,10 @@ public:
 
   void setPosition(const Vector<int>& newPos);
 
-  const Rect& getBoundingBox() const;
+  const Rect<float>& getBoundingBox() const;
 
 protected:
-  Rect boundingBox;
+  Rect<float> boundingBox;
 };
 
 } // namespace game
