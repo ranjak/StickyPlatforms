@@ -16,3 +16,11 @@ O9/03/2016
 
 	I've started working on soution #1 on the "physics" branch, but all things considered I'm probably going to scrap it and start working on solution #2 instead.
 
+09/05/2016
+
+  Playable platforming level milestone reached.
+  As mentionned in the previous entry, I've opted for a less realistic approach to physics.
+  Milestone for 09/12/2016:
+    * refined gameplay (smoother movement, stricter air control)
+    * cleaner code (conventions, structure: state pattern, less hardcoded things)
+    * horizontal & vertical scrolling with tile-based maps
