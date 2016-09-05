@@ -10,6 +10,7 @@ enum Command {
   DOWN,
   LEFT,
   RIGHT,
+  JUMP,
   NB_CMD
 };
 

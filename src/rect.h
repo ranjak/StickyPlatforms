@@ -2,6 +2,7 @@
 #define RECT_H
 
 #include "SDL.h"
+#include "gamevector.h"
 
 namespace game {
 
@@ -17,7 +18,10 @@ public:
   Rect(int x, int y, int w, int h);
 
   bool intersects(const Rect& other) const;
+  Rect getIntersection(const Rect &other) const;
+  Vector<int> getCollisionNormal(const Rect &other) const;
 
+public:
   int x, y, w, h;
 };
 

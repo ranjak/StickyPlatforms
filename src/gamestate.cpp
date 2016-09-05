@@ -55,5 +55,20 @@ bool GameState::collides(const Entity &entity)
   return false;
 }
 
+std::vector<CollisionManifold> GameState::checkCollisions(Entity &entity)
+{
+  // Check only the entities after the given entity in sequential order
+  auto entityPos = std::find_if(entities.begin(), entities.end(), [&] (std::unique_ptr<Entity>& vecEntity) { return vecEntity.get() == &entity; });
+
+  std::vector<CollisionManifold> collisions;
+
+  for (auto it = entityPos+1; it != entities.end(); it++) {
+    if (entity.getBoundingBox().intersects((*it)->getBoundingBox()))
+      collisions.push_back(CollisionManifold{**it, entity.getBoundingBox().getCollisionNormal((*it)->getBoundingBox())});
+  }
+
+  return collisions;
+}
+
 
 } //namespace game

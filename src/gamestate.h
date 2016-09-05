@@ -8,12 +8,14 @@
 #include "inputhandler.h"
 #include "entity.h"
 #include "display.h"
+#include "gamevector.h"
 
 namespace game {
 
 extern const std::uint32_t TIMESTEP;
 
 class Entity;
+struct CollisionManifold;
 
 /**
  * @brief The GameState class describes the state of the game at a given moment.
@@ -45,6 +47,13 @@ public:
    */
   bool collides(const Entity& entity);
 
+  /**
+   * @brief checkCollisions Get a list of collisions for a given entity
+   * @param entity Entity we want to check collisions for.
+   * @return A list of collisions manifolds for every entity that the given entity collides with.
+   */
+  std::vector<CollisionManifold> checkCollisions(Entity& entity);
+
 private:
   // Key bindings to game commands
   GameCommands bindings;
@@ -52,6 +61,12 @@ private:
   std::vector<std::unique_ptr<Entity>> entities;
   // Current snapshot of user input
   const InputHandler* inputSnapshot;
+};
+
+
+struct CollisionManifold {
+  Entity& collider;
+  Vector<int> normal;
 };
 
 
