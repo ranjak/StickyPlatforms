@@ -11,10 +11,13 @@ find_package(SDL2_ttf REQUIRED)
 # Project setup
 
 set(SRC_LIST
-    src/main.cpp
-    src/inputhandler.cpp
-    src/log.cpp
-    src/display.cpp
+    src/system/main.cpp
+    src/system/inputhandler.cpp
+    src/system/log.cpp
+    src/system/display.cpp
+    src/system/gamevector.cpp
+    src/system/color.cpp
+    src/system/rect.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
     src/entity.cpp
@@ -22,9 +25,6 @@ set(SRC_LIST
     src/graphics.cpp
     src/rectangle.cpp
     src/platform.cpp
-    src/gamevector.cpp
-    src/color.cpp
-    src/rect.cpp
     src/herostate.cpp
 )
 
@@ -34,6 +34,7 @@ include_directories(
     ${SDL2_INCLUDE_DIR}
     ${SDL2_TTF_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/system
 )
 target_link_libraries(${PROJECT_NAME}
     ${SDL2_LIBRARY}
