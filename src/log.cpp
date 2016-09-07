@@ -10,8 +10,8 @@ Log::Log() :
 
 
 Log::Log(std::ostream& output) :
-  output(output),
-  level(Priority::DBG)
+  mOutput(output),
+  mLevel(Priority::DBG)
 {
 }
 
@@ -26,7 +26,7 @@ Log& Log::getGlobal()
 
 void Log::log(Priority sev, const std::string& msg)
 {
-  if (sev >= level)
+  if (sev >= mLevel)
   {
     std::string priorityStr;
     switch (sev) {
@@ -50,14 +50,14 @@ void Log::log(Priority sev, const std::string& msg)
       break;
     }
 
-    output << priorityStr << msg << std::endl;
+    mOutput << priorityStr << msg << std::endl;
   }
 }
 
 
 void Log::setLevel(Priority maxLevel)
 {
-  this->level = maxLevel;
+  this->mLevel = maxLevel;
 }
 
 

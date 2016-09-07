@@ -11,7 +11,7 @@ public:
   Vector();
   Vector(T x, T y);
 
-
+public:
   T x;
   T y;
 };

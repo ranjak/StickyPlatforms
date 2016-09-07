@@ -49,15 +49,15 @@ public:
   void setLevel(Priority maxLevel);
 
   Log();
-  Log(std::ostream &output);
+  Log(std::ostream &mOutput);
 
   // It doesn't make sense to copy loggers
   Log(Log const&) = delete;
   void operator=(Log const&) = delete;
 
 private:
-  std::ostream& output;
-  Priority level;
+  std::ostream& mOutput;
+  Priority mLevel;
 };
 
 /**

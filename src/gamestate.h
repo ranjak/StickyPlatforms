@@ -56,11 +56,11 @@ public:
 
 private:
   // Key bindings to game commands
-  GameCommands bindings;
+  GameCommands mBindings;
   // Entites populating the game world
-  std::vector<std::unique_ptr<Entity>> entities;
+  std::vector<std::unique_ptr<Entity>> mEntities;
   // Current snapshot of user input
-  const InputHandler* inputSnapshot;
+  const InputHandler* mInputSnapshot;
 };
 
 

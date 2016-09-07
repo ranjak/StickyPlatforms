@@ -5,19 +5,19 @@ namespace game {
 
 
 GameCommands::GameCommands() :
-  bindings { SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_SPACE }
+  mBindings { SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_SPACE }
 {
 
 }
 
 void GameCommands::setBinding(Command cmdToBind, uint32_t scancode)
 {
-  bindings[cmdToBind] = scancode;
+  mBindings[cmdToBind] = scancode;
 }
 
 uint32_t GameCommands::getBinding(Command cmd)
 {
-  return bindings[cmd];
+  return mBindings[cmd];
 }
 
 } // namespace game

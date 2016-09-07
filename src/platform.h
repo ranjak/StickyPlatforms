@@ -18,7 +18,7 @@ public:
   void draw(Display& target) const override;
 
 private:
-  Rectangle graphics;
+  Rectangle mGraphics;
 };
 
 } // namespace game

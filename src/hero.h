@@ -20,14 +20,14 @@ public:
 
 private:
   // Maximum falling speed in pixels/s
-  float fallSpeed;
+  float mFallSpeed;
   // State the hero is in at a given moment
   enum class State { GROUND, AIR };
-  State state;
+  State mState;
   // Velocity in pixels/sec
-  Vector<float> velocity;
+  Vector<float> mVelocity;
   // Visual representation (aka white cube)
-  Rectangle cube;
+  Rectangle mCube;
 };
 
 } //namespace game

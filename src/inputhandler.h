@@ -21,11 +21,11 @@ public:
   bool quitRequested() const;
   bool isKeyPressed(uint32_t scancode) const;
 private:
-  SDL_Event event;
+  SDL_Event mEvent;
   bool mQuitRequested;
 
   // TODO optimize/simplify (use SDL's input state table ?)
-  std::vector<std::uint32_t> pressedKeys;
+  std::vector<std::uint32_t> mPressedKeys;
 };
 
 }

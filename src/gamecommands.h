@@ -24,7 +24,7 @@ public:
   std::uint32_t getBinding(Command cmd);
 
 private:
-  std::uint32_t bindings[NB_CMD];
+  std::uint32_t mBindings[NB_CMD];
 };
 
 }

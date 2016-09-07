@@ -19,13 +19,13 @@ public:
 
   void setPos(int x, int y);
   void setSize(int w, int h);
-  void setColor(const Color& color);
+  void setColor(const Color& mColor);
 
 private:
   // Fill color of the cube
-  Color color;
+  Color mColor;
   // Size and position in window coordinates
-  SDL_Rect sizePos;
+  SDL_Rect mSizePos;
 };
 
 } // namespace game

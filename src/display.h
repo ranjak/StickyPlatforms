@@ -27,8 +27,8 @@ public:
   SDL_Renderer* getRenderer();
 
 private:
-  SDL_Window* window;
-  SDL_Renderer* renderer;
+  SDL_Window* mWindow;
+  SDL_Renderer* mRenderer;
 };
 
 }

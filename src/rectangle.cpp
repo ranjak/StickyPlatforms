@@ -13,38 +13,38 @@ Rectangle::Rectangle() :
 
 Rectangle::Rectangle(int x, int y, int w, int h) :
   Graphics(),
-  sizePos{x, y, w, h},
-  color()
+  mSizePos{x, y, w, h},
+  mColor()
 {
 }
 
 void Rectangle::draw(Display &target) const
 {
   // Don't try to render if size is invalid
-  if (sizePos.w <= 0 || sizePos.h <= 0)
+  if (mSizePos.w <= 0 || mSizePos.h <= 0)
     return;
 
   SDL_Renderer* renderer = target.getRenderer();
 
-  SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-  SDL_RenderFillRect(renderer, &sizePos);
+  SDL_SetRenderDrawColor(renderer, mColor.r, mColor.g, mColor.b, mColor.a);
+  SDL_RenderFillRect(renderer, &mSizePos);
 }
 
 void Rectangle::setPos(int x, int y)
 {
-  this->sizePos.x = x;
-  this->sizePos.y = y;
+  this->mSizePos.x = x;
+  this->mSizePos.y = y;
 }
 
 void Rectangle::setSize(int w, int h)
 {
-  this->sizePos.w = w;
-  this->sizePos.h = h;
+  this->mSizePos.w = w;
+  this->mSizePos.h = h;
 }
 
 void Rectangle::setColor(const Color &color)
 {
-  this->color = color;
+  this->mColor = color;
 }
 
 

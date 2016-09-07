@@ -29,7 +29,7 @@ public:
   const Rect<float>& getBoundingBox() const;
 
 protected:
-  Rect<float> boundingBox;
+  Rect<float> mBoundingBox;
 };
 
 } // namespace game

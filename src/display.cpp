@@ -6,16 +6,16 @@ namespace game {
 
 
 Display::Display() :
-  window(nullptr),
-  renderer(nullptr)
+  mWindow(nullptr),
+  mRenderer(nullptr)
 {
 
 }
 
 Display::~Display()
 {
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
+  SDL_DestroyRenderer(mRenderer);
+  SDL_DestroyWindow(mWindow);
   SDL_Quit();
 }
 
@@ -26,7 +26,7 @@ void Display::init()
       throw std::exception();
   }
 
-  if (SDL_CreateWindowAndRenderer(320, 240, SDL_WINDOW_RESIZABLE, &window, &renderer)) {
+  if (SDL_CreateWindowAndRenderer(320, 240, SDL_WINDOW_RESIZABLE, &mWindow, &mRenderer)) {
       game::error(std::string("Couldn't create window and renderer: ") + SDL_GetError());
       throw std::exception();
   }
@@ -34,17 +34,17 @@ void Display::init()
 
 void Display::render(const GameState &game)
 {
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-  SDL_RenderClear(renderer);
+  SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+  SDL_RenderClear(mRenderer);
 
   game.drawEntities(*this);
 
-  SDL_RenderPresent(renderer);
+  SDL_RenderPresent(mRenderer);
 }
 
 SDL_Renderer *Display::getRenderer()
 {
-  return renderer;
+  return mRenderer;
 }
 
 }
