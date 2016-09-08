@@ -1,44 +1,17 @@
-#include "hero.h"
-#include "airstate.h"
-#include "groundstate.h"
-#include <algorithm>
+#include "herophysics.h"
 
 namespace game {
 
 
-Hero::Hero() :
-  Entity(0, 0, 20, 20),
-  mState(new AirState(*this)),
-  mVelocity(0.f, 0.f),
-  mOnGround(false),
-  mCube(0, 0, 20, 20)
-{
-  mCube.setColor(game::GREEN);
-}
-
-void Hero::update(uint32_t step, GameState &game)
+HeroPhysics::HeroPhysics(Hero &hero) :
+  mBoundingBox(),
+  mVelocity(),
+  mHero(hero)
 {
 
-  mState->update(step, game);
-
-  updatePhysics(step, game);
-
-  // Update the graphics
-  // TODO remove duplicate data ?
-  mCube.setPos(mBoundingBox.x, mBoundingBox.y);
 }
 
-void Hero::draw(Display& target) const
-{
-  mCube.draw(target);
-}
-
-Vector<float>& Hero::velocity()
-{
-  return mVelocity;
-}
-
-void Hero::updatePhysics(uint32_t step, GameState &game)
+void HeroPhysics::update(std::uint32_t step, GameState &game)
 {
   // Move according to velocity
   mBoundingBox.x += mVelocity.x * step / 1000.f;
@@ -53,7 +26,7 @@ void Hero::updatePhysics(uint32_t step, GameState &game)
     mVelocity.y = 0;
   }
   // Check collisions
-  for (CollisionManifold& col : game.checkCollisions(*this)) {
+  for (CollisionManifold& col : game.checkCollisions(mHero)) {
 
     // Nullify velocity if it's opposite to the normal
     if (mVelocity.x * col.normal.x < 0)
@@ -79,13 +52,6 @@ void Hero::updatePhysics(uint32_t step, GameState &game)
       mBoundingBox.x = col.collider.getBoundingBox().x + col.collider.getBoundingBox().w;
   }
 
-  // Change state if we went from ground to air (and vice versa)
-  if (!onGround && mOnGround)
-    mState.reset(new AirState(*this));
-  else if (onGround && !mOnGround)
-    mState.reset(new GroundState(*this));
-
-  mOnGround = onGround;
 }
 
-} // namespace game
+}

@@ -1,8 +1,13 @@
 #ifndef HEROSTATE_H
 #define HEROSTATE_H
 
+#include "gamestate.h"
+#include "hero.h"
+#include <cstdint>
+
 namespace game {
 
+class Hero;
 
 /**
  * @brief The current state the hero is in.
@@ -12,9 +17,14 @@ namespace game {
 class HeroState
 {
 public:
-    HeroState();
+    HeroState(Hero& hero);
 
-    virtual void update();
+    virtual void update(std::uint32_t step, GameState &game);
+
+    virtual void enter();
+
+protected:
+    Hero& mHero;
 };
 
 }

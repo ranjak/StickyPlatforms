@@ -3,12 +3,18 @@
 namespace game {
 
 
-HeroState::HeroState()
+HeroState::HeroState(Hero &hero) :
+  mHero(hero)
 {
 
 }
 
-void HeroState::update()
+void HeroState::update(std::uint32_t step, GameState &game)
+{
+
+}
+
+void HeroState::enter()
 {
 
 }
