@@ -12,7 +12,7 @@ class Graphics
 public:
   Graphics();
 
-  virtual void draw(Display& target) const = 0;
+  virtual void draw(Display& target, int x, int y) const = 0;
 
 };
 

@@ -37,7 +37,7 @@ void Display::render(const GameState &game)
   SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
   SDL_RenderClear(mRenderer);
 
-  game.drawEntities(*this);
+  game.draw(*this);
 
   SDL_RenderPresent(mRenderer);
 }

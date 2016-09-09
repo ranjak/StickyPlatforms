@@ -11,26 +11,21 @@ Hero::Hero() :
   mState(new AirState(*this)),
   mVelocity(0.f, 0.f),
   mOnGround(false),
-  mCube(0, 0, 20, 20)
+  mCube(20, 20)
 {
   mCube.setColor(game::GREEN);
 }
 
 void Hero::update(uint32_t step, GameState &game)
 {
-
   mState->update(step, game);
 
   updatePhysics(step, game);
-
-  // Update the graphics
-  // TODO remove duplicate data ?
-  mCube.setPos(mBoundingBox.x, mBoundingBox.y);
 }
 
 void Hero::draw(Display& target) const
 {
-  mCube.draw(target);
+  mCube.draw(target, mBoundingBox.x, mBoundingBox.y);
 }
 
 Vector<float>& Hero::velocity()
@@ -53,7 +48,7 @@ void Hero::updatePhysics(uint32_t step, GameState &game)
     mVelocity.y = 0;
   }
   // Check collisions
-  for (CollisionManifold& col : game.checkCollisions(*this)) {
+  for (CollisionManifold& col : game.getLevel().checkCollisions(*this)) {
 
     // Nullify velocity if it's opposite to the normal
     if (mVelocity.x * col.normal.x < 0)

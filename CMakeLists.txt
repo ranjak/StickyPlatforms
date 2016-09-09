@@ -29,7 +29,9 @@ set(SRC_LIST
     src/horizcontrolstate.cpp
     src/groundstate.cpp
     src/airstate.cpp
-    src/herophysics.cpp
+    src/world/level.cpp
+    src/world/tile.cpp
+    src/test/test.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SRC_LIST})

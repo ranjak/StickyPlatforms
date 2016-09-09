@@ -11,21 +11,19 @@ namespace game {
 class Rectangle : public Graphics
 {
 public:
-  Rectangle();
+  Rectangle(int w=0, int h=0);
 
-  Rectangle(int x, int y, int w, int h);
+  void draw(Display& target, int x, int y) const override;
 
-  void draw(Display& target) const override;
-
-  void setPos(int x, int y);
   void setSize(int w, int h);
   void setColor(const Color& mColor);
 
 private:
-  // Fill color of the cube
+  // Fill color of the rectangle
   Color mColor;
-  // Size and position in window coordinates
-  SDL_Rect mSizePos;
+  // Size in window coordinates
+  int w;
+  int h;
 };
 
 } // namespace game
