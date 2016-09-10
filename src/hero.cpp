@@ -36,10 +36,12 @@ Vector<float>& Hero::velocity()
 void Hero::updatePhysics(uint32_t step, GameState &game)
 {
   // Move according to velocity
-  mBoundingBox.x += mVelocity.x * step / 1000.f;
-  mBoundingBox.y += mVelocity.y * step / 1000.f;
+  Vector<float> destination(mBoundingBox.x + mVelocity.x * step / 1000.f, mBoundingBox.y + mVelocity.y * step / 1000.f);
 
   // Collision handling
+
+  game.getLevel().tryMoving(mBoundingBox, destination);
+
   // If we find out we're not currently on the ground, we'll switch to air state
   // First check the base ground level. FIXME: do not hardcode
   bool onGround = mBoundingBox.y + mBoundingBox.h >= 240;

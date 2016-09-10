@@ -80,4 +80,67 @@ std::vector<CollisionManifold> Level::checkCollisions(Entity &entity)
   return collisions;
 }
 
+bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
+{
+  Vector<float> direction(dest.x - box.x, dest.y - box.y);
+  Vector<float> facingPoint;
+
+  facingPoint.x = (direction.x > 0) ? box.x + box.w : box.x;
+  facingPoint.y = (direction.y > 0) ? box.y + box.h : box.y;
+
+  Vector<float> destFacingPoint(facingPoint.x + direction.x, facingPoint.y + direction.y);
+
+  // Check obstacles on the X axis
+  if (direction.x > 0) {
+    // Find the closest tile obstacle on X
+    for (int i=facingPoint.x / Tile::SIZE; i<=destFacingPoint.x / Tile::SIZE; i++) {
+      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h) / Tile::SIZE; j++) {
+        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+          destFacingPoint.x = i * Tile::SIZE;
+          break;
+        }
+      }
+    }
+    // Move on the X axis up to the closest obstacle found
+    box.x = destFacingPoint.x - box.w;
+  }
+  else {
+    for (int i=facingPoint.x / Tile::SIZE; i>=destFacingPoint.x / Tile::SIZE; i--) {
+      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h) / Tile::SIZE; j++) {
+        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+          destFacingPoint.x = i * Tile::SIZE;
+          break;
+        }
+      }
+    }
+    box.x = destFacingPoint.x;
+  }
+
+  // Same for the Y axis
+  if (direction.y > 0) {
+    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w) / Tile::SIZE; i++) {
+      for (int j=facingPoint.y / Tile::SIZE; j<=destFacingPoint.y / Tile::SIZE; j++) {
+        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+          destFacingPoint.y = j * Tile::SIZE;
+          break;
+        }
+      }
+    }
+    box.y = destFacingPoint.y - box.h;
+  }
+  else {
+    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w) / Tile::SIZE; i++) {
+      for (int j=facingPoint.y / Tile::SIZE; j>=destFacingPoint.y / Tile::SIZE; j--) {
+        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+          destFacingPoint.y = j * Tile::SIZE;
+          break;
+        }
+      }
+    }
+    box.y = destFacingPoint.y;
+  }
+
+  return box.x == dest.x && box.y == dest.y;
+}
+
 }
