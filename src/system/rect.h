@@ -19,6 +19,8 @@ public:
   Rect(T x, T y, T w, T h);
 
   bool intersects(const Rect& other) const;
+  bool touches(const Rect &other) const;
+
   Rect<T> getIntersection(const Rect &other) const;
   Vector<int> getCollisionNormal(const Rect &other) const;
 

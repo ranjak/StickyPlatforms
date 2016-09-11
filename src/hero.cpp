@@ -3,6 +3,7 @@
 #include "groundstate.h"
 #include "world/tile.h"
 #include <algorithm>
+#include <cmath>
 
 namespace game {
 
@@ -12,7 +13,8 @@ Hero::Hero() :
   mState(new AirState(*this)),
   mVelocity(0.f, 0.f),
   mOnGround(false),
-  mCube(Tile::SIZE, Tile::SIZE)
+  mCube(Tile::SIZE, Tile::SIZE),
+  mRemainder(0.f, 0.f)
 {
   mCube.setColor(game::GREEN);
 }
@@ -46,41 +48,22 @@ Vector<float>& Hero::velocity()
 void Hero::updatePhysics(uint32_t step, GameState &game)
 {
   // Move according to velocity
-  Vector<float> destination(mBoundingBox.x + mVelocity.x * step / 1000.f, mBoundingBox.y + mVelocity.y * step / 1000.f);
 
-  // Collision handling
+  // Only use integers for position. Store fractional part in a remainder.
+  mRemainder.x += mVelocity.x * step / 1000.f;
+  mRemainder.y += mVelocity.y * step / 1000.f;
+
+  Vector<float> destination(0.f, 0.f);
+  mRemainder.x = std::modf(mRemainder.x, &destination.x);
+  mRemainder.y = std::modf(mRemainder.y, &destination.y);
+
+  destination.x += mBoundingBox.x;
+  destination.y += mBoundingBox.y;
 
   game.getLevel().tryMoving(*this, destination);
 
   // If we find out we're not currently on the ground, we'll switch to air state
   bool onGround = game.getLevel().isOnGround(*this);
-
-  // Check collisions
-  for (CollisionManifold& col : game.getLevel().checkCollisions(*this)) {
-
-    // Nullify velocity if it's opposite to the normal
-    if (mVelocity.x * col.normal.x < 0)
-      mVelocity.x = 0;
-    else if (mVelocity.y * col.normal.y < 0)
-      mVelocity.y = 0;
-
-    // Collision from above (= on ground)
-    if (col.normal.y == -1) {
-      onGround = true;
-      // Place the bounding box correctly (we don't want them to overlap)
-      mBoundingBox.y = col.collider.getBoundingBox().y - mBoundingBox.h;
-    }
-    // From below
-    else if (col.normal.y == 1)
-      mBoundingBox.y = col.collider.getBoundingBox().y + col.collider.getBoundingBox().h;
-
-    // From the side
-    else if (col.normal.x == -1)
-      mBoundingBox.x = col.collider.getBoundingBox().x - mBoundingBox.w;
-
-    else if (col.normal.x == 1)
-      mBoundingBox.x = col.collider.getBoundingBox().x + col.collider.getBoundingBox().w;
-  }
 
   // Change state if we went from ground to air (and vice versa)
   if (!onGround && mOnGround)

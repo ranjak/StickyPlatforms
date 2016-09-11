@@ -27,6 +27,13 @@ bool Rect<T>::intersects(const Rect &other) const
 }
 
 template<typename T>
+bool Rect<T>::touches(const Rect &other) const
+{
+  return !(x + w < other.x || x > other.x + other.w)
+      && !(y + h < other.y || y > other.y + other.h);
+}
+
+template<typename T>
 Rect<T> Rect<T>::getIntersection(const Rect &other) const
 {
   if (!intersects(other))

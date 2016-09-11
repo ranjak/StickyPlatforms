@@ -34,6 +34,8 @@ private:
   bool mOnGround;
   // Visual representation (aka green cube)
   Rectangle mCube;
+  // Fractional movement
+  Vector<float> mRemainder;
 };
 
 } //namespace game
