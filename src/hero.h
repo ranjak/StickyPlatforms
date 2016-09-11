@@ -19,6 +19,8 @@ public:
 
   void draw(Display& target) const override;
 
+  void onObstacleReached(const Vector<int> &normal) override;
+
   Vector<float> &velocity();
 
 private:

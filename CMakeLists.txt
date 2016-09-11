@@ -34,7 +34,7 @@ set(SRC_LIST
     src/test/test.cpp
 )
 
-add_executable(${PROJECT_NAME} ${SRC_LIST})
+add_executable(game1 ${SRC_LIST})
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
@@ -48,6 +48,11 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 # Build flags
+
+set_property(TARGET game1 PROPERTY CXX_STANDARD 11)
+
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Wall)
+
 if (NOT CMAKE_BUILD_TYPE MATCHES [Dd]ebug)
     add_definitions(-DNDEBUG)
 endif()

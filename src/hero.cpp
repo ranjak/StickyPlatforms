@@ -1,17 +1,18 @@
 #include "hero.h"
 #include "airstate.h"
 #include "groundstate.h"
+#include "world/tile.h"
 #include <algorithm>
 
 namespace game {
 
 
 Hero::Hero() :
-  Entity(0, 0, 20, 20),
+  Entity(0, 0, Tile::SIZE, Tile::SIZE),
   mState(new AirState(*this)),
   mVelocity(0.f, 0.f),
   mOnGround(false),
-  mCube(20, 20)
+  mCube(Tile::SIZE, Tile::SIZE)
 {
   mCube.setColor(game::GREEN);
 }
@@ -28,6 +29,15 @@ void Hero::draw(Display& target) const
   mCube.draw(target, mBoundingBox.x, mBoundingBox.y);
 }
 
+void Hero::onObstacleReached(const Vector<int> &normal)
+{
+  // Nullify the velocity in the direction of the collision
+  if (normal.x != 0)
+    mVelocity.x = 0;
+  if (normal.y != 0)
+    mVelocity.y = 0;
+}
+
 Vector<float>& Hero::velocity()
 {
   return mVelocity;
@@ -40,15 +50,11 @@ void Hero::updatePhysics(uint32_t step, GameState &game)
 
   // Collision handling
 
-  game.getLevel().tryMoving(mBoundingBox, destination);
+  game.getLevel().tryMoving(*this, destination);
 
   // If we find out we're not currently on the ground, we'll switch to air state
-  // First check the base ground level. FIXME: do not hardcode
-  bool onGround = mBoundingBox.y + mBoundingBox.h >= 240;
-  if (onGround) {
-    mBoundingBox.y = 240 - mBoundingBox.h;
-    mVelocity.y = 0;
-  }
+  bool onGround = game.getLevel().isOnGround(*this);
+
   // Check collisions
   for (CollisionManifold& col : game.getLevel().checkCollisions(*this)) {
 

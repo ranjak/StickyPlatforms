@@ -80,8 +80,9 @@ std::vector<CollisionManifold> Level::checkCollisions(Entity &entity)
   return collisions;
 }
 
-bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
+bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 {
+  Rect<float> &box = entity.getBoundingBox();
   Vector<float> direction(dest.x - box.x, dest.y - box.y);
   Vector<float> facingPoint;
 
@@ -101,6 +102,14 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
   else if (destFacingPoint.y > mSize.y * Tile::SIZE)
     destFacingPoint.y = mSize.y * Tile::SIZE - box.h;
 
+  // Store all entities that could possibly block our way
+  Rect<float> movementArea;
+  movementArea.x = std::min(destFacingPoint.x, box.x);
+  movementArea.y = std::min(destFacingPoint.y, box.y);
+  movementArea.w = (movementArea.x == box.x) ? (destFacingPoint.x - box.x) : (box.x + box.h - destFacingPoint.x);
+  movementArea.h = (movementArea.y == box.y) ? (destFacingPoint.y - box.y) : (box.y + box.y - destFacingPoint.y);
+  std::vector<Entity*> neighbours(getEntitiesInArea(movementArea));
+
   // Check obstacles on the X axis
   if (direction.x > 0) {
     // Find the closest tile obstacle on X
@@ -112,8 +121,17 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
         }
       }
     }
+    // Find the closest entity obstacle on X
+    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
+      Rect<float> &ebox = (**it).getBoundingBox();
+      if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
+        destFacingPoint.x = std::min(destFacingPoint.x, ebox.x);
+    }
     // Move on the X axis up to the closest obstacle found
     box.x = destFacingPoint.x - box.w;
+    // Notify the entity if it didn't reach its goal
+    if (box.x != dest.x)
+      entity.onObstacleReached(Vector<int>(-1, 0));
   }
   else if (direction.x < 0) {
     for (int i=facingPoint.x / Tile::SIZE; i>=destFacingPoint.x / Tile::SIZE; i--) {
@@ -124,7 +142,14 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
         }
       }
     }
+    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
+      Rect<float> &ebox = (**it).getBoundingBox();
+      if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
+        destFacingPoint.x = std::max(destFacingPoint.x, ebox.x + ebox.w);
+    }
     box.x = destFacingPoint.x;
+    if (box.x != dest.x)
+      entity.onObstacleReached(Vector<int>(1, 0));
   }
 
   // Same for the Y axis
@@ -137,7 +162,14 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
         }
       }
     }
+    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
+      Rect<float> &ebox = (**it).getBoundingBox();
+      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
+        destFacingPoint.x = std::min(destFacingPoint.y, ebox.y);
+    }
     box.y = destFacingPoint.y - box.h;
+    if (box.y != dest.y)
+      entity.onObstacleReached(Vector<int>(0, -1));
   }
   else if (direction.y < 0) {
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
@@ -148,10 +180,45 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
         }
       }
     }
+    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
+      Rect<float> &ebox = (**it).getBoundingBox();
+      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
+        destFacingPoint.x = std::max(destFacingPoint.y, ebox.y + ebox.h);
+    }
     box.y = destFacingPoint.y;
+    if (box.y != dest.y)
+      entity.onObstacleReached(Vector<int>(0, 1));
   }
 
   return box.x == dest.x && box.y == dest.y;
+}
+
+std::vector<Entity*> Level::getEntitiesInArea(const Rect<float> &area)
+{
+  std::vector<Entity*> entities;
+  for (auto it=mEntities.begin(); it != mEntities.end(); it++) {
+    if (area.intersects((**it).getBoundingBox()))
+      entities.push_back(it->get());
+  }
+
+  return entities;
+}
+
+bool Level::isOnGround(Entity &entity)
+{
+  const Rect<float> &box = entity.getBoundingBox();
+
+  // At the boundaries of the level ?
+  if (box.y + box.h >= mSize.y * Tile::SIZE)
+    return true;
+
+  // Any solid tile below ?
+  for (int i=box.x / Tile::SIZE; i <= (box.x + box.w - 1) / Tile::SIZE; i++) {
+    if (tileset[mTiles[i*mSize.y + (box.y + box.h) / Tile::SIZE]].isObstacle())
+      return true;
+  }
+
+  return false;
 }
 
 }

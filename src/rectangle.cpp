@@ -6,8 +6,8 @@ namespace game {
 
 Rectangle::Rectangle(int w, int h) :
   Graphics(),
-  w(w), h(h),
-  mColor()
+  mColor(),
+  w(w), h(h)
 {
 }
 
