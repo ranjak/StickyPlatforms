@@ -90,12 +90,23 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
 
   Vector<float> destFacingPoint(facingPoint.x + direction.x, facingPoint.y + direction.y);
 
+  // Do not go beyond the level's boundaries
+  if (destFacingPoint.x < 0)
+    destFacingPoint.x = 0;
+  else if (destFacingPoint.x > mSize.x * Tile::SIZE)
+    destFacingPoint.x = mSize.x * Tile::SIZE - box.w;
+
+  if (destFacingPoint.y < 0)
+    destFacingPoint.y = 0;
+  else if (destFacingPoint.y > mSize.y * Tile::SIZE)
+    destFacingPoint.y = mSize.y * Tile::SIZE - box.h;
+
   // Check obstacles on the X axis
   if (direction.x > 0) {
     // Find the closest tile obstacle on X
-    for (int i=facingPoint.x / Tile::SIZE; i<=destFacingPoint.x / Tile::SIZE; i++) {
-      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h) / Tile::SIZE; j++) {
-        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+    for (int i=facingPoint.x / Tile::SIZE; i<=(destFacingPoint.x - 1) / Tile::SIZE; i++) {
+      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
+        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.x = i * Tile::SIZE;
           break;
         }
@@ -104,10 +115,10 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
     // Move on the X axis up to the closest obstacle found
     box.x = destFacingPoint.x - box.w;
   }
-  else {
+  else if (direction.x < 0) {
     for (int i=facingPoint.x / Tile::SIZE; i>=destFacingPoint.x / Tile::SIZE; i--) {
-      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h) / Tile::SIZE; j++) {
-        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
+        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.x = i * Tile::SIZE;
           break;
         }
@@ -118,9 +129,9 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
 
   // Same for the Y axis
   if (direction.y > 0) {
-    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w) / Tile::SIZE; i++) {
-      for (int j=facingPoint.y / Tile::SIZE; j<=destFacingPoint.y / Tile::SIZE; j++) {
-        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
+      for (int j=facingPoint.y / Tile::SIZE; j<=(destFacingPoint.y - 1) / Tile::SIZE; j++) {
+        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.y = j * Tile::SIZE;
           break;
         }
@@ -128,10 +139,10 @@ bool Level::tryMoving(Rect<float> &box, const Vector<float> &dest)
     }
     box.y = destFacingPoint.y - box.h;
   }
-  else {
-    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w) / Tile::SIZE; i++) {
+  else if (direction.y < 0) {
+    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
       for (int j=facingPoint.y / Tile::SIZE; j>=destFacingPoint.y / Tile::SIZE; j--) {
-        if (tileset[mTiles[i*mSize.x + j]].isObstacle()) {
+        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.y = j * Tile::SIZE;
           break;
         }
