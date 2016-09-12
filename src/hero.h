@@ -4,11 +4,13 @@
 #include "entity.h"
 #include "rectangle.h"
 #include "herostate.h"
+#include "gamevector.h"
 #include <memory>
 
 namespace game {
 
 class HeroState;
+class Camera;
 
 class Hero : public Entity
 {
@@ -17,7 +19,7 @@ public:
 
   void update(uint32_t step, GameState &game) override;
 
-  void draw(Display& target) const override;
+  void draw(Display& target, const Camera &cam) const override;
 
   void onObstacleReached(const Vector<int> &normal) override;
 

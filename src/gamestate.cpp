@@ -11,7 +11,8 @@ const std::uint32_t TIMESTEP = 10;
 GameState::GameState() :
   mBindings(),
   mInputSnapshot(),
-  mLevel(std::move(Test::makeLevel()))
+  mLevel(std::move(Test::makeLevel())),
+  mCamera(0, 0, 320, 240)
 {
 }
 
@@ -25,7 +26,7 @@ void GameState::update(uint32_t step, const InputHandler *input)
 
 void GameState::draw(Display &target) const
 {
-  mLevel->draw(target);
+  mLevel->draw(target, *this);
 }
 
 bool GameState::isCommandPressed(Command cmd)
@@ -36,6 +37,16 @@ bool GameState::isCommandPressed(Command cmd)
 Level &GameState::getLevel()
 {
   return *mLevel;
+}
+
+Camera &GameState::getCamera()
+{
+  return mCamera;
+}
+
+const Camera &GameState::getCamera() const
+{
+  return mCamera;
 }
 
 } //namespace game

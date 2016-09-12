@@ -8,6 +8,7 @@ namespace game {
 
 class Graphics;
 class Display;
+class Camera;
 
 typedef int TileID;
 
@@ -24,7 +25,7 @@ public:
   Tile(bool isObstacle, const std::shared_ptr<Graphics> &graphics = std::shared_ptr<Graphics>());
 
   bool isObstacle() const;
-  void draw(Display& display, int x, int y) const;
+  void draw(Display& display, int x, int y, const Camera &cam) const;
 
 private:
   bool mIsObstacle;

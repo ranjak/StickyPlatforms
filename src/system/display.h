@@ -19,6 +19,8 @@ public:
    */
   void init();
 
+  void setCameraSize(int w, int h);
+
   /**
    * @brief render one frame.
    */

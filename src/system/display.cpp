@@ -1,6 +1,7 @@
 #include "display.h"
 #include "log.h"
 #include "SDL.h"
+#include <stdexcept>
 
 namespace game {
 
@@ -30,6 +31,12 @@ void Display::init()
       game::error(std::string("Couldn't create window and renderer: ") + SDL_GetError());
       throw std::exception();
   }
+}
+
+void Display::setCameraSize(int w, int h)
+{
+  if (SDL_RenderSetLogicalSize(mRenderer, w, h) < 0)
+    throw std::runtime_error(SDL_GetError());
 }
 
 void Display::render(const GameState &game)

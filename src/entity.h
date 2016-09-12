@@ -2,15 +2,14 @@
 #define ENTITY_H
 
 #include <cstdint>
-#include "gamestate.h"
 #include "gamevector.h"
-#include "display.h"
 #include "rect.h"
 
 namespace game {
 
 class GameState;
 class Display;
+class Camera;
 
 class Entity
 {
@@ -23,13 +22,13 @@ public:
    * @param step Time in milliseconds to simulate.
    * @param game Currently running game.
    */
-  virtual void update(std::uint32_t step, GameState& game) = 0;
+  virtual void update(std::uint32_t step, GameState& game);
 
   /**
    * @brief draw Draw this entity on \p target, if applicable.
    * @param target Render target on which the entity will be drawn.
    */
-  virtual void draw(Display& target) const = 0;
+  virtual void draw(Display& target, const Camera& camera) const;
 
   /**
    * @brief onObstacleReached Function called by the level when this entity's movement
@@ -39,9 +38,9 @@ public:
    */
   virtual void onObstacleReached(const Vector<int> &normal);
 
-  Vector<int> getPosition() const;
+  Vector<float> getPosition() const;
 
-  void setPosition(const Vector<int>& newPos);
+  void setPosition(const Vector<float>& newPos);
 
   Rect<float>& getBoundingBox();
   const Rect<float>& getBoundingBox() const;

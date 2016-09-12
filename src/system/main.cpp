@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
   display.init();
   glog(game::Log::Priority::DBG, "Initialization OK");
 
+  display.setCameraSize(320, 240);
+
   // Simulated game time. Increases by a fixed amount at every game update.
   Uint32 gameTime = 0;
   // Time at which the main loop was started.

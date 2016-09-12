@@ -1,4 +1,5 @@
 #include "platform.h"
+#include "camera.h"
 
 namespace game {
 
@@ -23,9 +24,11 @@ void Platform::update(uint32_t step, GameState &game)
 }
 
 // FIXME duplicate code detected! See Hero.
-void Platform::draw(Display &target) const
+void Platform::draw(Display &target, const Camera &cam) const
 {
-  mGraphics.draw(target, mBoundingBox.x, mBoundingBox.y);
+  Vector<float> pos = cam.toCamCoords(getPosition());
+
+  mGraphics.draw(target, pos.x, pos.y);
 }
 
 } // namespace game

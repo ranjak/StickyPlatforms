@@ -29,7 +29,7 @@ public:
 
   void update(GameState &game, std::uint32_t step);
 
-  void draw(Display &target) const;
+  void draw(Display &target, const GameState &game) const;
 
   void addEntity(std::unique_ptr<Entity> entity);
 

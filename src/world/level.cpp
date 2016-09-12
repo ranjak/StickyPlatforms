@@ -29,18 +29,22 @@ void Level::update(GameState &game, uint32_t step)
   }
 }
 
-void Level::draw(Display &target) const
+void Level::draw(Display &target, const GameState &game) const
 {
+  const Camera& cam = game.getCamera();
+  const Rect<float>& viewport = cam.getBoundingBox();
+
   // Draw tiles. They are drawn by column.
-  for (int i=0; i<mSize.x; i++) {
-    for (int j=0; j<mSize.y; j++) {
-      tileset[mTiles[i*mSize.y + j]].draw(target, i, j);
+  for (int i=viewport.x / Tile::SIZE; i<=(viewport.x+viewport.w - 1) / Tile::SIZE; i++) {
+    for (int j=viewport.y / Tile::SIZE; j<=(viewport.y+viewport.h - 1) / Tile::SIZE; j++) {
+      tileset[mTiles[i*mSize.y + j]].draw(target, i, j, cam);
     }
   }
 
   // Draw entities
   for (const std::unique_ptr<Entity>& entity : mEntities) {
-    entity->draw(target);
+    if (entity->getBoundingBox().intersects(viewport))
+      entity->draw(target, cam);
   }
 }
 

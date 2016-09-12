@@ -1,5 +1,7 @@
 #include "tile.h"
 #include "graphics.h"
+#include "camera.h"
+#include "gamevector.h"
 
 namespace game {
 
@@ -17,10 +19,14 @@ bool Tile::isObstacle() const
   return mIsObstacle;
 }
 
-void Tile::draw(Display& display, int x, int y) const
+void Tile::draw(Display& display, int x, int y, const Camera &cam) const
 {
   if (mGraphics.get() != nullptr)
-    mGraphics->draw(display, x*SIZE, y*SIZE);
+  {
+    Vector<float> camCoords = cam.toCamCoords(Vector<float>(x*SIZE, y*SIZE));
+
+    mGraphics->draw(display, camCoords.x, camCoords.y);
+  }
 }
 
 }

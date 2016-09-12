@@ -6,6 +6,7 @@
 
 namespace game {
 
+class Camera;
 
 class Platform : public Entity
 {
@@ -15,7 +16,7 @@ public:
 
   void update(std::uint32_t step, GameState& game) override;
 
-  void draw(Display& target) const override;
+  void draw(Display& target, const Camera &cam) const override;
 
 private:
   Rectangle mGraphics;

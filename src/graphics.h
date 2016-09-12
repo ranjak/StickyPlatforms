@@ -2,7 +2,6 @@
 #define GRAPHICS_H
 
 #include "display.h"
-#include "SDL.h"
 
 namespace game {
 

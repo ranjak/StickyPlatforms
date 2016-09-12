@@ -2,6 +2,7 @@
 #include "airstate.h"
 #include "groundstate.h"
 #include "world/tile.h"
+#include "camera.h"
 #include <algorithm>
 #include <cmath>
 
@@ -26,9 +27,11 @@ void Hero::update(uint32_t step, GameState &game)
   updatePhysics(step, game);
 }
 
-void Hero::draw(Display& target) const
+void Hero::draw(Display& target, const Camera &cam) const
 {
-  mCube.draw(target, mBoundingBox.x, mBoundingBox.y);
+  Vector<float> pos = cam.toCamCoords(getPosition());
+
+  mCube.draw(target, pos.x, pos.y);
 }
 
 void Hero::onObstacleReached(const Vector<int> &normal)

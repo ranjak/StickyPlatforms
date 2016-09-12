@@ -15,17 +15,27 @@ Entity::Entity(int x, int y, int w, int h) :
 
 }
 
+void Entity::update(uint32_t step, GameState &game)
+{
+
+}
+
+void Entity::draw(Display &target, const Camera &camera) const
+{
+
+}
+
 void Entity::onObstacleReached(const Vector<int> &normal)
 {
 
 }
 
-Vector<int> Entity::getPosition() const
+Vector<float> Entity::getPosition() const
 {
-  return Vector<int>(mBoundingBox.x, mBoundingBox.y);
+  return Vector<float>(mBoundingBox.x, mBoundingBox.y);
 }
 
-void Entity::setPosition(const Vector<int> &newPos)
+void Entity::setPosition(const Vector<float> &newPos)
 {
   mBoundingBox.x = newPos.x;
   mBoundingBox.y = newPos.y;

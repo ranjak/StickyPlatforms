@@ -7,6 +7,7 @@
 #include "inputhandler.h"
 #include "display.h"
 #include "world/level.h"
+#include "camera.h"
 
 namespace game {
 
@@ -37,6 +38,9 @@ public:
 
   Level& getLevel();
 
+  Camera &getCamera();
+  const Camera &getCamera() const;
+
 private:
   // Key bindings to game commands
   GameCommands mBindings;
@@ -44,6 +48,7 @@ private:
   const InputHandler* mInputSnapshot;
   // Current level
   std::unique_ptr<Level> mLevel;
+  Camera mCamera;
 };
 
 } //namespace game
