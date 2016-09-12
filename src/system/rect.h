@@ -1,7 +1,6 @@
 #ifndef RECT_H
 #define RECT_H
 
-#include "SDL.h"
 #include "gamevector.h"
 
 namespace game {

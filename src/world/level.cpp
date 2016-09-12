@@ -2,6 +2,7 @@
 #include "rectangle.h"
 #include "log.h"
 #include <algorithm>
+#include <cassert>
 
 namespace game {
 
@@ -229,6 +230,88 @@ bool Level::isOnGround(Entity &entity)
   }
 
   return false;
+}
+
+bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle, int maxPoint)
+{
+  // This function works for only a single coordinate at a time
+  assert(!(direction.x != 0 && direction.y != 0) && !(direction.x == 0 && direction.y == 0));
+
+  // Get the outside facing point of the box for the given direction
+  int facingPoint;
+
+  if (direction.x < 0) {
+    facingPoint = box.x - 1;
+    maxPoint = std::max(0, maxPoint);
+  }
+  else if (direction.x > 0) {
+    facingPoint = box.x + box.h;
+    maxPoint = std::min(mSize.x*Tile::SIZE - 1, maxPoint);
+  }
+  else if (direction.y < 0) {
+    facingPoint = box.y - 1;
+    maxPoint = std::max(0, maxPoint);
+  }
+  else if (direction.y > 0) {
+    facingPoint = box.y + box.h;
+    maxPoint = std::min(mSize.y*Tile::SIZE - 1, maxPoint);
+  }
+
+  // Start and end points to iterate over the tile array, depend on the direction
+  std::pair<int,int> indices = std::minmax(facingPoint, maxPoint);
+  indices.first /= Tile::SIZE;
+  indices.second /= Tile::SIZE;
+
+  bool obstacleFound = false;
+  obstacle.x = obstacle.y = maxPoint;
+
+  if (direction.x != 0) {
+    for (int i=indices.first; i<=indices.second; i++) {
+      for (int j=box.y / Tile::SIZE; j<=(box.y+box.h - 1) / Tile::SIZE; j++) {
+
+        if (tileset[mTiles[i*mSize.y + j]].isObstacle()
+            && std::abs(obstacle.x - facingPoint) >= std::abs(i*Tile::SIZE - facingPoint)) {
+
+          obstacle.x = i*Tile::SIZE;
+          obstacle.y = j*Tile::SIZE;
+          obstacleFound = true;
+        }
+      }
+    }
+  }
+  else {
+    for (int i=box.y / Tile::SIZE; i<=(box.y+box.h - 1) / Tile::SIZE; i++) {
+      for (int j=indices.first; j<=indices.second; j++) {
+
+        if (tileset[mTiles[i*mSize.y + j]].isObstacle()
+            && std::abs(obstacle.y - facingPoint) >= std::abs(j*Tile::SIZE - facingPoint)) {
+
+          obstacle.x = i*Tile::SIZE;
+          obstacle.y = j*Tile::SIZE;
+          obstacleFound = true;
+        }
+      }
+    }
+  }
+
+  return obstacleFound;
+}
+
+bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle)
+{
+  // Set maxPoint to the level's boundary pointed to by the direction
+  int maxPoint;
+
+  if (direction.x < 0 || direction.y < 0)
+    maxPoint = 0;
+  else if (direction.x > 0)
+    maxPoint = mSize.x * Tile::SIZE - 1;
+  else if (direction.y > 0)
+    maxPoint = mSize.y * Tile::SIZE - 1;
+  else
+    assert(false);
+
+  return getFacingObstacle(box, direction, obstacle, maxPoint);
 }
 
 }

@@ -24,3 +24,14 @@ O9/03/2016
     * refined gameplay (smoother movement, stricter air control)
     * cleaner code (conventions, structure: state pattern, less hardcoded things)
     * horizontal & vertical scrolling with tile-based maps
+    
+09/12/2016
+
+	State pattern has been implemented for player control. But it adds complexity that isn't really needed right now...
+	Tile-based level system is implemented, but scrolling isn't done yet.
+	Also, there's a basic tileset system, but it currently isn't flexible.
+	Objectives for 09/14:
+	  * Scrolling system done
+	  * Image-based tilesets
+	And hopefully for 09/17:
+	  * File format for maps and tilesets.

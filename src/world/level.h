@@ -69,6 +69,9 @@ public:
 
   bool isOnGround(Entity &entity);
 
+  bool getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle, int maxPoint);
+  bool getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle);
+
 private:
   // Size in tiles
   Vector<int> mSize;
