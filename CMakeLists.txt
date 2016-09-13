@@ -18,6 +18,7 @@ set(SRC_LIST
     src/system/gamevector.cpp
     src/system/color.cpp
     src/system/rect.cpp
+    src/system/util.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
     src/entity.cpp

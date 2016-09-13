@@ -1,8 +1,10 @@
 #include "world/level.h"
 #include "rectangle.h"
 #include "log.h"
+#include "hero.h"
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
 
 namespace game {
 
@@ -13,13 +15,18 @@ Tile Level::tileset[] {
 };
 
 
-Level::Level(int width, int height) :
+Level::Level(int width, int height, std::unique_ptr<Hero> hero) :
   mSize(width, height),
   mTiles(),
-  mEntities()
+  mEntities(),
+  mHero(hero.get())
 {
   if (width >= 0 && height >= 0)
     mTiles.reset(new TileID[width * height]);
+  else
+    throw std::runtime_error(std::string("Invalid level size: ") + std::to_string(width) + "x" + std::to_string(height));
+
+  addEntity(std::move(hero));
 }
 
 void Level::update(GameState &game, uint32_t step)
@@ -27,6 +34,7 @@ void Level::update(GameState &game, uint32_t step)
   for (const std::unique_ptr<Entity>& entity : mEntities) {
     entity->update(step, game);
   }
+  game.getCamera().update(step, game);
 }
 
 void Level::draw(Display &target, const GameState &game) const
@@ -316,6 +324,21 @@ bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direc
     assert(false);
 
   return getFacingObstacle(box, direction, obstacle, maxPoint);
+}
+
+Hero *Level::getHero()
+{
+  return mHero;
+}
+
+const Vector<int> &Level::getSize()
+{
+  return mSize;
+}
+
+Vector<int> Level::getPixelSize()
+{
+  return mSize * Tile::SIZE;
 }
 
 }

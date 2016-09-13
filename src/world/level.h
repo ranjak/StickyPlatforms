@@ -15,6 +15,7 @@ namespace game {
 struct CollisionManifold;
 class Entity;
 class Tile;
+class Hero;
 
 /**
  * @brief The Level class represents a game level.
@@ -25,7 +26,7 @@ class Level
 public:
   static Tile tileset[];
 
-  Level(int width=0, int height=0);
+  Level(int width, int height, std::unique_ptr<Hero> hero);
 
   void update(GameState &game, std::uint32_t step);
 
@@ -67,10 +68,29 @@ public:
    */
   std::vector<Entity *> getEntitiesInArea(const Rect<float> &area);
 
+  /**
+   * @brief isOnGround Check whether \p entity is standing on ground (solid tile or entity).
+   * @param entity
+   * @return \c true if \p entity is on ground.
+   */
   bool isOnGround(Entity &entity);
 
+  /**
+   * @brief getFacingObstacle Cehck whether an entity is facing a blocking tile along the given direction.
+   * @param box Bounding box of the entity
+   * @param direction X or Y direction (one axis at a time)
+   * @param[out] obstacle Coordinates of the closest tile obstacle, if any
+   * @param maxPoint Maximum distance in pixels along the direction to check for obstacles.
+   * If unspecified, the maximum distance is the facing level's boundary.
+   * @return \c true if an obstacle was found.
+   */
   bool getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle, int maxPoint);
   bool getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle);
+
+  Hero* getHero();
+
+  const Vector<int> &getSize();
+  Vector<int> getPixelSize();
 
 private:
   // Size in tiles
@@ -79,6 +99,7 @@ private:
   std::unique_ptr<TileID[]> mTiles;
   // Dynamic entities
   std::vector<std::unique_ptr<Entity>> mEntities;
+  Hero* mHero;
 };
 
 struct CollisionManifold {

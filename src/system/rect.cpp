@@ -65,6 +65,20 @@ Vector<int> Rect<T>::getCollisionNormal(const Rect &other) const
     return Vector<int>(nx, 0);
 }
 
+template<typename T>
+Vector<T> Rect<T>::getCenter() const
+{
+  return Vector<T>(x + (w/2), y + (h/2));
+}
+
+template<typename T>
+void Rect<T>::setCenter(Vector<T> center)
+{
+  x = center.x - (w / 2);
+  y = center.y - (h / 2);
+}
+
+
 // Template definitions for needed Rect specializations
 template class Rect<int>;
 template class Rect<float>;

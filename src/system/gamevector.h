@@ -11,6 +11,9 @@ public:
   Vector();
   Vector(T x, T y);
 
+  Vector<T> operator /(float scalar);
+  Vector<T> operator *(float scalar);
+
 public:
   T x;
   T y;

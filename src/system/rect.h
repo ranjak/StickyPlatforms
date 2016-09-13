@@ -23,6 +23,9 @@ public:
   Rect<T> getIntersection(const Rect &other) const;
   Vector<int> getCollisionNormal(const Rect &other) const;
 
+  Vector<T> getCenter() const;
+  void setCenter(Vector<T>);
+
 public:
   T x, y, w, h;
 };
