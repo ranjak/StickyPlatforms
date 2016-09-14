@@ -8,4 +8,9 @@ Graphics::Graphics()
 
 }
 
+Graphics::~Graphics()
+{
+
+}
+
 } // namespace game

@@ -15,6 +15,8 @@ public:
 
   void draw(Display& target, int x, int y) const override;
 
+  void draw(Display &target, const Rect<int> &dest) const override;
+
   void setSize(int w, int h);
   void setColor(const Color& mColor);
 

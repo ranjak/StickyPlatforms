@@ -2,7 +2,6 @@
 #define DISPLAY_H
 
 #include "SDL.h"
-#include "gamestate.h"
 
 namespace game {
 

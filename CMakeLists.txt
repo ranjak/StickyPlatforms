@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
 # Dependencies
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 # Project setup
 
@@ -19,6 +19,8 @@ set(SRC_LIST
     src/system/color.cpp
     src/system/rect.cpp
     src/system/util.cpp
+    src/system/util_sdl.cpp
+    src/system/image.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
     src/entity.cpp
@@ -40,13 +42,13 @@ add_executable(game1 ${SRC_LIST})
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
-    ${SDL2_TTF_INCLUDE_DIR}
+    ${SDL2_IMAGE_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system
 )
 target_link_libraries(${PROJECT_NAME}
     ${SDL2_LIBRARY}
-    ${SDL2_TTF_LIBRARIES}
+    ${SDL2_IMAGE_LIBRARIES}
 )
 
 # Build flags

@@ -1,5 +1,6 @@
 #include "display.h"
 #include "log.h"
+#include "gamestate.h"
 #include "SDL.h"
 #include <stdexcept>
 

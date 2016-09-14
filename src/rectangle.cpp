@@ -1,5 +1,9 @@
 #include "rectangle.h"
 #include "log.h"
+#include "display.h"
+#include "rect.h"
+#include "util_sdl.h"
+#include "SDL.h"
 
 namespace game {
 
@@ -13,10 +17,15 @@ Rectangle::Rectangle(int w, int h) :
 
 void Rectangle::draw(Display &target, int x, int y) const
 {
-  SDL_Rect renderRect { x, y, w, h };
+  draw(target, Rect<int>(x, y, w, h));
+}
+
+void Rectangle::draw(Display &target, const Rect<int> &dest) const
+{
+  SDL_Rect renderRect = getSdlRect(dest);
 
   // Don't try to render if size is invalid
-  if (w <= 0 || h <= 0)
+  if (renderRect.w <= 0 || renderRect.h <= 0)
     return;
 
   SDL_Renderer* renderer = target.getRenderer();
