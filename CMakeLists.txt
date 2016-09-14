@@ -21,6 +21,7 @@ set(SRC_LIST
     src/system/util.cpp
     src/system/util_sdl.cpp
     src/system/image.cpp
+    src/system/resource.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
     src/entity.cpp

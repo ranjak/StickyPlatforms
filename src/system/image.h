@@ -13,7 +13,7 @@ namespace game {
 class Image : public Graphics
 {
 public:
-  Image(Display& renderer, std::string filename);
+  Image(Display& renderer, const std::string& filename);
 
   void draw(Display &target, int x, int y) const override;
 

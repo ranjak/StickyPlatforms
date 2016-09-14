@@ -12,12 +12,12 @@ int main(int argc, char *argv[])
 {
   game::Display display;
   game::InputHandler input;
-  game::GameState game;
 
   display.init();
   glog(game::Log::Priority::DBG, "Initialization OK");
 
   display.setCameraSize(320, 240);
+  game::GameState game(display);
 
   // Simulated game time. Increases by a fixed amount at every game update.
   Uint32 gameTime = 0;

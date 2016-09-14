@@ -1,21 +1,20 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "gamestate.h"
-#include "display.h"
-#include "entity.h"
 #include "gamevector.h"
 #include "world/tile.h"
-#include "rect.h"
 #include <vector>
 #include <memory>
 
 namespace game {
 
 struct CollisionManifold;
+class GameState;
 class Entity;
 class Tile;
 class Hero;
+class Display;
+template<typename T> class Rect;
 
 /**
  * @brief The Level class represents a game level.
@@ -24,7 +23,6 @@ class Hero;
 class Level
 {
 public:
-  static Tile tileset[];
 
   Level(int width, int height, std::unique_ptr<Hero> hero);
 
@@ -35,6 +33,8 @@ public:
   void addEntity(std::unique_ptr<Entity> entity);
 
   const std::unique_ptr<TileID[]>& tiles();
+
+  std::vector<Tile> &tileset();
 
   /**
    * @brief collides Checks whether an entity is colliding with any other in the game world.
@@ -95,6 +95,8 @@ public:
 private:
   // Size in tiles
   Vector<int> mSize;
+  // Tileset of this level
+  std::vector<Tile> mTileset;
   // Static tiles the world is made of
   std::unique_ptr<TileID[]> mTiles;
   // Dynamic entities

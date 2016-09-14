@@ -8,10 +8,10 @@ namespace game {
 
 const std::uint32_t TIMESTEP = 10;
 
-GameState::GameState() :
+GameState::GameState(Display &display) :
   mBindings(),
   mInputSnapshot(),
-  mLevel(std::move(Test::makeLevel())),
+  mLevel(std::move(Test::makeLevel(display))),
   mCamera(0, 0, 320, 240)
 {
 }

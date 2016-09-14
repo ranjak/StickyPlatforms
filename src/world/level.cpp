@@ -2,6 +2,8 @@
 #include "rectangle.h"
 #include "log.h"
 #include "hero.h"
+#include "rect.h"
+#include "entity.h"
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
@@ -9,14 +11,9 @@
 namespace game {
 
 
-Tile Level::tileset[] {
-  Tile(false),
-  Tile(true, std::shared_ptr<Graphics>(new Rectangle(Tile::SIZE, Tile::SIZE)))
-};
-
-
 Level::Level(int width, int height, std::unique_ptr<Hero> hero) :
   mSize(width, height),
+  mTileset(),
   mTiles(),
   mEntities(),
   mHero(hero.get())
@@ -45,7 +42,7 @@ void Level::draw(Display &target, const GameState &game) const
   // Draw tiles. They are drawn by column.
   for (int i=viewport.x / Tile::SIZE; i<=(viewport.x+viewport.w - 1) / Tile::SIZE; i++) {
     for (int j=viewport.y / Tile::SIZE; j<=(viewport.y+viewport.h - 1) / Tile::SIZE; j++) {
-      tileset[mTiles[i*mSize.y + j]].draw(target, i, j, cam);
+      mTileset[mTiles[i*mSize.y + j]].draw(target, i, j, cam);
     }
   }
 
@@ -64,6 +61,11 @@ void Level::addEntity(std::unique_ptr<Entity> entity)
 const std::unique_ptr<TileID[]> &Level::tiles()
 {
   return mTiles;
+}
+
+std::vector<Tile> &Level::tileset()
+{
+  return mTileset;
 }
 
 bool Level::collides(const Entity &entity)
@@ -129,7 +131,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
     // Find the closest tile obstacle on X
     for (int i=facingPoint.x / Tile::SIZE; i<=(destFacingPoint.x - 1) / Tile::SIZE; i++) {
       for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
-        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.x = i * Tile::SIZE;
           break;
         }
@@ -150,7 +152,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   else if (direction.x < 0) {
     for (int i=(int)facingPoint.x / Tile::SIZE; i>=(int)destFacingPoint.x / Tile::SIZE; i--) {
       for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
-        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.x = (i+1) * Tile::SIZE;
           break;
         }
@@ -170,7 +172,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   if (direction.y > 0) {
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
       for (int j=facingPoint.y / Tile::SIZE; j<=(destFacingPoint.y - 1) / Tile::SIZE; j++) {
-        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.y = j * Tile::SIZE;
           break;
         }
@@ -188,7 +190,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   else if (direction.y < 0) {
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
       for (int j=(int)facingPoint.y / Tile::SIZE; j>=(int)destFacingPoint.y / Tile::SIZE; j--) {
-        if (tileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.y = (j+1) * Tile::SIZE;
           break;
         }
@@ -228,7 +230,7 @@ bool Level::isOnGround(Entity &entity)
 
   // Any solid tile below ?
   for (int i=box.x / Tile::SIZE; i <= (box.x + box.w - 1) / Tile::SIZE; i++) {
-    if (tileset[mTiles[i*mSize.y + (box.y + box.h) / Tile::SIZE]].isObstacle())
+    if (mTileset[mTiles[i*mSize.y + (box.y + box.h) / Tile::SIZE]].isObstacle())
       return true;
   }
 
@@ -281,7 +283,7 @@ bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direc
     for (int i=indices.first; i<=indices.second; i++) {
       for (int j=box.y / Tile::SIZE; j<=(box.y+box.h - 1) / Tile::SIZE; j++) {
 
-        if (tileset[mTiles[i*mSize.y + j]].isObstacle()
+        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()
             && std::abs(obstacle.x - facingPoint) >= std::abs(i*Tile::SIZE - facingPoint)) {
 
           obstacle.x = i*Tile::SIZE;
@@ -295,7 +297,7 @@ bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direc
     for (int i=box.y / Tile::SIZE; i<=(box.y+box.h - 1) / Tile::SIZE; i++) {
       for (int j=indices.first; j<=indices.second; j++) {
 
-        if (tileset[mTiles[i*mSize.y + j]].isObstacle()
+        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()
             && std::abs(obstacle.y - facingPoint) >= std::abs(j*Tile::SIZE - facingPoint)) {
 
           obstacle.x = i*Tile::SIZE;

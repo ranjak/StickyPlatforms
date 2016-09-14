@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "camera.h"
 #include "gamevector.h"
+#include "rect.h"
 
 namespace game {
 
@@ -25,7 +26,7 @@ void Tile::draw(Display& display, int x, int y, const Camera &cam) const
   {
     Vector<float> camCoords = cam.toCamCoords(Vector<float>(x*SIZE, y*SIZE));
 
-    mGraphics->draw(display, camCoords.x, camCoords.y);
+    mGraphics->draw(display, Rect<int>((int)camCoords.x, (int)camCoords.y, SIZE, SIZE));
   }
 }
 

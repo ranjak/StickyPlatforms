@@ -9,7 +9,7 @@
 namespace game {
 
 
-Image::Image(Display &renderer, std::string filename) :
+Image::Image(Display &renderer, const std::string &filename) :
   Graphics(),
   mTexture(nullptr, SDL_DestroyTexture),
   mRenderer(renderer)

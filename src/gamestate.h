@@ -23,7 +23,7 @@ class Level;
 class GameState
 {
 public:
-  GameState();
+  GameState(Display &display);
 
   /**
    * @brief update Update this state by the given amount of time.
