@@ -22,7 +22,7 @@ public:
   /**
    * @brief The Priority enum defines the possible priorities for a log message.
    */
-  enum class Priority {
+  enum Priority {
     ERROR,
     WARNING,
     INFO,

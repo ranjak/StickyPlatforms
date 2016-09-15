@@ -128,20 +128,21 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 
   // Check obstacles on the X axis
   if (direction.x > 0) {
-    // Find the closest tile obstacle on X
-    for (int i=facingPoint.x / Tile::SIZE; i<=(destFacingPoint.x - 1) / Tile::SIZE; i++) {
-      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
-        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
-          destFacingPoint.x = i * Tile::SIZE;
-          break;
-        }
-      }
-    }
     // Find the closest entity obstacle on X
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
       Rect<float> &ebox = (**it).getBoundingBox();
       if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
         destFacingPoint.x = std::min(destFacingPoint.x, ebox.x);
+    }
+    // Find the closest tile obstacle on X
+    for (int i=facingPoint.x / Tile::SIZE; i<=(destFacingPoint.x - 1) / Tile::SIZE; i++) {
+      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
+        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
+        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
+          destFacingPoint.x = i * Tile::SIZE;
+          break;
+        }
+      }
     }
     // Move on the X axis up to the closest obstacle found
     box.x = destFacingPoint.x - box.w;
@@ -150,18 +151,19 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
       entity.onObstacleReached(Vector<int>(-1, 0));
   }
   else if (direction.x < 0) {
+    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
+      Rect<float> &ebox = (**it).getBoundingBox();
+      if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
+        destFacingPoint.x = std::max(destFacingPoint.x, ebox.x + ebox.w);
+    }
     for (int i=(int)facingPoint.x / Tile::SIZE; i>=(int)destFacingPoint.x / Tile::SIZE; i--) {
       for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
+        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
         if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.x = (i+1) * Tile::SIZE;
           break;
         }
       }
-    }
-    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> &ebox = (**it).getBoundingBox();
-      if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
-        destFacingPoint.x = std::max(destFacingPoint.x, ebox.x + ebox.w);
     }
     box.x = destFacingPoint.x;
     if (box.x != dest.x)
@@ -170,36 +172,38 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 
   // Same for the Y axis
   if (direction.y > 0) {
+    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
+      Rect<float> &ebox = (**it).getBoundingBox();
+      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
+        destFacingPoint.y = std::min(destFacingPoint.y, ebox.y);
+    }
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
       for (int j=facingPoint.y / Tile::SIZE; j<=(destFacingPoint.y - 1) / Tile::SIZE; j++) {
+        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
         if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.y = j * Tile::SIZE;
           break;
         }
       }
     }
-    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> &ebox = (**it).getBoundingBox();
-      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
-        destFacingPoint.y = std::min(destFacingPoint.y, ebox.y);
-    }
     box.y = destFacingPoint.y - box.h;
     if (box.y != dest.y)
       entity.onObstacleReached(Vector<int>(0, -1));
   }
   else if (direction.y < 0) {
+    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
+      Rect<float> &ebox = (**it).getBoundingBox();
+      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
+        destFacingPoint.y = std::max(destFacingPoint.y, ebox.y + ebox.h);
+    }
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
       for (int j=(int)facingPoint.y / Tile::SIZE; j>=(int)destFacingPoint.y / Tile::SIZE; j--) {
+        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
         if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
           destFacingPoint.y = (j+1) * Tile::SIZE;
           break;
         }
       }
-    }
-    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> &ebox = (**it).getBoundingBox();
-      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
-        destFacingPoint.y = std::max(destFacingPoint.y, ebox.y + ebox.h);
     }
     box.y = destFacingPoint.y;
     if (box.y != dest.y)

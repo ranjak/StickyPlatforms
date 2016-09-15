@@ -26,7 +26,7 @@ Log& Log::getGlobal()
 
 void Log::log(Priority sev, const std::string& msg)
 {
-  if (sev >= mLevel)
+  if (sev <= mLevel)
   {
     std::string priorityStr;
     switch (sev) {

@@ -9,8 +9,13 @@ namespace game {
 
 const int Tile::SIZE = 32;
 
-Tile::Tile(bool isObstacle, const std::shared_ptr<Graphics> &graphics) :
-  mIsObstacle(isObstacle), mGraphics(graphics)
+Tile::Tile(bool isObstacle,
+           const std::shared_ptr<Graphics> &graphics,
+           const std::function<void(Entity &, Level &)> &collisionBehavior)
+  :
+    mIsObstacle(isObstacle),
+    mGraphics(graphics),
+    mCollisionBehavior(collisionBehavior)
 {
 
 }
@@ -28,6 +33,12 @@ void Tile::draw(Display& display, int x, int y, const Camera &cam) const
 
     mGraphics->draw(display, Rect<int>((int)camCoords.x, (int)camCoords.y, SIZE, SIZE));
   }
+}
+
+void Tile::onCollision(Entity &entity, Level &level)
+{
+  if (mCollisionBehavior)
+    mCollisionBehavior(entity, level);
 }
 
 }
