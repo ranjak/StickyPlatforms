@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
   glog(game::Log::Priority::DBG, "Initialization OK");
 
   display.setCameraSize(320, 240);
-  game::GameState game(display);
+  game::GameState game(display, input);
 
   // Simulated game time. Increases by a fixed amount at every game update.
   Uint32 gameTime = 0;
@@ -26,15 +26,19 @@ int main(int argc, char *argv[])
 
   while (!input.quitRequested()) {
 
-    input.handle();
-    if (input.quitRequested())
-      break;
-
     Uint32 realTimeElasped = SDL_GetTicks() - startTime;
     while (realTimeElasped > gameTime) {
-      game.update(game::TIMESTEP, &input);
+
+      input.handle();
+      if (input.quitRequested())
+        break;
+
+      game.update(game::TIMESTEP);
       gameTime += game::TIMESTEP;
     }
+
+    if (input.quitRequested())
+        break;
 
     display.render(game);
 

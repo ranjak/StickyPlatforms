@@ -1,26 +1,25 @@
 #include "gamestate.h"
 #include "hero.h"
 #include "platform.h"
+#include "display.h"
 #include "test/test.h"
+#include "world/level.h"
 #include <algorithm>
 
 namespace game {
 
 const std::uint32_t TIMESTEP = 10;
 
-GameState::GameState(Display &display) :
-  mBindings(),
-  mInputSnapshot(),
+GameState::GameState(Display &display, InputHandler &input) :
+  mCommands(input),
   mLevel(std::move(Test::makeLevel(display))),
   mCamera(0, 0, 320, 240)
 {
 }
 
 
-void GameState::update(uint32_t step, const InputHandler *input)
+void GameState::update(uint32_t step)
 {
-  mInputSnapshot = input;
-
   mLevel->update(*this, step);
 }
 
@@ -29,9 +28,9 @@ void GameState::draw(Display &target) const
   mLevel->draw(target, *this);
 }
 
-bool GameState::isCommandPressed(Command cmd)
+GameCommands &GameState::getCommands()
 {
-  return mInputSnapshot->isKeyPressed(mBindings.getBinding(cmd));
+  return mCommands;
 }
 
 Level &GameState::getLevel()

@@ -6,15 +6,17 @@ namespace game {
 InputHandler::InputHandler() :
   mEvent(),
   mQuitRequested(false),
-  mPressedKeys()
+  mHeldKeys()
 {
 
 }
 
 
-const std::vector<std::uint32_t>& InputHandler::handle()
+void InputHandler::handle()
 {
-  // Place the scancode of all currently pressed keys in pressedKeys
+  // Hit and Release events last only one frame
+  mHitKeys.clear();
+  mReleasedKeys.clear();
 
   while (SDL_PollEvent(&mEvent)) {
 
@@ -26,20 +28,21 @@ const std::vector<std::uint32_t>& InputHandler::handle()
 
     case SDL_KEYDOWN:
       // Only take this event into account if the user actually pressed the key
-      if (!mEvent.key.repeat)
-        mPressedKeys.push_back(mEvent.key.keysym.scancode);
+      if (!mEvent.key.repeat) {
+        mHitKeys.push_back(mEvent.key.keysym.scancode);
+        mHeldKeys.push_back(mEvent.key.keysym.scancode);
+      }
       break;
 
     case SDL_KEYUP:
       if (!mEvent.key.repeat) {
-        auto keyPos = std::find(mPressedKeys.begin(), mPressedKeys.end(), mEvent.key.keysym.scancode);
-        mPressedKeys.erase(keyPos);
+        mReleasedKeys.push_back(mEvent.key.keysym.scancode);
+        auto keyPos = std::find(mHeldKeys.begin(), mHeldKeys.end(), mEvent.key.keysym.scancode);
+        mHeldKeys.erase(keyPos);
       }
       break;
     }
   }
-
-  return mPressedKeys;
 }
 
 
@@ -49,9 +52,19 @@ bool InputHandler::quitRequested() const
 }
 
 
-bool InputHandler::isKeyPressed(uint32_t scancode) const
+bool InputHandler::isKeyHit(uint32_t scancode) const
 {
-  return std::find(mPressedKeys.begin(), mPressedKeys.end(), scancode) != mPressedKeys.end();
+  return std::find(mHitKeys.begin(), mHitKeys.end(), scancode) != mHitKeys.end();
+}
+
+bool InputHandler::isKeyHeld(uint32_t scancode) const
+{
+  return std::find(mHeldKeys.begin(), mHeldKeys.end(), scancode) != mHeldKeys.end();
+}
+
+bool InputHandler::isKeyReleased(uint32_t scancode) const
+{
+  return std::find(mReleasedKeys.begin(), mReleasedKeys.end(), scancode) != mReleasedKeys.end();
 }
 
 }

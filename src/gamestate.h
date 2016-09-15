@@ -4,16 +4,15 @@
 #include <cstdint>
 #include <memory>
 #include "gamecommands.h"
-#include "inputhandler.h"
-#include "display.h"
-#include "world/level.h"
 #include "camera.h"
+#include "world/level.h"
 
 namespace game {
 
 extern const std::uint32_t TIMESTEP;
 
 class Level;
+class InputHandler;
 
 /**
  * @brief The GameState class describes the state of the game at a given moment.
@@ -23,18 +22,17 @@ class Level;
 class GameState
 {
 public:
-  GameState(Display &display);
+  GameState(Display &display, InputHandler &input);
 
   /**
    * @brief update Update this state by the given amount of time.
    * @param step Amount of virtual time in milliseconds by which to advance the state.
-   * @param input Object containing the player's input status.
    */
-  void update(std::uint32_t step, const InputHandler* input);
+  void update(std::uint32_t step);
 
   void draw(Display& target) const;
 
-  bool isCommandPressed(Command cmd);
+  GameCommands &getCommands();
 
   Level& getLevel();
 
@@ -42,10 +40,8 @@ public:
   const Camera &getCamera() const;
 
 private:
-  // Key bindings to game commands
-  GameCommands mBindings;
-  // Current snapshot of user input
-  const InputHandler* mInputSnapshot;
+  // Game commands bindings and status
+  GameCommands mCommands;
   // Current level
   std::unique_ptr<Level> mLevel;
   Camera mCamera;

@@ -14,18 +14,24 @@ public:
 
   /**
    * @brief Handle player input for one frame.
-   * @return List of keys currently being pressed.
    */
-  const std::vector<std::uint32_t>& handle();
+  void handle();
 
   bool quitRequested() const;
-  bool isKeyPressed(uint32_t scancode) const;
+  bool isKeyHit(std::uint32_t scancode) const;
+  bool isKeyHeld(std::uint32_t scancode) const;
+  bool isKeyReleased(std::uint32_t scancode) const;
+
 private:
   SDL_Event mEvent;
   bool mQuitRequested;
 
-  // TODO optimize/simplify (use SDL's input state table ?)
-  std::vector<std::uint32_t> mPressedKeys;
+  // Keys that were just pressed at the time handle() was called
+  std::vector<std::uint32_t> mHitKeys;
+  // Keys that were in mHitKeys last time handle() was called and haven't been released
+  std::vector<std::uint32_t> mHeldKeys;
+  // Keys that were just released
+  std::vector<std::uint32_t> mReleasedKeys;
 };
 
 }

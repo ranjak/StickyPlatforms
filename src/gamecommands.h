@@ -5,6 +5,8 @@
 
 namespace game {
 
+class InputHandler;
+
 enum Command {
   UP,
   DOWN,
@@ -17,14 +19,19 @@ enum Command {
 class GameCommands
 {
 public:
-  GameCommands();
+  GameCommands(InputHandler &input);
 
   void setBinding(Command cmdToBind, std::uint32_t scancode);
 
-  std::uint32_t getBinding(Command cmd);
+  std::uint32_t getBinding(Command cmd) const;
+
+  bool isHit(Command cmd) const;
+  bool isHeld(Command cmd) const;
+  bool isReleased(Command cmd) const;
 
 private:
   std::uint32_t mBindings[NB_CMD];
+  InputHandler &mInput;
 };
 
 }

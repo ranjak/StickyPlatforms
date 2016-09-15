@@ -1,4 +1,5 @@
 #include "horizcontrolstate.h"
+#include "gamecommands.h"
 #include <cmath>
 #include <algorithm>
 
@@ -18,10 +19,10 @@ void HorizControlState::update(std::uint32_t step, GameState &game)
   float accelAmount = getAcceleration() * step / 1000.f;
 
   // Accelerate until max speed
-  if (game.isCommandPressed(Command::LEFT) && !game.isCommandPressed(Command::RIGHT))
+  if (game.getCommands().isHeld(Command::LEFT) && !game.getCommands().isHeld(Command::RIGHT))
     velocity.x = std::max(-getMaxSpeed(), velocity.x - accelAmount);
 
-  else if (game.isCommandPressed(Command::RIGHT) && !game.isCommandPressed(Command::LEFT))
+  else if (game.getCommands().isHeld(Command::RIGHT) && !game.getCommands().isHeld(Command::LEFT))
     velocity.x = std::min(getMaxSpeed(), velocity.x + accelAmount);
 
   // No direction : decelerate until stop
