@@ -5,6 +5,7 @@
 #include "rectangle.h"
 #include "herostate.h"
 #include "gamevector.h"
+#include "swordstate.h"
 #include <memory>
 
 namespace game {
@@ -21,7 +22,12 @@ public:
 
   void onObstacleReached(const Vector<int> &normal) override;
 
+  void draw(Display &target, const Camera &camera) const override;
+
   Vector<float> &velocity();
+
+  void swingSword();
+  void stopSword();
 
 private:
   void updatePhysics(uint32_t step, GameState &game);
@@ -34,6 +40,9 @@ private:
   bool mOnGround;
   // Fractional movement
   Vector<float> mRemainder;
+  // Sword-realted stuff
+  bool mIsSlashing;
+  SwordState mSwordState;
 };
 
 } //namespace game

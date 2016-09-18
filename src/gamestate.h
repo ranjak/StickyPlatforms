@@ -22,6 +22,11 @@ class InputHandler;
 class GameState
 {
 public:
+  /**
+   * @brief current Get a read-only reference to the current game.
+   */
+  static const GameState &current();
+
   GameState(Display &display, InputHandler &input);
 
   /**
@@ -39,12 +44,22 @@ public:
   Camera &getCamera();
   const Camera &getCamera() const;
 
+  /**
+   * @brief now Get the current simulated game time since the game started.
+   * @return The game time in milliseconds.
+   */
+  std::uint32_t now() const;
+
 private:
+  static GameState *currentGame;
   // Game commands bindings and status
   GameCommands mCommands;
   // Current level
   std::unique_ptr<Level> mLevel;
+  // Camera that tracks the player
   Camera mCamera;
+  // Simulated game time, advances every time update() is called
+  std::uint32_t mGameTime;
 };
 
 } //namespace game

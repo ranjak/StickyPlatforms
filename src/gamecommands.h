@@ -13,6 +13,7 @@ enum Command {
   LEFT,
   RIGHT,
   JUMP,
+  SWORD,
   NB_CMD
 };
 

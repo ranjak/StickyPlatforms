@@ -4,6 +4,8 @@
 #include "hero.h"
 #include "rect.h"
 #include "entity.h"
+#include "gamestate.h"
+#include "camera.h"
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>

@@ -1,5 +1,7 @@
 #include "groundstate.h"
 #include "gamecommands.h"
+#include "gamestate.h"
+#include "hero.h"
 
 namespace game {
 

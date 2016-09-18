@@ -1,13 +1,12 @@
 #ifndef HEROSTATE_H
 #define HEROSTATE_H
 
-#include "gamestate.h"
-#include "hero.h"
 #include <cstdint>
 
 namespace game {
 
 class Hero;
+class GameState;
 
 /**
  * @brief The current state the hero is in.

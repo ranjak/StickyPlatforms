@@ -4,6 +4,7 @@
 #include "world/tile.h"
 #include "camera.h"
 #include "rectangle.h"
+#include "gamestate.h"
 #include <algorithm>
 #include <cmath>
 #include <memory>
@@ -16,7 +17,9 @@ Hero::Hero() :
   mState(new AirState(*this)),
   mVelocity(0.f, 0.f),
   mOnGround(false),
-  mRemainder(0.f, 0.f)
+  mRemainder(0.f, 0.f),
+  mIsSlashing(false),
+  mSwordState(*this)
 {
 }
 
@@ -25,6 +28,9 @@ void Hero::update(uint32_t step, GameState &game)
   mState->update(step, game);
 
   updatePhysics(step, game);
+
+  if (mIsSlashing)
+    mSwordState.update(step, game);
 }
 
 void Hero::onObstacleReached(const Vector<int> &normal)
@@ -36,9 +42,32 @@ void Hero::onObstacleReached(const Vector<int> &normal)
     mVelocity.y = 0;
 }
 
+void Hero::draw(Display &target, const Camera &camera) const
+{
+  Entity::draw(target, camera);
+
+  if (mIsSlashing)
+    mSwordState.draw(target, camera);
+}
+
 Vector<float>& Hero::velocity()
 {
   return mVelocity;
+}
+
+void Hero::swingSword()
+{
+  // We can't start a new slash before the current one is done.
+  if (mIsSlashing)
+    return;
+
+  mIsSlashing = true;
+  mSwordState.enter();
+}
+
+void Hero::stopSword()
+{
+  mIsSlashing = false;
 }
 
 void Hero::updatePhysics(uint32_t step, GameState &game)

@@ -1,5 +1,8 @@
 #include "horizcontrolstate.h"
 #include "gamecommands.h"
+#include "gamevector.h"
+#include "gamestate.h"
+#include "hero.h"
 #include <cmath>
 #include <algorithm>
 
@@ -30,6 +33,9 @@ void HorizControlState::update(std::uint32_t step, GameState &game)
     velocity.x = std::max(0.f, velocity.x - accelAmount);
   else if (velocity.x < 0)
     velocity.x = std::min(0.f, velocity.x + accelAmount);
+
+  if (game.getCommands().isHit(Command::SWORD))
+    mHero.swingSword();
 }
 
 float HorizControlState::getMaxSpeed()

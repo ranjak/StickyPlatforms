@@ -37,6 +37,7 @@ set(SRC_LIST
     src/test/test.cpp
     src/camera.cpp
     src/enemy.cpp
+    src/swordstate.cpp
 )
 
 add_executable(game1 ${SRC_LIST})

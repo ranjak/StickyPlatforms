@@ -1,4 +1,6 @@
 #include "airstate.h"
+#include "gamevector.h"
+#include "hero.h"
 
 namespace game {
 
