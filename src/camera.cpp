@@ -37,4 +37,9 @@ Vector<float> Camera::toCamCoords(const Vector<float> &levelCoords) const
   return Vector<float>(levelCoords.x - mBoundingBox.x, levelCoords.y - mBoundingBox.y);
 }
 
+Rect<float> Camera::toCamCoords(const Rect<float> &levelCoords) const
+{
+  return Rect<float>(levelCoords.x - mBoundingBox.x, levelCoords.y - mBoundingBox.y, levelCoords.w, levelCoords.h);
+}
+
 }

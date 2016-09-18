@@ -1,6 +1,5 @@
 #include "gamestate.h"
 #include "hero.h"
-#include "platform.h"
 #include "display.h"
 #include "test/test.h"
 #include "world/level.h"

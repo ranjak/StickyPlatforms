@@ -7,6 +7,7 @@
 
 namespace game {
 
+template<typename T> class Rect;
 
 class Camera : public Entity
 {
@@ -17,6 +18,8 @@ public:
   void update(std::uint32_t step, GameState &game) override;
 
   Vector<float> toCamCoords(const Vector<float>& levelCoords) const;
+
+  Rect<float> toCamCoords(const Rect<float>& levelCoords) const;
 
 };
 

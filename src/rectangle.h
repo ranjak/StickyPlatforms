@@ -11,7 +11,7 @@ namespace game {
 class Rectangle : public Graphics
 {
 public:
-  Rectangle(int w=0, int h=0);
+  Rectangle(int w=0, int h=0, const Color &color=Color::WHITE);
 
   void draw(Display& target, int x, int y) const override;
 

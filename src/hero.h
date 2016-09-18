@@ -19,8 +19,6 @@ public:
 
   void update(uint32_t step, GameState &game) override;
 
-  void draw(Display& target, const Camera &cam) const override;
-
   void onObstacleReached(const Vector<int> &normal) override;
 
   Vector<float> &velocity();
@@ -34,8 +32,6 @@ private:
   // Velocity in pixels/sec
   Vector<float> mVelocity;
   bool mOnGround;
-  // Visual representation (aka green cube)
-  Rectangle mCube;
   // Fractional movement
   Vector<float> mRemainder;
 };

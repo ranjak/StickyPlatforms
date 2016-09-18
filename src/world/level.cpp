@@ -160,7 +160,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
       for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
         mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
         if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
-          destFacingPoint.x = (i+1) * Tile::SIZE;
+          destFacingPoint.x = std::min((i+1), mSize.x-1) * Tile::SIZE;
           break;
         }
       }
@@ -200,7 +200,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
       for (int j=(int)facingPoint.y / Tile::SIZE; j>=(int)destFacingPoint.y / Tile::SIZE; j--) {
         mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
         if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
-          destFacingPoint.y = (j+1) * Tile::SIZE;
+          destFacingPoint.y = std::min((j+1), mSize.y-1) * Tile::SIZE;
           break;
         }
       }

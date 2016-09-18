@@ -3,21 +3,21 @@
 #include "groundstate.h"
 #include "world/tile.h"
 #include "camera.h"
+#include "rectangle.h"
 #include <algorithm>
 #include <cmath>
+#include <memory>
 
 namespace game {
 
 
 Hero::Hero() :
-  Entity(0, 0, Tile::SIZE, Tile::SIZE),
+  Entity(0, 0, Tile::SIZE, Tile::SIZE, std::unique_ptr<Graphics>(new Rectangle(Tile::SIZE, Tile::SIZE, Color::GREEN))),
   mState(new AirState(*this)),
   mVelocity(0.f, 0.f),
   mOnGround(false),
-  mCube(Tile::SIZE, Tile::SIZE),
   mRemainder(0.f, 0.f)
 {
-  mCube.setColor(game::GREEN);
 }
 
 void Hero::update(uint32_t step, GameState &game)
@@ -25,13 +25,6 @@ void Hero::update(uint32_t step, GameState &game)
   mState->update(step, game);
 
   updatePhysics(step, game);
-}
-
-void Hero::draw(Display& target, const Camera &cam) const
-{
-  Vector<float> pos = cam.toCamCoords(getPosition());
-
-  mCube.draw(target, pos.x, pos.y);
 }
 
 void Hero::onObstacleReached(const Vector<int> &normal)

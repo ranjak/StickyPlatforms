@@ -2,20 +2,25 @@
 #define ENTITY_H
 
 #include <cstdint>
+#include <memory>
 #include "gamevector.h"
 #include "rect.h"
+#include "graphics.h"
 
 namespace game {
 
 class GameState;
 class Display;
 class Camera;
+class Graphics;
 
 class Entity
 {
 public:
   Entity();
-  Entity(int x, int y, int w=0, int h=0);
+  Entity(int x, int y, int w=0, int h=0, std::unique_ptr<Graphics> graphs=nullptr);
+
+  virtual ~Entity() = default;
 
   /**
    * @brief update Update this entity, making its simulation advance by \p step.
@@ -47,6 +52,7 @@ public:
 
 protected:
   Rect<float> mBoundingBox;
+  std::unique_ptr<Graphics> mGraphics;
 };
 
 } // namespace game

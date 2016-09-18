@@ -35,3 +35,12 @@ O9/03/2016
 	  * Image-based tilesets
 	And hopefully for 09/17:
 	  * File format for maps and tilesets.
+	  
+09/18/2016
+
+  Scrolling is done. However I'm still unsure about file formats. I've been thinking about using
+  the Tiled editor along with the TMX format.
+  Anyway, I think it's a bit early to implement that, and I've decided to focus on adding some gameplay instead.
+  Plans for today:
+    * Add an AI-controlled (brainless) enemy.
+    * Add an "attack" action that makes the hero swing a sword, an can hit the enemy.

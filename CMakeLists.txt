@@ -28,7 +28,6 @@ set(SRC_LIST
     src/hero.cpp
     src/graphics.cpp
     src/rectangle.cpp
-    src/platform.cpp
     src/herostate.cpp
     src/horizcontrolstate.cpp
     src/groundstate.cpp
@@ -37,6 +36,7 @@ set(SRC_LIST
     src/world/tile.cpp
     src/test/test.cpp
     src/camera.cpp
+    src/enemy.cpp
 )
 
 add_executable(game1 ${SRC_LIST})

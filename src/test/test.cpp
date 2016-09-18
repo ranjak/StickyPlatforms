@@ -1,11 +1,11 @@
 #include "test.h"
 #include "hero.h"
-#include "platform.h"
 #include "world/level.h"
 #include "world/tile.h"
 #include "image.h"
 #include "resource.h"
 #include "log.h"
+#include "enemy.h"
 #include <cstring>
 #include <memory>
 #include <vector>
@@ -31,6 +31,8 @@ TileID testTiles[] {
   0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 1,
 };
 
+const Vector<int> lvlSize(16*Tile::SIZE, 11*Tile::SIZE);
+
 std::unique_ptr<Level> Test::makeLevel(Display& display)
 {
   std::unique_ptr<Level> level(new Level(16, 11, std::unique_ptr<Hero>(new Hero)));
@@ -47,7 +49,9 @@ std::unique_ptr<Level> Test::makeLevel(Display& display)
   // Fille the level's tile array with testTiles
   std::memcpy(level->tiles().get(), testTiles, 16 * 11 * sizeof(TileID));
 
-  level->addEntity(std::unique_ptr<Entity>(new Platform(150, 150)));
+  // Platform
+  level->addEntity(std::unique_ptr<Entity>(new Entity(150, 150, 50, 20, std::unique_ptr<Graphics>(new Rectangle(50, 20)))));
+  level->addEntity(std::unique_ptr<Entity>(new Enemy(lvlSize.x - 100, lvlSize.y - (Tile::SIZE*2), Tile::SIZE, Tile::SIZE)));
 
   return level;
 }

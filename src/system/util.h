@@ -2,7 +2,8 @@
 #define UTIL_H
 
 /**
- * @file Utility functions.
+ * @file util.h
+ * Utility functions.
  */
 
 namespace game {

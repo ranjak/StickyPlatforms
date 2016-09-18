@@ -8,9 +8,9 @@
 namespace game {
 
 
-Rectangle::Rectangle(int w, int h) :
+Rectangle::Rectangle(int w, int h, const Color &color) :
   Graphics(),
-  mColor(),
+  mColor(color),
   w(w), h(h)
 {
 }
