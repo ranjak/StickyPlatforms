@@ -10,29 +10,23 @@ namespace game {
 
 Enemy::Enemy(int x, int y, int w, int h) :
   Entity(x, y, w, h, std::unique_ptr<Graphics>(new Rectangle(w, h, Color::RED))),
-  mDirectionX(-1),
-  mSpeed(75),
-  mRemainder(0.f)
+  mSpeed(75.f),
+  mMovement(*this)
 {
+  // Set initial velocity
+  mMovement.velocity().x = - mSpeed;
 }
 
 void Enemy::update(uint32_t step, GameState &game)
 {
-  // Move along the direction. Currently we're supposed to move along X only.
-  mRemainder += mDirectionX * mSpeed * step / 1000.f;
-
-  Vector<float> destination(0.f, mBoundingBox.y);
-  mRemainder = std::modf(mRemainder, &destination.x);
-
-  destination.x += mBoundingBox.x;
-  game.getLevel().tryMoving(*this, destination);
+  mMovement.update(step, game);
 }
 
 void Enemy::onObstacleReached(const Vector<int> &normal)
 {
-  // Hit something? Go to the opposite direction
+  // Hit something? Go in the opposite direction
   if (normal.x != 0)
-    mDirectionX = normal.x;
+    mMovement.velocity().x = mSpeed * normal.x;
 }
 
 } // namespace game

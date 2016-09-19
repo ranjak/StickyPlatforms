@@ -15,9 +15,8 @@ namespace game {
 Hero::Hero() :
   Entity(0, 0, Tile::SIZE, Tile::SIZE, std::unique_ptr<Graphics>(new Rectangle(Tile::SIZE, Tile::SIZE, Color::GREEN))),
   mState(new AirState(*this)),
-  mVelocity(0.f, 0.f),
   mOnGround(false),
-  mRemainder(0.f, 0.f),
+  mMovement(*this),
   mIsSlashing(false),
   mSwordState(*this)
 {
@@ -37,9 +36,9 @@ void Hero::onObstacleReached(const Vector<int> &normal)
 {
   // Nullify the velocity in the direction of the collision
   if (normal.x != 0)
-    mVelocity.x = 0;
+    mMovement.velocity().x = 0;
   if (normal.y != 0)
-    mVelocity.y = 0;
+    mMovement.velocity().y = 0;
 }
 
 void Hero::draw(Display &target, const Camera &camera) const
@@ -52,7 +51,7 @@ void Hero::draw(Display &target, const Camera &camera) const
 
 Vector<float>& Hero::velocity()
 {
-  return mVelocity;
+  return mMovement.velocity();
 }
 
 void Hero::swingSword()
@@ -72,20 +71,7 @@ void Hero::stopSword()
 
 void Hero::updatePhysics(uint32_t step, GameState &game)
 {
-  // Move according to velocity
-
-  // Only use integers for position. Store fractional part in a remainder.
-  mRemainder.x += mVelocity.x * step / 1000.f;
-  mRemainder.y += mVelocity.y * step / 1000.f;
-
-  Vector<float> destination(0.f, 0.f);
-  mRemainder.x = std::modf(mRemainder.x, &destination.x);
-  mRemainder.y = std::modf(mRemainder.y, &destination.y);
-
-  destination.x += mBoundingBox.x;
-  destination.y += mBoundingBox.y;
-
-  game.getLevel().tryMoving(*this, destination);
+  mMovement.update(step, game);
 
   // If we find out we're not currently on the ground, we'll switch to air state
   bool onGround = game.getLevel().isOnGround(*this);

@@ -6,6 +6,7 @@
 #include "herostate.h"
 #include "gamevector.h"
 #include "swordstate.h"
+#include "movement.h"
 #include <memory>
 
 namespace game {
@@ -35,11 +36,8 @@ private:
 private:
   // State the hero is currently in
   std::unique_ptr<HeroState> mState;
-  // Velocity in pixels/sec
-  Vector<float> mVelocity;
   bool mOnGround;
-  // Fractional movement
-  Vector<float> mRemainder;
+  Movement mMovement;
   // Sword-realted stuff
   bool mIsSlashing;
   SwordState mSwordState;

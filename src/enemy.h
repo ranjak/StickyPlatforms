@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include "entity.h"
+#include "movement.h"
 
 namespace game {
 
@@ -14,9 +15,8 @@ public:
   virtual void onObstacleReached(const Vector<int> &normal) override;
 
 private:
-  int mDirectionX;
   float mSpeed;
-  float mRemainder;
+  Movement mMovement;
 };
 
 } // namespace game

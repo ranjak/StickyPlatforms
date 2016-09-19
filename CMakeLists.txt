@@ -38,6 +38,7 @@ set(SRC_LIST
     src/camera.cpp
     src/enemy.cpp
     src/swordstate.cpp
+    src/movement.cpp
 )
 
 add_executable(game1 ${SRC_LIST})
