@@ -16,7 +16,7 @@ Movement::Movement(Entity &entity) :
 
 void Movement::update(uint32_t step, GameState &game)
 {
-  Rect<float> box = mEntity.getBoundingBox();
+  Rect<float> box = mEntity.getGlobalBox();
   // Only use integers for position. Store fractional part in a remainder.
   mRemainder.x += mVelocity.x * step / 1000.f;
   mRemainder.y += mVelocity.y * step / 1000.f;

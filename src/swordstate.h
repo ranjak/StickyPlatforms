@@ -2,7 +2,7 @@
 #define SWORDSTATE_H
 
 #include "herostate.h"
-#include "entity.h"
+#include "sword.h"
 
 namespace game {
 
@@ -25,10 +25,7 @@ private:
   std::uint32_t mEndTimestamp;
   // When the sword will stop dealing damage
   std::uint32_t mDamageEndTimestamp;
-  Entity mSword;
-  float mSwordVelocity;
-  float mRemainder;
-  int mSwordMvt;
+  Sword mSword;
 };
 
 } // namespace game

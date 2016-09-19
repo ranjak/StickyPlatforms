@@ -18,7 +18,7 @@ class Entity
 {
 public:
   Entity();
-  Entity(int x, int y, int w=0, int h=0, std::unique_ptr<Graphics> graphs=nullptr);
+  Entity(int x, int y, int w=0, int h=0, std::unique_ptr<Graphics> graphs=nullptr, Entity *parent=nullptr);
 
   virtual ~Entity() = default;
 
@@ -43,16 +43,20 @@ public:
    */
   virtual void onObstacleReached(const Vector<int> &normal);
 
-  Vector<float> getPosition() const;
+  Vector<float> getLocalPos() const;
+  Vector<float> getGlobalPos() const;
 
-  void setPosition(const Vector<float>& newPos);
+  void setLocalPos(const Vector<float>& newPos);
+  void setGlobalPos(const Vector<float> &newPos);
 
-  Rect<float>& getBoundingBox();
-  const Rect<float>& getBoundingBox() const;
+  Rect<float> &getLocalBox();
+  const Rect<float> &getLocalBox() const;
+  Rect<float> getGlobalBox() const;
 
 protected:
   Rect<float> mBoundingBox;
   std::unique_ptr<Graphics> mGraphics;
+  Entity *mParent;
 };
 
 } // namespace game

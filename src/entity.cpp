@@ -11,9 +11,10 @@ Entity::Entity() :
 
 }
 
-Entity::Entity(int x, int y, int w, int h, std::unique_ptr<Graphics> graphs) :
+Entity::Entity(int x, int y, int w, int h, std::unique_ptr<Graphics> graphs, Entity *parent) :
   mBoundingBox(x, y, w, h),
-  mGraphics(std::move(graphs))
+  mGraphics(std::move(graphs)),
+  mParent(parent)
 {
 
 }
@@ -26,7 +27,7 @@ void Entity::update(uint32_t step, GameState &game)
 void Entity::draw(Display &target, const Camera &camera) const
 {
   if (mGraphics) {
-    Vector<float> pos = camera.toCamCoords(getPosition());
+    Vector<float> pos = camera.toCamCoords(getGlobalPos());
     mGraphics->draw(target, pos.x, pos.y);
   }
 }
@@ -36,24 +37,64 @@ void Entity::onObstacleReached(const Vector<int> &normal)
 
 }
 
-Vector<float> Entity::getPosition() const
+Vector<float> Entity::getLocalPos() const
 {
   return Vector<float>(mBoundingBox.x, mBoundingBox.y);
 }
 
-void Entity::setPosition(const Vector<float> &newPos)
+Vector<float> Entity::getGlobalPos() const
+{
+  if (mParent) {
+    Vector<float> ppos = mParent->getGlobalPos();
+    ppos.x += mBoundingBox.x;
+    ppos.y += mBoundingBox.y;
+    return ppos;
+  }
+
+  return Vector<float>(mBoundingBox.x, mBoundingBox.y);
+}
+
+void Entity::setLocalPos(const Vector<float> &newPos)
 {
   mBoundingBox.x = newPos.x;
   mBoundingBox.y = newPos.y;
 }
 
-Rect<float> &Entity::getBoundingBox()
+void Entity::setGlobalPos(const Vector<float> &newPos)
+{
+  if (mParent) {
+    Vector<float> ppos = mParent->getGlobalPos();
+    mBoundingBox.x = newPos.x - ppos.x;
+    mBoundingBox.y = newPos.y - ppos.y;
+  }
+  else {
+    mBoundingBox.x = newPos.x;
+    mBoundingBox.y = newPos.y;
+  }
+}
+
+Rect<float> &Entity::getLocalBox()
 {
   return mBoundingBox;
 }
 
-const Rect<float> &Entity::getBoundingBox() const
+const Rect<float> &Entity::getLocalBox() const
 {
+  return mBoundingBox;
+}
+
+Rect<float> Entity::getGlobalBox() const
+{
+  if (mParent) {
+    Rect<float> parentBox = mParent->getGlobalBox();
+    parentBox.x += mBoundingBox.x;
+    parentBox.y += mBoundingBox.y;
+    parentBox.w = mBoundingBox.w;
+    parentBox.h = mBoundingBox.h;
+
+    return parentBox;
+  }
+
   return mBoundingBox;
 }
 

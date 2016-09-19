@@ -39,7 +39,7 @@ void Level::update(GameState &game, uint32_t step)
 void Level::draw(Display &target, const GameState &game) const
 {
   const Camera& cam = game.getCamera();
-  const Rect<float>& viewport = cam.getBoundingBox();
+  Rect<float> viewport = cam.getGlobalBox();
 
   // Draw tiles. They are drawn by column.
   for (int i=viewport.x / Tile::SIZE; i<=(viewport.x+viewport.w - 1) / Tile::SIZE; i++) {
@@ -50,7 +50,7 @@ void Level::draw(Display &target, const GameState &game) const
 
   // Draw entities
   for (const std::unique_ptr<Entity>& entity : mEntities) {
-    if (entity->getBoundingBox().intersects(viewport))
+    if (entity->getGlobalBox().intersects(viewport))
       entity->draw(target, cam);
   }
 }
@@ -76,7 +76,7 @@ bool Level::collides(const Entity &entity)
   auto entityPos = std::find_if(mEntities.begin(), mEntities.end(), [&] (std::unique_ptr<Entity>& vecEntity) { return vecEntity.get() == &entity; });
 
   for (auto it = entityPos+1; it != mEntities.end(); it++) {
-    if (entity.getBoundingBox().intersects((*it)->getBoundingBox()))
+    if (entity.getGlobalBox().intersects((*it)->getGlobalBox()))
       return true;
   }
 
@@ -93,8 +93,8 @@ std::vector<CollisionManifold> Level::checkCollisions(Entity &entity)
   std::vector<CollisionManifold> collisions;
 
   for (auto it = entityPos; it != mEntities.end(); it++) {
-    if (entity.getBoundingBox().intersects((*it)->getBoundingBox()))
-      collisions.push_back(CollisionManifold{**it, entity.getBoundingBox().getCollisionNormal((*it)->getBoundingBox())});
+    if (entity.getGlobalBox().intersects((*it)->getGlobalBox()))
+      collisions.push_back(CollisionManifold{**it, entity.getGlobalBox().getCollisionNormal((*it)->getGlobalBox())});
   }
 
   return collisions;
@@ -102,7 +102,7 @@ std::vector<CollisionManifold> Level::checkCollisions(Entity &entity)
 
 bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 {
-  Rect<float> &box = entity.getBoundingBox();
+  Rect<float> box = entity.getGlobalBox();
   Vector<float> direction(dest.x - box.x, dest.y - box.y);
   Vector<float> facingPoint;
 
@@ -134,7 +134,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   if (direction.x > 0) {
     // Find the closest entity obstacle on X
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> &ebox = (**it).getBoundingBox();
+      Rect<float> ebox = (**it).getGlobalBox();
       if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
         destFacingPoint.x = std::min(destFacingPoint.x, ebox.x);
     }
@@ -156,7 +156,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   }
   else if (direction.x < 0) {
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> &ebox = (**it).getBoundingBox();
+      Rect<float> ebox = (**it).getGlobalBox();
       if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
         destFacingPoint.x = std::max(destFacingPoint.x, ebox.x + ebox.w);
     }
@@ -177,7 +177,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   // Same for the Y axis
   if (direction.y > 0) {
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> &ebox = (**it).getBoundingBox();
+      Rect<float> ebox = (**it).getGlobalBox();
       if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
         destFacingPoint.y = std::min(destFacingPoint.y, ebox.y);
     }
@@ -196,7 +196,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   }
   else if (direction.y < 0) {
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> &ebox = (**it).getBoundingBox();
+      Rect<float> ebox = (**it).getGlobalBox();
       if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
         destFacingPoint.y = std::max(destFacingPoint.y, ebox.y + ebox.h);
     }
@@ -214,6 +214,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
       entity.onObstacleReached(Vector<int>(0, 1));
   }
 
+  entity.setGlobalPos(Vector<float>(box.x, box.y));
   return box.x == dest.x && box.y == dest.y;
 }
 
@@ -221,7 +222,7 @@ std::vector<Entity*> Level::getEntitiesInArea(const Rect<float> &area)
 {
   std::vector<Entity*> entities;
   for (auto it=mEntities.begin(); it != mEntities.end(); it++) {
-    if (area.intersects((**it).getBoundingBox()))
+    if (area.intersects((**it).getGlobalBox()))
       entities.push_back(it->get());
   }
 
@@ -230,7 +231,7 @@ std::vector<Entity*> Level::getEntitiesInArea(const Rect<float> &area)
 
 bool Level::isOnGround(Entity &entity)
 {
-  const Rect<float> &box = entity.getBoundingBox();
+  Rect<float> box = entity.getGlobalBox();
 
   // At the boundaries of the level ?
   if (box.y + box.h >= mSize.y * Tile::SIZE)
@@ -245,7 +246,7 @@ bool Level::isOnGround(Entity &entity)
   // Any entity below ?
   for (auto it=mEntities.begin(); it != mEntities.end(); it++) {
 
-    Rect<float> &obox = (**it).getBoundingBox();
+    Rect<float> obox = (**it).getGlobalBox();
 
     if (it->get() != &entity && (box.y + box.h == obox.y) && (box.x + box.w > obox.x) && (box.x < obox.x + obox.w))
       return true;

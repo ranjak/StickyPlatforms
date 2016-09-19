@@ -13,9 +13,7 @@ SwordState::SwordState(Hero& hero) :
   HeroState(hero),
   mEndTimestamp(0),
   mDamageEndTimestamp(0),
-  mSword(0, 0, 25, 8, std::unique_ptr<Graphics>(new Rectangle(25, 8, Color::BLUE))),
-  mSwordVelocity(0.f),
-  mSwordMvt(0)
+  mSword(&hero)
 {
 
 }
@@ -27,37 +25,21 @@ void SwordState::update(uint32_t step, GameState &game)
     return;
   }
 
-  Rect<float> &hbox = mHero.getBoundingBox();
-  Rect<float> &sbox = mSword.getBoundingBox();
-
   // Perform the slash
-  if (game.now() < mDamageEndTimestamp) {
-    float integerPart;
-    mRemainder += mSwordVelocity * step / 1000.f;
-
-    mRemainder = std::modf(mRemainder, &integerPart);
-    mSwordMvt += integerPart;
-  }
-
-  sbox.x = hbox.x + hbox.w + 10;
-  sbox.y = hbox.y - sbox.h + mSwordMvt;
+  if (game.now() < mDamageEndTimestamp)
+    mSword.update(step, game);
 }
 
 void SwordState::enter()
 {
-  // The state lasts one second
+  // The state lasts 300ms
   mEndTimestamp = GameState::current().now() + 300;
+  // The swing must last 50ms, start above the hero and end at his feet.
   mDamageEndTimestamp = GameState::current().now() + 50;
 
-  // The swing must last 300ms, start above the hero and end at his feet.
-  Rect<float> &hbox = mHero.getBoundingBox();
-  Rect<float> &sbox = mSword.getBoundingBox();
-
-  mSwordVelocity = hbox.h / (50.f / 1000.f);
-
-  // Put the sword above the hero
-  sbox.y = hbox.y - sbox.h;
-  mSwordMvt = 0;
+  // Reset the sword's position
+  const Rect<float> &box = mHero.getLocalBox();
+  mSword.setLocalPos(Vector<float>(box.w, - mSword.getLocalBox().h));
 }
 
 void SwordState::draw(Display &display, const Camera &camera) const

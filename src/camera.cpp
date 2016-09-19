@@ -24,7 +24,7 @@ void Camera::update(uint32_t step, GameState &game)
   Vector<int> size = level.getPixelSize();
 
   // Track the hero, keep him in the middle.
-  const Rect<float> &box = level.getHero()->getBoundingBox();
+  Rect<float> box = level.getHero()->getGlobalBox();
   mBoundingBox.setCenter(box.getCenter());
 
   // Do not go beyond the level's boundaries (but handle cases where the camera is larger than the level)
