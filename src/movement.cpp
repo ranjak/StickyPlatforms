@@ -29,6 +29,9 @@ void Movement::update(uint32_t step, GameState &game)
   destination.y += box.y;
 
   game.getLevel().tryMoving(mEntity, destination);
+
+  if (mEntity.isCollidable())
+    game.getLevel().handleCollisions(mEntity);
 }
 
 Vector<float> &Movement::velocity()

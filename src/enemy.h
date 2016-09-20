@@ -12,11 +12,17 @@ public:
   Enemy(int x, int y, int w, int h);
 
   virtual void update(std::uint32_t step, GameState& game) override;
+
   virtual void onObstacleReached(const Vector<int> &normal) override;
+  virtual void onCollision(Entity &entity) override;
+
+  virtual bool isDead() const override;
 
 private:
   float mSpeed;
   Movement mMovement;
+  int mHealthPoints;
+  std::uint32_t mInvincibilityEnd;
 };
 
 } // namespace game

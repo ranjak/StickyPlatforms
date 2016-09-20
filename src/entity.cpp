@@ -11,10 +11,13 @@ Entity::Entity() :
 
 }
 
-Entity::Entity(int x, int y, int w, int h, std::unique_ptr<Graphics> graphs, Entity *parent) :
+Entity::Entity(int x, int y, int w, int h, std::unique_ptr<Graphics> graphs, Entity *parent, bool isObstacle) :
   mBoundingBox(x, y, w, h),
   mGraphics(std::move(graphs)),
-  mParent(parent)
+  mParent(parent),
+  mIsObstacle(isObstacle),
+  mIsCollidable(true),
+  mIgnoresObstacles(false)
 {
 
 }
@@ -35,6 +38,36 @@ void Entity::draw(Display &target, const Camera &camera) const
 void Entity::onObstacleReached(const Vector<int> &normal)
 {
 
+}
+
+void Entity::onCollision(Entity &entity)
+{
+
+}
+
+void Entity::onCollision(Tile &tile, Vector<int> pos)
+{
+
+}
+
+bool Entity::isObstacle() const
+{
+  return mIsObstacle;
+}
+
+bool Entity::isCollidable() const
+{
+  return mIsCollidable;
+}
+
+bool Entity::ignoresObstacles() const
+{
+  return mIgnoresObstacles;
+}
+
+bool Entity::isDead() const
+{
+  return false;
 }
 
 Vector<float> Entity::getLocalPos() const

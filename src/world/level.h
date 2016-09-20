@@ -50,6 +50,8 @@ public:
    */
   std::vector<CollisionManifold> checkCollisions(Entity& entity);
 
+  void handleCollisions(Entity &entity);
+
   /**
    * @brief tryMoving Try to move \p entity to \p dest, according to a linear trajectory.
    * Obstacles are taken into account, and can prevent \p entity from reaching \p dest.

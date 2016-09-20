@@ -3,6 +3,7 @@
 #include "color.h"
 #include "world/level.h"
 #include "gamestate.h"
+#include "sword.h"
 #include <cmath>
 
 namespace game {
@@ -11,7 +12,9 @@ namespace game {
 Enemy::Enemy(int x, int y, int w, int h) :
   Entity(x, y, w, h, std::unique_ptr<Graphics>(new Rectangle(w, h, Color::RED))),
   mSpeed(75.f),
-  mMovement(*this)
+  mMovement(*this),
+  mHealthPoints(3),
+  mInvincibilityEnd(0)
 {
   // Set initial velocity
   mMovement.velocity().x = - mSpeed;
@@ -27,6 +30,22 @@ void Enemy::onObstacleReached(const Vector<int> &normal)
   // Hit something? Go in the opposite direction
   if (normal.x != 0)
     mMovement.velocity().x = mSpeed * normal.x;
+}
+
+void Enemy::onCollision(Entity &entity)
+{
+  std::uint32_t now = 0;
+  Sword *sword = dynamic_cast<Sword *>(&entity);
+
+  if (sword != nullptr && (now=GameState::current().now()) > mInvincibilityEnd) {
+    mHealthPoints--;
+    mInvincibilityEnd = now + 200;
+  }
+}
+
+bool Enemy::isDead() const
+{
+  return mHealthPoints <= 0;
 }
 
 } // namespace game

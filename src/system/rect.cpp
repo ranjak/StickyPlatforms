@@ -78,6 +78,33 @@ void Rect<T>::setCenter(Vector<T> center)
   y = center.y - (h / 2);
 }
 
+template<typename T>
+T Rect<T>::distanceX(const Rect &other) const
+{
+  if (x + w < other.x)
+    return other.x - (x + w);
+
+  else if (other.x + other.w < x)
+    return x - (other.x + other.w);
+
+  // Overlap or touch
+  else
+    return 0;
+}
+
+template<typename T>
+T Rect<T>::distanceY(const Rect &other) const
+{
+  if (y + h < other.y)
+    return other.y - (y + h);
+
+  else if (other.y + other.h < y)
+    return y - (other.y + other.h);
+
+  // Overlap or touch
+  else
+    return 0;
+}
 
 // Template definitions for needed Rect specializations
 template class Rect<int>;

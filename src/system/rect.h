@@ -26,6 +26,9 @@ public:
   Vector<T> getCenter() const;
   void setCenter(Vector<T>);
 
+  T distanceX(const Rect &other) const;
+  T distanceY(const Rect &other) const;
+
 public:
   T x, y, w, h;
 };

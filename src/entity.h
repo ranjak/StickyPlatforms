@@ -13,12 +13,13 @@ class GameState;
 class Display;
 class Camera;
 class Graphics;
+class Tile;
 
 class Entity
 {
 public:
   Entity();
-  Entity(int x, int y, int w=0, int h=0, std::unique_ptr<Graphics> graphs=nullptr, Entity *parent=nullptr);
+  Entity(int x, int y, int w=0, int h=0, std::unique_ptr<Graphics> graphs=nullptr, Entity *parent=nullptr, bool isObstacle=false);
 
   virtual ~Entity() = default;
 
@@ -43,6 +44,17 @@ public:
    */
   virtual void onObstacleReached(const Vector<int> &normal);
 
+  virtual void onCollision(Entity &entity);
+  virtual void onCollision(Tile &tile, Vector<int> pos);
+
+  /** Whether this entity can block the way of other entities */
+  bool isObstacle() const;
+  /** Whether this entity should be checked for collisions */
+  bool isCollidable() const;
+  bool ignoresObstacles() const;
+
+  virtual bool isDead() const;
+
   Vector<float> getLocalPos() const;
   Vector<float> getGlobalPos() const;
 
@@ -57,6 +69,9 @@ protected:
   Rect<float> mBoundingBox;
   std::unique_ptr<Graphics> mGraphics;
   Entity *mParent;
+  bool mIsObstacle;
+  bool mIsCollidable;
+  bool mIgnoresObstacles;
 };
 
 } // namespace game

@@ -34,6 +34,8 @@ void Level::update(GameState &game, uint32_t step)
     entity->update(step, game);
   }
   game.getCamera().update(step, game);
+
+  mEntities.erase(std::remove_if(mEntities.begin(), mEntities.end(), [](std::unique_ptr<Entity>& entity) {return entity->isDead();}), mEntities.end());
 }
 
 void Level::draw(Display &target, const GameState &game) const
@@ -100,6 +102,27 @@ std::vector<CollisionManifold> Level::checkCollisions(Entity &entity)
   return collisions;
 }
 
+void Level::handleCollisions(Entity &entity)
+{
+  Rect<float> box = entity.getGlobalBox();
+
+  // Check tile collisions first
+  for (int i=box.x / Tile::SIZE; i<=(box.x+box.w - 1)/Tile::SIZE; i++) {
+    for (int j=box.y / Tile::SIZE; j<=(box.y+box.h - 1)/Tile::SIZE; j++) {
+      mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
+      entity.onCollision(mTileset[mTiles[i*mSize.y + j]], Vector<int>(i*Tile::SIZE, j*Tile::SIZE));
+    }
+  }
+
+  // Check entity collisions
+  for (const std::unique_ptr<Entity> &other : mEntities) {
+    if (other.get() != &entity && other->isCollidable() && box.touches(other->getGlobalBox())) {
+      other->onCollision(entity);
+      entity.onCollision(*other);
+    }
+  }
+}
+
 bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 {
   Rect<float> box = entity.getGlobalBox();
@@ -122,6 +145,15 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   else if (destFacingPoint.y > mSize.y * Tile::SIZE)
     destFacingPoint.y = mSize.y * Tile::SIZE;
 
+  if (!entity.isCollidable() || entity.ignoresObstacles()) {
+
+    box.x = (direction.x >= 0) ? destFacingPoint.x-box.w : destFacingPoint.x;
+    box.y = (direction.y >= 0) ? destFacingPoint.y-box.h : destFacingPoint.y;
+
+    entity.setGlobalPos(Vector<float>(box.x, box.y));
+    return box.x == dest.x && box.y == dest.y;
+  }
+
   // Store all entities that could possibly block our way
   Rect<float> movementArea;
   movementArea.x = std::min(destFacingPoint.x, box.x);
@@ -135,7 +167,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
     // Find the closest entity obstacle on X
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
       Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
+      if (*it != &entity && (**it).isObstacle() && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
         destFacingPoint.x = std::min(destFacingPoint.x, ebox.x);
     }
     // Find the closest tile obstacle on X
@@ -157,7 +189,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   else if (direction.x < 0) {
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
       Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
+      if (*it != &entity && (**it).isObstacle() && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
         destFacingPoint.x = std::max(destFacingPoint.x, ebox.x + ebox.w);
     }
     for (int i=(int)facingPoint.x / Tile::SIZE; i>=(int)destFacingPoint.x / Tile::SIZE; i--) {
@@ -178,7 +210,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   if (direction.y > 0) {
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
       Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
+      if (*it != &entity && (**it).isObstacle() && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
         destFacingPoint.y = std::min(destFacingPoint.y, ebox.y);
     }
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
@@ -197,7 +229,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   else if (direction.y < 0) {
     for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
       Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
+      if (*it != &entity && (**it).isObstacle() && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
         destFacingPoint.y = std::max(destFacingPoint.y, ebox.y + ebox.h);
     }
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
