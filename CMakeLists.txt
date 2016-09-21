@@ -42,13 +42,16 @@ set(SRC_LIST
     src/movement.cpp
 )
 
-add_executable(game1 ${SRC_LIST})
+add_subdirectory(src/3rdparty/tmxparser)
+
+add_executable(game1 ${SRC_LIST} $<TARGET_OBJECTS:tmxparser>)
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
     ${SDL2_IMAGE_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tmxparser/include
 )
 target_link_libraries(${PROJECT_NAME}
     ${SDL2_LIBRARY}
