@@ -1,6 +1,8 @@
 #include "entity.h"
 #include "camera.h"
 #include "graphics.h"
+#include "log.h"
+#include <algorithm>
 
 namespace game {
 
@@ -14,12 +16,25 @@ Entity::Entity() :
 Entity::Entity(int x, int y, int w, int h, std::unique_ptr<Graphics> graphs, Entity *parent, bool isObstacle) :
   mBoundingBox(x, y, w, h),
   mGraphics(std::move(graphs)),
-  mParent(parent),
+  mParent(),
+  mChildren(),
   mIsObstacle(isObstacle),
   mIsCollidable(true),
   mIgnoresObstacles(false)
 {
+  if (parent != nullptr)
+    parent->addChild(this);
+}
 
+Entity::~Entity()
+{
+  // Notify related entities
+  for (Entity *child : mChildren) {
+    child->mParent = nullptr;
+  }
+
+  if (mParent != nullptr)
+    mParent->removeChild(this);
 }
 
 void Entity::update(uint32_t step, GameState &game)
@@ -68,6 +83,26 @@ bool Entity::ignoresObstacles() const
 bool Entity::isDead() const
 {
   return false;
+}
+
+void Entity::addChild(Entity *child)
+{
+  if (child->mParent)
+    child->mParent->removeChild(child);
+
+  child->mParent = this;
+  mChildren.push_back(child);
+}
+
+void Entity::removeChild(Entity *child)
+{
+  if (child->mParent == this) {
+    child->mParent = nullptr;
+    mChildren.erase(std::find(mChildren.begin(), mChildren.end(), child));
+  }
+  else {
+    Log::getGlobal().get(Log::WARNING) << "Entity " << child << " doesn't have " << this << " as parent, can't remove from children list";
+  }
 }
 
 Vector<float> Entity::getLocalPos() const

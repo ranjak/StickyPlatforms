@@ -30,6 +30,8 @@ public:
     TRACE
   };
 
+  static std::string priorityToStr(Priority sev);
+
   /**
    * @brief getGlobal Retrieve the static global logger object.
    * @return A reference to the statically created global logger object.
@@ -47,6 +49,8 @@ public:
    * @param maxLevel Maximum priority level for this logger.
    */
   void setLevel(Priority maxLevel);
+
+  std::ostream &get(Priority sev);
 
   Log();
   Log(std::ostream &mOutput);

@@ -16,6 +16,33 @@ Log::Log(std::ostream& output) :
 }
 
 
+std::string Log::priorityToStr(Log::Priority sev)
+{
+  std::string priorityStr;
+  switch (sev) {
+  case Priority::ERROR:
+    priorityStr = "[ERROR] ";
+    break;
+  case Priority::WARNING:
+    priorityStr = "[WARNING] ";
+    break;
+  case Priority::INFO:
+    priorityStr = "[INFO] ";
+    break;
+  case Priority::DBG:
+    priorityStr = "[DEBUG] ";
+    break;
+  case Priority::TRACE:
+    priorityStr = "[TRACE] ";
+    break;
+  default:
+    priorityStr = "";
+    break;
+  }
+
+  return priorityStr;
+}
+
 Log& Log::getGlobal()
 {
   static Log globalLogger;
@@ -28,27 +55,7 @@ void Log::log(Priority sev, const std::string& msg)
 {
   if (sev <= mLevel)
   {
-    std::string priorityStr;
-    switch (sev) {
-    case Priority::ERROR:
-      priorityStr = "[ERROR] ";
-      break;
-    case Priority::WARNING:
-      priorityStr = "[WARNING] ";
-      break;
-    case Priority::INFO:
-      priorityStr = "[INFO] ";
-      break;
-    case Priority::DBG:
-      priorityStr = "[DEBUG] ";
-      break;
-    case Priority::TRACE:
-      priorityStr = "[TRACE] ";
-      break;
-    default:
-      priorityStr = "";
-      break;
-    }
+    std::string priorityStr = priorityToStr(sev);
 
     mOutput << priorityStr << msg << std::endl;
   }
@@ -60,10 +67,17 @@ void Log::setLevel(Priority maxLevel)
   this->mLevel = maxLevel;
 }
 
+std::ostream &Log::get(Log::Priority sev)
+{
+  mOutput << priorityToStr(sev);
+  return mOutput;
+}
+
 
 void error(std::string msg)
 {
   Log::getGlobal().log(Log::Priority::ERROR, msg);
 }
+
 
 }

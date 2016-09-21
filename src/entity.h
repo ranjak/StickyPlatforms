@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 #include "gamevector.h"
 #include "rect.h"
 #include "graphics.h"
@@ -21,7 +22,7 @@ public:
   Entity();
   Entity(int x, int y, int w=0, int h=0, std::unique_ptr<Graphics> graphs=nullptr, Entity *parent=nullptr, bool isObstacle=false);
 
-  virtual ~Entity() = default;
+  virtual ~Entity();
 
   /**
    * @brief update Update this entity, making its simulation advance by \p step.
@@ -55,6 +56,9 @@ public:
 
   virtual bool isDead() const;
 
+  void addChild(Entity *child);
+  void removeChild(Entity *child);
+
   Vector<float> getLocalPos() const;
   Vector<float> getGlobalPos() const;
 
@@ -69,6 +73,7 @@ protected:
   Rect<float> mBoundingBox;
   std::unique_ptr<Graphics> mGraphics;
   Entity *mParent;
+  std::vector<Entity *> mChildren;
   bool mIsObstacle;
   bool mIsCollidable;
   bool mIgnoresObstacles;
