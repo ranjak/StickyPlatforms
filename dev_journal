@@ -44,3 +44,20 @@ O9/03/2016
   Plans for today:
     * Add an AI-controlled (brainless) enemy.
     * Add an "attack" action that makes the hero swing a sword, an can hit the enemy.
+    
+09/20/2016
+
+  Implementing the last feature has made me wonder about the architecture of collision handling once again.
+  The Entity class is growing quite large, and I'm tempted to use a component-based approach,
+  where I'd have a component dedicated to collision handling. I already kind of have that with my Movement class,
+  which can be thought of as a component.
+  Making a PhysicsComponent that holds both entity position and movement is tempting, but it would be unnecessary
+  for static entities.
+  
+  I'm going to continue with what I have for now, as I can't really predict what I'll need.
+  For that matter, I need to experiment with larger and more interesting levels.
+  That's why I've changed my mind about adding support for level edition: I'm going to do it now,
+  probably using Tiled.
+  For 09/24/2016:
+    * Working Tiled map loader.
+    * Animations.
