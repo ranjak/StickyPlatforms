@@ -25,13 +25,15 @@ public:
 
   Level(int width, int height, std::unique_ptr<Hero> hero);
 
+  static std::unique_ptr<Level> loadFromTmx(const std::string &file);
+
   void update(GameState &game, std::uint32_t step);
 
   void draw(Display &target, const GameState &game) const;
 
   void addEntity(std::unique_ptr<Entity> entity);
 
-  const std::unique_ptr<TileID[]>& tiles();
+  TileID *tiles();
 
   std::vector<Tile> &tileset();
 

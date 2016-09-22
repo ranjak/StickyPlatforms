@@ -6,6 +6,8 @@
 #include "entity.h"
 #include "gamestate.h"
 #include "camera.h"
+#include "TMXParser.h"
+#include "world/tmxmaploader.h"
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
@@ -26,6 +28,11 @@ Level::Level(int width, int height, std::unique_ptr<Hero> hero) :
     throw std::runtime_error(std::string("Invalid level size: ") + std::to_string(width) + "x" + std::to_string(height));
 
   addEntity(std::move(hero));
+}
+
+std::unique_ptr<Level> Level::loadFromTmx(const std::string &file)
+{
+  return TMXMapLoader::load(file);
 }
 
 void Level::update(GameState &game, uint32_t step)
@@ -62,9 +69,9 @@ void Level::addEntity(std::unique_ptr<Entity> entity)
   mEntities.push_back(std::move(entity));
 }
 
-const std::unique_ptr<TileID[]> &Level::tiles()
+TileID *Level::tiles()
 {
-  return mTiles;
+  return mTiles.get();
 }
 
 std::vector<Tile> &Level::tileset()
