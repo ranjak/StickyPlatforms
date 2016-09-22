@@ -8,7 +8,6 @@
 
 namespace game {
 
-struct CollisionManifold;
 class GameState;
 class Entity;
 class Tile;
@@ -35,20 +34,6 @@ public:
   const std::unique_ptr<TileID[]>& tiles();
 
   std::vector<Tile> &tileset();
-
-  /**
-   * @brief collides Checks whether an entity is colliding with any other in the game world.
-   * @param entity Entity we want to check collisions for.
-   * @return true if entity collides with one or more other entities.
-   */
-  bool collides(const Entity& entity);
-
-  /**
-   * @brief checkCollisions Get a list of collisions for a given entity
-   * @param entity Entity we want to check collisions for.
-   * @return A list of collisions manifolds for every entity that the given entity collides with.
-   */
-  std::vector<CollisionManifold> checkCollisions(Entity& entity);
 
   void handleCollisions(Entity &entity);
 
@@ -104,11 +89,6 @@ private:
   // Dynamic entities
   std::vector<std::unique_ptr<Entity>> mEntities;
   Hero* mHero;
-};
-
-struct CollisionManifold {
-  Entity& collider;
-  Vector<int> normal;
 };
 
 }

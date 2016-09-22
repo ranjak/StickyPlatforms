@@ -6,9 +6,6 @@
 #include <utility>
 #include <map>
 
-#include <rapidxml/rapidxml.hpp>
-#include <rapidxml/rapidxml_utils.hpp>
-
 namespace TSX {
   class Parser
   {
@@ -48,6 +45,7 @@ namespace TSX {
 
       struct Tile {
         unsigned int id;
+        TilesetImage image;
         std::vector<unsigned int> terrain;
         std::map<std::string, std::string> property;
       };

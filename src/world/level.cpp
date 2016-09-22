@@ -72,36 +72,6 @@ std::vector<Tile> &Level::tileset()
   return mTileset;
 }
 
-bool Level::collides(const Entity &entity)
-{
-  // Check only the entities after the given entity in sequential order
-  auto entityPos = std::find_if(mEntities.begin(), mEntities.end(), [&] (std::unique_ptr<Entity>& vecEntity) { return vecEntity.get() == &entity; });
-
-  for (auto it = entityPos+1; it != mEntities.end(); it++) {
-    if (entity.getGlobalBox().intersects((*it)->getGlobalBox()))
-      return true;
-  }
-
-  return false;
-}
-
-std::vector<CollisionManifold> Level::checkCollisions(Entity &entity)
-{
-  // Check only the entities after the given entity in sequential order
-  auto entityPos = std::find_if(mEntities.begin(), mEntities.end(), [&] (std::unique_ptr<Entity>& vecEntity) { return vecEntity.get() == &entity; });
-  // Entity not in the list? Check from the beginning
-  entityPos = (entityPos != mEntities.end()) ? entityPos+1 : mEntities.begin();
-
-  std::vector<CollisionManifold> collisions;
-
-  for (auto it = entityPos; it != mEntities.end(); it++) {
-    if (entity.getGlobalBox().intersects((*it)->getGlobalBox()))
-      collisions.push_back(CollisionManifold{**it, entity.getGlobalBox().getCollisionNormal((*it)->getGlobalBox())});
-  }
-
-  return collisions;
-}
-
 void Level::handleCollisions(Entity &entity)
 {
   Rect<float> box = entity.getGlobalBox();

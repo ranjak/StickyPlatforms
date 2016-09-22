@@ -3,8 +3,9 @@
 set(SRC_LIST
     src/TMXParser.cpp
     src/TSXParser.cpp
+    src/common.cpp
 )
 
-include_directories(include)
+include_directories(include src)
 
 add_library(tmxparser OBJECT ${SRC_LIST})

@@ -2,8 +2,6 @@
 #define TMXPARSER_H
 
 //#include <TSXParser.h>
-#include <rapidxml/rapidxml.hpp>
-#include <rapidxml/rapidxml_utils.hpp>
 
 #include <string>
 #include <vector>
@@ -81,6 +79,8 @@ namespace TMX
       struct Image {
         std::string source;
         std::string transparencyColor;
+        unsigned int width;
+        unsigned int height;
       };
 
       struct ImageLayer {
@@ -100,8 +100,6 @@ namespace TMX
       std::map<std::string, ImageLayer> imageLayer;
     protected:
     private:
-      template<typename Ch>
-      const char* presentOrDefaut(rapidxml::xml_attribute<Ch>* node, const char* defaultVal);
   };
 
 }
