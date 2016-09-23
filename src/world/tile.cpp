@@ -1,23 +1,31 @@
 #include "tile.h"
-#include "graphics.h"
 #include "camera.h"
 #include "gamevector.h"
 #include "rect.h"
+#include "image.h"
 
 namespace game {
 
 
 const int Tile::SIZE = 32;
 
-Tile::Tile(bool isObstacle,
-           const std::shared_ptr<Graphics> &graphics,
+Tile::Tile(TileID id,
+           bool isObstacle,
+           const std::shared_ptr<Image> &graphics,
+           const Rect<int> &graphicsPos,
            const std::function<void(Entity &, Level &)> &collisionBehavior)
   :
+    id(id),
     mIsObstacle(isObstacle),
     mGraphics(graphics),
-    mCollisionBehavior(collisionBehavior)
+    mCollisionBehavior(collisionBehavior),
+    mGraphicsPos(graphicsPos)
 {
-
+  // Unspecified position in the image ? Take the whole image
+  if (mGraphicsPos.w <= 0 && mGraphics) {
+    mGraphicsPos.w = mGraphics->size().x;
+    mGraphicsPos.h = mGraphics->size().y;
+  }
 }
 
 bool Tile::isObstacle() const
@@ -27,11 +35,8 @@ bool Tile::isObstacle() const
 
 void Tile::draw(Display& display, int x, int y, const Camera &cam) const
 {
-  if (mGraphics.get() != nullptr)
-  {
-    Vector<float> camCoords = cam.toCamCoords(Vector<float>(x*SIZE, y*SIZE));
-
-    mGraphics->draw(display, Rect<int>((int)camCoords.x, (int)camCoords.y, SIZE, SIZE));
+  if (mGraphics) {
+    mGraphics->draw(display, cam.toCamCoords(Rect<int>(x*SIZE, y*SIZE, SIZE, SIZE)), mGraphicsPos);
   }
 }
 

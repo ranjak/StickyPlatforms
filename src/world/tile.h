@@ -3,11 +3,12 @@
 
 #include <memory>
 #include <functional>
+#include "rect.h"
 
 namespace game {
 
 
-class Graphics;
+class Image;
 class Display;
 class Camera;
 class Entity;
@@ -25,8 +26,10 @@ public:
   /** Size of a tile in pixels. Tiles have identical width and height. */
   static const int SIZE;
 
-  Tile(bool isObstacle,
-       const std::shared_ptr<Graphics> &graphics = std::shared_ptr<Graphics>(),
+  Tile(TileID id,
+       bool isObstacle = true,
+       const std::shared_ptr<Image> &graphics = std::shared_ptr<Image>(),
+       const Rect<int> &graphicsPos = {},
        const std::function<void(Entity &, Level &)> &collisionBehavior = std::function<void(Entity &, Level &)>());
 
   /**
@@ -51,10 +54,13 @@ public:
    */
   void onCollision(Entity &entity, Level &level);
 
+public:
+  const TileID id;
 private:
   bool mIsObstacle;
-  std::shared_ptr<Graphics> mGraphics;
+  std::shared_ptr<Image> mGraphics;
   std::function<void(Entity &, Level &)> mCollisionBehavior;
+  Rect<int> mGraphicsPos;
 };
 
 }

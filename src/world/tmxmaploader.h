@@ -3,21 +3,23 @@
 
 #include <string>
 #include <memory>
+#include "world/tile.h"
 
 namespace game {
 
 class Level;
+class Display;
 
 class TMXMapLoader
 {
 public:
 
-  static std::unique_ptr<Level> load(const std::string &file);
+  static std::unique_ptr<Level> load(const std::string &file, Display &display);
 
 private:
   TMXMapLoader();
 
-  bool loadTilesCsv(const std::string &tilesCsv, Level &level);
+  bool loadTilesCsv(const std::string &tilesCsv, TileID *tilesArray, const Vector<int> &levelSize);
 
   int readInt();
 

@@ -15,24 +15,19 @@
 namespace game {
 
 
-Level::Level(int width, int height, std::unique_ptr<Hero> hero) :
+Level::Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles) :
   mSize(width, height),
-  mTileset(),
-  mTiles(),
+  mTilesets(std::move(tilesets)),
+  mTiles(std::move(tiles)),
   mEntities(),
   mHero(hero.get())
 {
-  if (width >= 0 && height >= 0)
-    mTiles.reset(new TileID[width * height]);
-  else
-    throw std::runtime_error(std::string("Invalid level size: ") + std::to_string(width) + "x" + std::to_string(height));
-
   addEntity(std::move(hero));
 }
 
-std::unique_ptr<Level> Level::loadFromTmx(const std::string &file)
+std::unique_ptr<Level> Level::loadFromTmx(const std::string &file, Display &display)
 {
-  return TMXMapLoader::load(file);
+  return TMXMapLoader::load(file, display);
 }
 
 void Level::update(GameState &game, uint32_t step)
@@ -53,7 +48,9 @@ void Level::draw(Display &target, const GameState &game) const
   // Draw tiles. They are drawn by column.
   for (int i=viewport.x / Tile::SIZE; i<=(viewport.x+viewport.w - 1) / Tile::SIZE; i++) {
     for (int j=viewport.y / Tile::SIZE; j<=(viewport.y+viewport.h - 1) / Tile::SIZE; j++) {
-      mTileset[mTiles[i*mSize.y + j]].draw(target, i, j, cam);
+      TileID &tile = mTiles[i*mSize.y + j];
+      if (tile > 0)
+        mTilesets[tile].draw(target, i, j, cam);
     }
   }
 
@@ -74,11 +71,6 @@ TileID *Level::tiles()
   return mTiles.get();
 }
 
-std::vector<Tile> &Level::tileset()
-{
-  return mTileset;
-}
-
 void Level::handleCollisions(Entity &entity)
 {
   Rect<float> box = entity.getGlobalBox();
@@ -86,8 +78,11 @@ void Level::handleCollisions(Entity &entity)
   // Check tile collisions first
   for (int i=box.x / Tile::SIZE; i<=(box.x+box.w - 1)/Tile::SIZE; i++) {
     for (int j=box.y / Tile::SIZE; j<=(box.y+box.h - 1)/Tile::SIZE; j++) {
-      mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
-      entity.onCollision(mTileset[mTiles[i*mSize.y + j]], Vector<int>(i*Tile::SIZE, j*Tile::SIZE));
+
+      if (mTiles[i*mSize.y + j] > 0) {
+        mTilesets[mTiles[i*mSize.y + j]].onCollision(entity, *this);
+        entity.onCollision(mTilesets[mTiles[i*mSize.y + j]], Vector<int>(i*Tile::SIZE, j*Tile::SIZE));
+      }
     }
   }
 
@@ -150,8 +145,8 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
     // Find the closest tile obstacle on X
     for (int i=facingPoint.x / Tile::SIZE; i<=(destFacingPoint.x - 1) / Tile::SIZE; i++) {
       for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
-        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
-        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        TileID &tile = mTiles[i*mSize.y + j];
+        if (tile > 0 && mTilesets[tile].isObstacle()) {
           destFacingPoint.x = i * Tile::SIZE;
           break;
         }
@@ -171,8 +166,8 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
     }
     for (int i=(int)facingPoint.x / Tile::SIZE; i>=(int)destFacingPoint.x / Tile::SIZE; i--) {
       for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
-        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
-        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        TileID &tile = mTiles[i*mSize.y + j];
+        if (tile > 0 && mTilesets[tile].isObstacle()) {
           destFacingPoint.x = std::min((i+1), mSize.x-1) * Tile::SIZE;
           break;
         }
@@ -192,8 +187,8 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
     }
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
       for (int j=facingPoint.y / Tile::SIZE; j<=(destFacingPoint.y - 1) / Tile::SIZE; j++) {
-        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
-        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        TileID &tile = mTiles[i*mSize.y + j];
+        if (tile > 0 && mTilesets[tile].isObstacle()) {
           destFacingPoint.y = j * Tile::SIZE;
           break;
         }
@@ -211,8 +206,8 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
     }
     for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
       for (int j=(int)facingPoint.y / Tile::SIZE; j>=(int)destFacingPoint.y / Tile::SIZE; j--) {
-        mTileset[mTiles[i*mSize.y + j]].onCollision(entity, *this);
-        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()) {
+        TileID &tile = mTiles[i*mSize.y + j];
+        if (tile > 0 && mTilesets[tile].isObstacle()) {
           destFacingPoint.y = std::min((j+1), mSize.y-1) * Tile::SIZE;
           break;
         }
@@ -248,7 +243,9 @@ bool Level::isOnGround(Entity &entity)
 
   // Any solid tile below ?
   for (int i=box.x / Tile::SIZE; i <= (box.x + box.w - 1) / Tile::SIZE; i++) {
-    if (mTileset[mTiles[i*mSize.y + (box.y + box.h) / Tile::SIZE]].isObstacle())
+
+    TileID &tile = mTiles[i*mSize.y + (box.y + box.h) / Tile::SIZE];
+    if (tile > 0 && mTilesets[tile].isObstacle())
       return true;
   }
 
@@ -301,7 +298,9 @@ bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direc
     for (int i=indices.first; i<=indices.second; i++) {
       for (int j=box.y / Tile::SIZE; j<=(box.y+box.h - 1) / Tile::SIZE; j++) {
 
-        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()
+        TileID &tile = mTiles[i*mSize.y + j];
+
+        if (tile > 0 && mTilesets[tile].isObstacle()
             && std::abs(obstacle.x - facingPoint) >= std::abs(i*Tile::SIZE - facingPoint)) {
 
           obstacle.x = i*Tile::SIZE;
@@ -315,7 +314,9 @@ bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direc
     for (int i=box.y / Tile::SIZE; i<=(box.y+box.h - 1) / Tile::SIZE; i++) {
       for (int j=indices.first; j<=indices.second; j++) {
 
-        if (mTileset[mTiles[i*mSize.y + j]].isObstacle()
+        TileID &tile = mTiles[i*mSize.y + j];
+
+        if (tile > 0 && mTilesets[tile].isObstacle()
             && std::abs(obstacle.y - facingPoint) >= std::abs(j*Tile::SIZE - facingPoint)) {
 
           obstacle.x = i*Tile::SIZE;

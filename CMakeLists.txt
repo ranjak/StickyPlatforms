@@ -34,7 +34,9 @@ set(SRC_LIST
     src/airstate.cpp
     src/world/level.cpp
     src/world/tile.cpp
+    src/world/tileset.cpp
     src/world/tmxmaploader.cpp
+    src/world/tsxtilesetloader.cpp
     src/test/test.cpp
     src/camera.cpp
     src/enemy.cpp

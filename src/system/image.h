@@ -2,6 +2,7 @@
 #define IMAGE_H
 
 #include "graphics.h"
+#include "gamevector.h"
 #include <iostream>
 #include <memory>
 
@@ -19,9 +20,14 @@ public:
 
   void draw(Display &target, const Rect<int> &dest) const override;
 
+  void draw(Display &target, const Rect<int> &dest, const Rect<int> &source) const;
+
+  const Vector<int> &size() const { return mSize; }
+
 private:
   std::unique_ptr<struct SDL_Texture, void(*)(struct SDL_Texture*)> mTexture;
   Display& mRenderer;
+  Vector<int> mSize;
 };
 
 }

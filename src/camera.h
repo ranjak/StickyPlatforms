@@ -19,7 +19,8 @@ public:
 
   Vector<float> toCamCoords(const Vector<float>& levelCoords) const;
 
-  Rect<float> toCamCoords(const Rect<float>& levelCoords) const;
+  template<typename T>
+  Rect<T> toCamCoords(const Rect<T>& levelCoords) const;
 
 };
 

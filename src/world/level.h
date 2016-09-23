@@ -3,6 +3,7 @@
 
 #include "gamevector.h"
 #include "world/tile.h"
+#include "world/tileset.h"
 #include <vector>
 #include <memory>
 
@@ -23,9 +24,9 @@ class Level
 {
 public:
 
-  Level(int width, int height, std::unique_ptr<Hero> hero);
+  Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles);
 
-  static std::unique_ptr<Level> loadFromTmx(const std::string &file);
+  static std::unique_ptr<Level> loadFromTmx(const std::string &file, Display &display);
 
   void update(GameState &game, std::uint32_t step);
 
@@ -34,8 +35,6 @@ public:
   void addEntity(std::unique_ptr<Entity> entity);
 
   TileID *tiles();
-
-  std::vector<Tile> &tileset();
 
   void handleCollisions(Entity &entity);
 
@@ -84,8 +83,7 @@ public:
 private:
   // Size in tiles
   Vector<int> mSize;
-  // Tileset of this level
-  std::vector<Tile> mTileset;
+  TilesetList mTilesets;
   // Static tiles the world is made of
   std::unique_ptr<TileID[]> mTiles;
   // Dynamic entities

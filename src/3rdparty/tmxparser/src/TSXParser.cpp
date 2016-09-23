@@ -10,7 +10,7 @@
 
 namespace TSX {
 
-  Parser::TilesetImage parseImage(rapidxml::xml_node<>* img_node);
+  Parser::TilesetImage parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir);
 
   Parser::Parser( const char* filename )
   {
@@ -36,6 +36,7 @@ namespace TSX {
     root_node = doc.first_node( "tileset" );
     //parse tileset element
     tileset.name = root_node->first_attribute( "name" )->value();
+    tileset.tileCount = std::atoi( root_node->first_attribute( "tilecount" )->value() );
     tileset.tileWidth = std::atoi( root_node->first_attribute( "tilewidth" )->value() );
     tileset.tileHeight = std::atoi( root_node->first_attribute( "tileheight" )->value() );
     tileset.spacing = std::atoi( TMX::presentOrDefault( root_node->first_attribute( "spacing" ), "0" ) );
@@ -56,7 +57,7 @@ namespace TSX {
     //parse tileset image
     rapidxml::xml_node<>* img_node = root_node->first_node( "image" );
     if (img_node != nullptr) {
-      tileset.image = parseImage(img_node);
+      tileset.image = parseImage(img_node, directory);
     }
     else {
       tileset.image.source = "";
@@ -99,7 +100,7 @@ namespace TSX {
         rapidxml::xml_node<>* img_node = tile_node->first_node( "image" );
 
         if (tileset.image.source.empty() && img_node) {
-          tile.image = parseImage(img_node);
+          tile.image = parseImage(img_node, directory);
         }
         else if (tileset.image.source.empty() && !img_node) {
           throw std::runtime_error("Every tile requires an image when the tileset doesn't have one");
@@ -115,13 +116,15 @@ namespace TSX {
         tileList.push_back( tile );
       }
     }
+
+    return true;
   }
 
-  Parser::TilesetImage parseImage(rapidxml::xml_node<>* img_node)
+  Parser::TilesetImage parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir)
   {
     Parser::TilesetImage image = {};
 
-    image.source = TMX::findOrFail( img_node, "source" );
+    image.source = currentDir + TMX::findOrFail( img_node, "source" );
     image.width = std::atoi( TMX::presentOrDefault( img_node->first_attribute( "width" ), "0" ) );
     image.height = std::atoi( TMX::presentOrDefault( img_node->first_attribute( "height" ), "0" ) );
 

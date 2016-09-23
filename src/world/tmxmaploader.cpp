@@ -1,9 +1,11 @@
 #include "world/tmxmaploader.h"
 #include "world/level.h"
 #include "world/tile.h"
+#include "world/tileset.h"
 #include "TMXParser.h"
 #include "hero.h"
 #include "log.h"
+#include "tsxtilesetloader.h"
 #include <string>
 #include <memory>
 #include <cctype>
@@ -11,28 +13,34 @@
 namespace game {
 
 
-std::unique_ptr<Level> TMXMapLoader::load(const std::string &file)
+std::unique_ptr<Level> TMXMapLoader::load(const std::string &file, Display &display)
 {
   TMXMapLoader loader;
 
   TMX::Parser tmx(file.c_str());
 
-  std::unique_ptr<Level> level(new Level(tmx.mapInfo.width, tmx.mapInfo.height, std::unique_ptr<Hero>(new Hero)));
-
-  // TODO load tilesets
+  // Load the map's tilesets
+  TilesetList tilesets;
+  for (TMX::Parser::Tileset tileset : tmx.tilesetList) {
+    tilesets.add(TSXTilesetLoader::loadTileset(tileset.source, display), tileset.firstGID);
+  }
 
   // Fill the tile array
+  Vector<int> levelSize(tmx.mapInfo.width, tmx.mapInfo.height);
+  std::unique_ptr<TileID[]> tilesArray(new TileID[levelSize.x * levelSize.y]);
+
   std::map<std::string, TMX::Parser::TileLayer>::iterator tiles = tmx.tileLayer.find("tiles");
   if (tiles == tmx.tileLayer.end()) {
     game::error("Level::loadFromTmx: A tile layer with name 'tiles' is required.");
     return nullptr;
   }
 
-  if (!loader.loadTilesCsv(tiles->second.data.contents, *level)) {
+  if (!loader.loadTilesCsv(tiles->second.data.contents, tilesArray.get(), levelSize)) {
     game::error("Level::loadFromTmx: CSV tile data is corrupt.");
     return nullptr;
   }
 
+  std::unique_ptr<Level> level(new Level(levelSize.x, levelSize.y, std::unique_ptr<Hero>(new Hero), std::move(tilesets), std::move(tilesArray)));
   return level;
 }
 
@@ -45,25 +53,22 @@ TMXMapLoader::TMXMapLoader() :
 
 }
 
-bool TMXMapLoader::loadTilesCsv(const std::string &tilesCsv, Level &level)
+bool TMXMapLoader::loadTilesCsv(const std::string &tilesCsv, TileID *tilesArray, const Vector<int> &levelSize)
 {
   mTilesCsv = &tilesCsv;
   mCsvEnded = false;
   mCsvError = false;
   mCsvIndex = 0;
 
-  Vector<int> size = level.getSize();
-  TileID *tiles = level.tiles();
-
   int i=0, j=0;
 
   readWhitespace();
 
-  for (j=0; j<size.y && !mCsvError && !mCsvEnded; j++) {
+  for (j=0; j<levelSize.y && !mCsvError && !mCsvEnded; j++) {
 
-    for (i=0; i<size.x && !mCsvError && !mCsvEnded; i++) {
+    for (i=0; i<levelSize.x && !mCsvError && !mCsvEnded; i++) {
 
-      tiles[i*size.y + j] = readInt();
+      tilesArray[i*levelSize.y + j] = readInt();
 
       if (!mCsvEnded)
         readSeparator();
@@ -71,7 +76,7 @@ bool TMXMapLoader::loadTilesCsv(const std::string &tilesCsv, Level &level)
   }
 
   // Check whether the whole array was filled
-  return i == size.x && j == size.y;
+  return i == levelSize.x && j == levelSize.y;
 }
 
 int TMXMapLoader::readInt()
