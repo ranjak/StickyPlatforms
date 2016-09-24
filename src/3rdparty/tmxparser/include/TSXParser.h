@@ -26,6 +26,7 @@ namespace TSX {
       struct Tileset {
         std::string name;
         unsigned int tileCount;
+        unsigned int columns;
         unsigned int tileWidth;
         unsigned int tileHeight;
         unsigned int spacing;

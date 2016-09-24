@@ -39,7 +39,7 @@ Tileset TSXTilesetLoader::loadTileset(const std::string &file, Display &display)
   // TODO handle "special" tiles
   if (singleImage) {
     for (size_t i=0; i<tsx.tileset.tileCount; i++) {
-      Rect<int> imgPos((i*tileSize.x)%tilesetImg->size().x, (i*tileSize.x)/tilesetImg->size().x, tileSize.x, tileSize.y);
+      Rect<int> imgPos((i%tsx.tileset.columns)*tileSize.x, (i/tsx.tileset.columns)*tileSize.y, tileSize.x, tileSize.y);
 
       tiles.emplace_back(i, true, tilesetImg, imgPos);
     }
