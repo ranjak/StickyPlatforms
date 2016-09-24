@@ -6,6 +6,7 @@
 namespace game {
 
 class GameState;
+template<typename T> class Vector;
 
 class Display
 {
@@ -16,7 +17,7 @@ public:
   /**
    * @brief Initialize the display components (window, renderer, etc.)
    */
-  void init();
+  void init(int winW, int winH);
 
   void setCameraSize(int w, int h);
 
@@ -26,6 +27,8 @@ public:
   void render(const GameState& game);
 
   SDL_Renderer* getRenderer();
+
+  Vector<int> getWindowSize();
 
 private:
   SDL_Window* mWindow;

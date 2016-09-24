@@ -16,12 +16,13 @@ const GameState &GameState::current()
   return *currentGame;
 }
 
-GameState::GameState(Display &display, InputHandler &input) :
+GameState::GameState(Display &display, InputHandler &input, int camW, int camH) :
   mCommands(input),
   mLevel(std::move(Test::makeLevel(display))),
-  mCamera(0, 0, 320, 240),
+  mCamera(0, 0, camW, camH),
   mGameTime(0)
 {
+  display.setCameraSize(camW, camH);
   currentGame = this;
 }
 

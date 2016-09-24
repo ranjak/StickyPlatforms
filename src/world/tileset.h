@@ -18,6 +18,8 @@ public:
 
   int numTiles() const { return mTiles.size(); }
 
+  int maxId() const { return mMaxId; }
+
 public:
   const std::string name;
 
@@ -26,6 +28,7 @@ private:
   std::vector<Tile> mTiles;
   Vector<int> mOffset;
   Vector<int> mTileSize;
+  int mMaxId;
 };
 
 class TilesetList

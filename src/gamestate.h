@@ -27,7 +27,7 @@ public:
    */
   static const GameState &current();
 
-  GameState(Display &display, InputHandler &input);
+  GameState(Display &display, InputHandler &input, int camW, int camH);
 
   /**
    * @brief update Update this state by the given amount of time.

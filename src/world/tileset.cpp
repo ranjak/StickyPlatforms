@@ -4,6 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include <cassert>
+#include <algorithm>
 
 namespace game {
 
@@ -13,7 +14,8 @@ Tileset::Tileset(const std::string &name, bool isSingleImage, Vector<int> tileSi
   mSingleImage(isSingleImage),
   mTiles(std::move(tiles)),
   mOffset(),
-  mTileSize(tileSize)
+  mTileSize(tileSize),
+  mMaxId(std::max_element(mTiles.begin(), mTiles.end(), [](const Tile &a, const Tile &b){ return a.id < b.id; })->id)
 {
 }
 
@@ -50,7 +52,7 @@ Tile &TilesetList::operator[](TileID gid)
 const Tile &TilesetList::operator[](TileID gid) const
 {
   for (const std::pair<TileID, Tileset> &tileset : mTilesets) {
-    if (tileset.first <= gid && (gid - tileset.first) < tileset.second.numTiles())
+    if (tileset.first <= gid && (gid - tileset.first) <= tileset.second.maxId())
       return tileset.second[gid - tileset.first];
   }
 
