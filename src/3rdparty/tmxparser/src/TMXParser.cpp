@@ -167,13 +167,7 @@ namespace TMX {
       imgLayer.offsety = std::atof( presentOrDefault( image_node->first_attribute( "offsety" ), "0" ) );
       std::cout << "Image Layer Offset Y: " << imgLayer.offsety << std::endl;
 
-      imgLayer.image.source = directory + image_node->first_node( "image" )->first_attribute( "source" )->value();
-      std::cout << "Image Layer Source: " << imgLayer.image.source << std::endl;
-
-      if( image_node->first_node( "image" )->first_attribute( "trans" ) != 0 ) {
-        imgLayer.image.transparentColor = image_node->first_node( "image" )->first_attribute( "trans" )->value();
-        std::cout << "Image Layer Transparent Color: " << imgLayer.image.transparentColor << std::endl;
-      }
+      imgLayer.image = parseImage(image_node->first_node( "image" ), directory);
 
       if( image_node->first_node( "properties" ) != 0 ) {
         for( rapidxml::xml_node<>* properties_node = image_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling( "property" ) ) {

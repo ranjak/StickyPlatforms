@@ -10,8 +10,6 @@
 
 namespace TSX {
 
-  TMX::Image parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir);
-
   Parser::Parser( const char* filename )
   {
     load( filename );
@@ -58,7 +56,7 @@ namespace TSX {
     //parse tileset image
     rapidxml::xml_node<>* img_node = root_node->first_node( "image" );
     if (img_node != nullptr) {
-      tileset.image = parseImage(img_node, directory);
+      tileset.image = TMX::parseImage(img_node, directory);
     }
     else {
       tileset.image.source = "";
@@ -101,7 +99,7 @@ namespace TSX {
         rapidxml::xml_node<>* img_node = tile_node->first_node( "image" );
 
         if (tileset.image.source.empty() && img_node) {
-          tile.image = parseImage(img_node, directory);
+          tile.image = TMX::parseImage(img_node, directory);
         }
         else if (tileset.image.source.empty() && !img_node) {
           throw std::runtime_error("Every tile requires an image when the tileset doesn't have one");
@@ -121,18 +119,4 @@ namespace TSX {
     return true;
   }
 
-  TMX::Image parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir)
-  {
-    TMX::Image image = {};
-
-    image.source = currentDir + TMX::findOrFail( img_node, "source" );
-    image.width = std::atoi( TMX::presentOrDefault( img_node->first_attribute( "width" ), "0" ) );
-    image.height = std::atoi( TMX::presentOrDefault( img_node->first_attribute( "height" ), "0" ) );
-
-    if( img_node->first_attribute( "trans" ) != 0 ) {
-      image.transparentColor = std::atoi( img_node->first_attribute( "trans" )->value() );
-    }
-
-    return image;
-  }
 }
