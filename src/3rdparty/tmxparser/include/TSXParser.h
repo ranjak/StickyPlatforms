@@ -1,6 +1,7 @@
 #ifndef TSXPARSER_H
 #define TSXPARSER_H
 
+#include "tmxcommon.h"
 #include <string>
 #include <vector>
 #include <utility>
@@ -16,13 +17,6 @@ namespace TSX {
 
       bool load( const char* filename );
 
-      struct TilesetImage {
-        std::string source;
-        std::string transparentColor;
-        unsigned int width;
-        unsigned int height;
-      };
-
       struct Tileset {
         std::string name;
         unsigned int tileCount;
@@ -36,7 +30,7 @@ namespace TSX {
 
         std::map<std::string, std::string> property;
 
-        TilesetImage image;
+        TMX::Image image;
       };
 
       struct Terrain {
@@ -47,7 +41,7 @@ namespace TSX {
 
       struct Tile {
         unsigned int id;
-        TilesetImage image;
+        TMX::Image image;
         std::vector<unsigned int> terrain;
         std::map<std::string, std::string> property;
       };

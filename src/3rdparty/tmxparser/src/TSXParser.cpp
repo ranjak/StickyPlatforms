@@ -10,7 +10,7 @@
 
 namespace TSX {
 
-  Parser::TilesetImage parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir);
+  TMX::Image parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir);
 
   Parser::Parser( const char* filename )
   {
@@ -121,9 +121,9 @@ namespace TSX {
     return true;
   }
 
-  Parser::TilesetImage parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir)
+  TMX::Image parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir)
   {
-    Parser::TilesetImage image = {};
+    TMX::Image image = {};
 
     image.source = currentDir + TMX::findOrFail( img_node, "source" );
     image.width = std::atoi( TMX::presentOrDefault( img_node->first_attribute( "width" ), "0" ) );

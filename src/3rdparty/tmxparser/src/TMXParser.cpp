@@ -171,8 +171,8 @@ namespace TMX {
       std::cout << "Image Layer Source: " << imgLayer.image.source << std::endl;
 
       if( image_node->first_node( "image" )->first_attribute( "trans" ) != 0 ) {
-        imgLayer.image.transparencyColor = image_node->first_node( "image" )->first_attribute( "trans" )->value();
-        std::cout << "Image Layer Transparent Color: " << imgLayer.image.transparencyColor << std::endl;
+        imgLayer.image.transparentColor = image_node->first_node( "image" )->first_attribute( "trans" )->value();
+        std::cout << "Image Layer Transparent Color: " << imgLayer.image.transparentColor << std::endl;
       }
 
       if( image_node->first_node( "properties" ) != 0 ) {

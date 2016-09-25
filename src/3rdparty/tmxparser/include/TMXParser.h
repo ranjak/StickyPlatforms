@@ -3,6 +3,7 @@
 
 //#include <TSXParser.h>
 
+#include "tmxcommon.h"
 #include <string>
 #include <vector>
 #include <utility>
@@ -50,37 +51,6 @@ namespace TMX
         float opacity;
         Data data;
         std::map<std::string, std::string> property;
-      };
-
-      struct Object {
-        std::string name;
-        std::string type;
-        int x;
-        int y;
-        unsigned int width;
-        unsigned int height;
-        unsigned int gid;
-        bool visible;
-        std::map<std::string, std::string> property;
-      };
-
-      struct ObjectGroup {
-        std::string color;
-        std::string name;
-        float opacity;
-        bool visible;
-        float offsetx;
-        float offsety;
-        std::string draworder;
-        std::map<std::string, Object> object;
-        std::map<std::string, std::string> property;
-      };
-
-      struct Image {
-        std::string source;
-        std::string transparencyColor;
-        unsigned int width;
-        unsigned int height;
       };
 
       struct ImageLayer {
