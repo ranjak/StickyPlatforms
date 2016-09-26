@@ -4,6 +4,7 @@
 #include "tmxcommon.h"
 #include <rapidxml/rapidxml.hpp>
 #include <string>
+#include <map>
 
 
 namespace TMX {
@@ -21,11 +22,15 @@ const char* presentOrDefault(rapidxml::xml_attribute<>* attribute, const char* d
  * @param currentDir Directory containing the file being parsed (used to correct the image's source attribute).
  * @return Image struct with parsed data.
  */
-TMX::Image parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir);
+Image parseImage(rapidxml::xml_node<>* img_node, const std::string &currentDir);
 
-TMX::Object parseObject(rapidxml::xml_node<>* obj_node);
+ObjectGroup parseObjectGroup(rapidxml::xml_node<>* group_node);
 
+Object parseObject(rapidxml::xml_node<>* obj_node);
 
+std::map<std::string, Property> parseProperties(rapidxml::xml_node<>* propertiesNode);
+
+Point pointFromString(const std::string &point);
 
 class MissingAttributeError : public std::exception
 {

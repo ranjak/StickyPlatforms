@@ -3,6 +3,7 @@
 set(SRC_LIST
     src/TMXParser.cpp
     src/TSXParser.cpp
+    src/tmxcommon.cpp
     src/common.cpp
 )
 

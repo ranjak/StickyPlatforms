@@ -28,7 +28,7 @@ namespace TSX {
         int offsetX;
         int offsetY;
 
-        std::map<std::string, std::string> property;
+        std::map<std::string, TMX::Property> property;
 
         TMX::Image image;
       };
@@ -36,14 +36,15 @@ namespace TSX {
       struct Terrain {
         std::string name;
         unsigned int tile;
-        std::map<std::string, std::string> property;
+        std::map<std::string, TMX::Property> property;
       };
 
       struct Tile {
         unsigned int id;
         TMX::Image image;
         std::vector<unsigned int> terrain;
-        std::map<std::string, std::string> property;
+        std::map<std::string, TMX::Property> property;
+        TMX::ObjectGroup collisions;
       };
 
       Tileset tileset;

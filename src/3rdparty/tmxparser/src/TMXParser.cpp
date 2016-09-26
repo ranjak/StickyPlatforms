@@ -60,15 +60,7 @@ namespace TMX {
     }
 
     if( root_node->first_node( "properties" ) != 0 ) {
-      for( rapidxml::xml_node<>* properties_node = root_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling() ) {
-        mapInfo.property[properties_node->first_attribute( "name" )->value()] = properties_node->first_attribute( "value" )->value();
-      }
-
-      std::cout << "Properties: " << std::endl;
-
-      for( std::map<std::string, std::string>::iterator it = mapInfo.property.begin(); it != mapInfo.property.end(); ++it ) {
-        std::cout << "-> " << it->first << " : " << it->second << std::endl;
-      }
+      mapInfo.property = parseProperties(root_node->first_node( "properties" ));
     }
 
     std::cout << std::endl;
@@ -88,15 +80,7 @@ namespace TMX {
       std::cout << std::endl << "Layer Name: " << layer.name << std::endl;
 
       if( layer_node->first_node( "properties" ) != 0 ) {
-        for( rapidxml::xml_node<>* properties_node = layer_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling() ) {
-          layer.property[properties_node->first_attribute( "name" )->value()] = properties_node->first_attribute( "value" )->value();
-        }
-
-        std::cout << "Properties: " << std::endl;
-
-        for( std::map<std::string, std::string>::iterator it = mapInfo.property.begin(); it != mapInfo.property.end(); ++it ) {
-          std::cout << "-> " << it->first << " : " << it->second << std::endl;
-        }
+        layer.property = parseProperties(layer_node->first_node( "properties" ));
       }
 
       rapidxml::xml_node<>* data_node = layer_node->first_node( "data" );
@@ -135,15 +119,7 @@ namespace TMX {
       std::cout << "Object Group Draw Order: " << oGroup.draworder << std::endl;
 
       if( oGroup_node->first_node( "properties" ) != 0 ) {
-        for( rapidxml::xml_node<>* properties_node = oGroup_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling() ) {
-          oGroup.property[properties_node->first_attribute( "name" )->value()] = properties_node->first_attribute( "value" )->value();
-        }
-
-        std::cout << "Properties: " << std::endl;
-
-        for( std::map<std::string, std::string>::iterator it = mapInfo.property.begin(); it != mapInfo.property.end(); ++it ) {
-          std::cout << "-> " << it->first << " : " << it->second << std::endl;
-        }
+        oGroup.property = parseProperties(oGroup_node->first_node( "properties" ));
       }
 
       objectGroup[oGroup.name] = oGroup;
@@ -167,18 +143,12 @@ namespace TMX {
       imgLayer.offsety = std::atof( presentOrDefault( image_node->first_attribute( "offsety" ), "0" ) );
       std::cout << "Image Layer Offset Y: " << imgLayer.offsety << std::endl;
 
-      imgLayer.image = parseImage(image_node->first_node( "image" ), directory);
+      if (image_node->first_node( "image" )) {
+        imgLayer.image = parseImage(image_node->first_node( "image" ), directory);
+      }
 
       if( image_node->first_node( "properties" ) != 0 ) {
-        for( rapidxml::xml_node<>* properties_node = image_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling( "property" ) ) {
-          imgLayer.property[properties_node->first_attribute( "name" )->value()] = properties_node->first_attribute( "value" )->value();
-        }
-
-        std::cout << "Properties: " << std::endl;
-
-        for( std::map<std::string, std::string>::iterator it = imgLayer.property.begin(); it != imgLayer.property.end(); ++it ) {
-          std::cout << "-> " << it->first << " : " << it->second << std::endl;
-        }
+        imgLayer.property = parseProperties(image_node->first_node( "properties" ));
       }
 
       imageLayer[imgLayer.name] = imgLayer;

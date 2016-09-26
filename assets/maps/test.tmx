@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="9">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="20">
  <tileset firstgid="1" source="grass.tsx"/>
  <layer name="tiles" width="20" height="10">
   <data encoding="csv">
@@ -15,4 +15,26 @@
 1,2,2,2,2,2,2,2,2,2,2,3,0,0,0,4,4,4,4,4
 </data>
  </layer>
+ <objectgroup name="entities">
+  <object id="9" gid="7" x="224" y="926" width="128" height="128"/>
+  <object id="10" gid="7" x="386" y="958" width="128" height="128" rotation="3.5"/>
+  <object id="12" x="1540" y="1160" width="372" height="114">
+   <properties>
+    <property name="mybool" type="bool" value="true"/>
+    <property name="prop">789
+987</property>
+    <property name="str" value="mystr"/>
+   </properties>
+  </object>
+  <object id="14" x="58" y="1004" width="116" height="106">
+   <ellipse/>
+  </object>
+  <object id="15" x="746.333" y="849.678" visible="0">
+   <polygon points="0,0 200,-4.67797 52,133.322 -106,133.322"/>
+  </object>
+  <object id="17" x="239.25" y="690.167">
+   <polyline points="0,0 146.667,-77.3333 186.667,36"/>
+  </object>
+ </objectgroup>
+ <imagelayer name="image"/>
 </map>

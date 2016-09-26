@@ -48,9 +48,7 @@ namespace TSX {
 
     //parse tileset properties
     if( root_node->first_node( "properties" ) != 0 ) {
-      for( rapidxml::xml_node<>* properties_node = root_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling() ) {
-        tileset.property[properties_node->first_attribute( "name" )->value()] = properties_node->first_attribute( "value" )->value();
-      }
+      tileset.property = TMX::parseProperties(root_node->first_node( "properties" ));
     }
 
     //parse tileset image
@@ -71,9 +69,7 @@ namespace TSX {
 
         //parse tileset terrain properties
         if( terrain_node->first_node( "properties" ) != 0 ) {
-          for( rapidxml::xml_node<>* properties_node = terrain_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling() ) {
-            terrain.property[properties_node->first_attribute( "name" )->value()] = properties_node->first_attribute( "value" )->value();
-          }
+          terrain.property = TMX::parseProperties(terrain_node->first_node( "properties" ));
         }
 
         terrainList.push_back( terrain );
@@ -105,11 +101,14 @@ namespace TSX {
           throw std::runtime_error("Every tile requires an image when the tileset doesn't have one");
         }
 
+        // Parse object group for tile collision, if any
+        if (tile_node->first_node( "objectgroup" )) {
+          tile.collisions = TMX::parseObjectGroup( tile_node->first_node( "objectgroup" ) );
+        }
+
         //parse tile properties
-        if( tile_node->first_node( "properties" ) != 0 ) {
-          for( rapidxml::xml_node<>* properties_node = tile_node->first_node( "properties" )->first_node( "property" ); properties_node; properties_node = properties_node->next_sibling() ) {
-            tile.property[properties_node->first_attribute( "name" )->value()] = properties_node->first_attribute( "value" )->value();
-          }
+        if(tile_node->first_node( "properties" )) {
+          tile.property = TMX::parseProperties(tile_node->first_node( "properties" ));
         }
 
         tileList.push_back( tile );

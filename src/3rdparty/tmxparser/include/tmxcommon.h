@@ -3,19 +3,56 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <new>
 
 namespace TMX {
 
+
+struct Point {
+  int x;
+  int y;
+};
+
+struct Property {
+  enum valType { STRING, INT, FLOAT, BOOL } type;
+  union
+  {
+    std::string strVal;
+    int intVal;
+    float floatVal;
+    bool boolVal;
+  };
+
+  Property(valType type, const std::string &value);
+
+  ~Property();
+
+  Property(const Property &p);
+  Property &operator=(const Property &p);
+
+  Property(Property &&p);
+  Property &operator=(Property &&p);
+};
+
 struct Object {
+  int id;
   std::string name;
   std::string type;
   int x;
   int y;
   unsigned int width;
   unsigned int height;
-  unsigned int gid;
   bool visible;
-  std::map<std::string, std::string> property;
+  float rotation;
+
+  // Used when the object is associated with a tile
+  unsigned int gid;
+  // Used by polygons and polylines
+  std::vector<Point> points;
+
+  enum { TILE, BOX, ELLIPSE, POLYGON, POLYLINE } kind;
+  std::map<std::string, Property> property;
 };
 
 struct ObjectGroup {
@@ -26,8 +63,8 @@ struct ObjectGroup {
   float offsetx;
   float offsety;
   std::string draworder;
-  std::map<std::string, Object> object;
-  std::map<std::string, std::string> property;
+  std::vector<Object> objects;
+  std::map<std::string, Property> property;
 };
 
 struct Image {
@@ -36,6 +73,7 @@ struct Image {
   unsigned int width;
   unsigned int height;
 };
+
 
 }
 

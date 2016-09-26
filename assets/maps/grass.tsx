@@ -19,6 +19,9 @@
  </tile>
  <tile id="5" terrain=",0,,">
   <image width="128" height="128" source="../PNG/grass_earth_tiles/grass_earth_13.png"/>
+  <objectgroup draworder="index">
+   <object id="1" x="0" y="0" width="128" height="64"/>
+  </objectgroup>
  </tile>
  <tile id="6" terrain="0,0,,">
   <image width="128" height="128" source="../PNG/grass_earth_tiles/grass_earth_15.png"/>
@@ -28,8 +31,14 @@
  </tile>
  <tile id="7" terrain="0,,,">
   <image width="128" height="128" source="../PNG/grass_earth_tiles/grass_earth_29.png"/>
+  <objectgroup draworder="index">
+   <object id="1" x="0" y="0" width="128" height="64"/>
+  </objectgroup>
  </tile>
  <tile id="8">
   <image width="128" height="128" source="../PNG/grass_earth_tiles/grass_earth_30.png"/>
+  <objectgroup draworder="index">
+   <object id="1" x="0" y="0" width="128" height="64"/>
+  </objectgroup>
  </tile>
 </tileset>
