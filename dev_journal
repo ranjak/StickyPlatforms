@@ -61,3 +61,13 @@ O9/03/2016
   For 09/24/2016:
     * Working Tiled map loader.
     * Animations.
+    
+09/26/2016
+
+  Map loading from Tiled's TMX/TSX formats is done, albeit incomplete, as support for placing dynamic entities on the map from the editor is missing.
+  I consider this feature important for easy prototyping. I also need a way to properly handle collisions
+  for tiles which collision box is smaller than the logical tile size.
+  On the other hand, I still haven't looked into animation. I don't feel it's a priority for now.
+  For 09/28/2016:
+  * Flexible tile bounding boxes
+  * Load entities from map files: support for at least a "player start" entity, and the enemy.
