@@ -2,6 +2,7 @@
 #define RECT_H
 
 #include "gamevector.h"
+#include <iostream>
 
 namespace game {
 
@@ -28,6 +29,11 @@ public:
 
   T distanceX(const Rect &other) const;
   T distanceY(const Rect &other) const;
+
+  friend std::ostream &operator<<(std::ostream &os, const Rect &r)
+  {
+    return os << "{"<<r.x<<","<<r.y<<","<<r.w<<","<<r.h<<"}";
+  }
 
 public:
   T x, y, w, h;

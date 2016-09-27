@@ -30,13 +30,23 @@ public:
        bool isObstacle = true,
        const std::shared_ptr<Image> &graphics = std::shared_ptr<Image>(),
        const Rect<int> &graphicsPos = {},
-       const std::function<void(Entity &, Level &)> &collisionBehavior = std::function<void(Entity &, Level &)>());
+       const Rect<float> &collisionBox = { 0.f, 0.f, static_cast<float>(SIZE), static_cast<float>(SIZE) },
+       const std::function<void(Entity &, Level &)> &collisionBehavior = std::function<void(Entity &, Level &)>()
+      );
 
   /**
    * @brief isObstacle Whether this tile is an obstacle for moving entities.
    * @return \c true if entities can't traverse this tile.
    */
   bool isObstacle() const;
+
+  /**
+   * @brief getCollisionBox Get the rectangle representing the collision area for this tile.
+   * @param x X position of the tile in tile coordinates
+   * @param y Y position of the tile in tile coordinates
+   * @return The collision box for this tile, offset by the proper coordinates in pixels.
+   */
+  Rect<float> getCollisionBox(int x, int y) const;
 
   /**
    * @brief draw Draw this tile at the given position in tile coordinates.
@@ -61,6 +71,7 @@ private:
   std::shared_ptr<Image> mGraphics;
   std::function<void(Entity &, Level &)> mCollisionBehavior;
   Rect<int> mGraphicsPos;
+  Rect<float> mCollisionBox;
 };
 
 }

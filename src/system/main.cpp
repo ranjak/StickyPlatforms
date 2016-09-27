@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
   game::InputHandler input;
 
   display.init(640, 480);
-  glog(game::Log::Priority::DBG, "Initialization OK");
+  glog(game::Log::DBG, "Initialization OK");
 
   game::GameState game(display, input, 320, 240);
 

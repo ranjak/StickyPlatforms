@@ -53,11 +53,17 @@ Log& Log::getGlobal()
 
 void Log::log(Priority sev, const std::string& msg)
 {
-  if (sev <= mLevel)
-  {
+  if (sev <= mLevel) {
     std::string priorityStr = priorityToStr(sev);
 
     mOutput << priorityStr << msg << std::endl;
+  }
+}
+
+void Log::log(Priority sev, std::stringstream &msg)
+{
+  if (sev <= mLevel) {
+    mOutput << msg.str() << std::endl;
   }
 }
 

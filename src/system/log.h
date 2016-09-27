@@ -2,10 +2,15 @@
 #define LOG_H
 
 #include <iostream>
+#include <sstream>
 
 // Helper define for logging, disabled in release mode
 #ifndef NDEBUG
-# define glog(severity, msg); game::Log::getGlobal().log(severity, msg);
+# define glog(sev, msg) \
+    do { std::stringstream s; \
+         s << msg; \
+         game::Log::getGlobal().log(sev, s); \
+    } while (0)
 #else
 # define glog(severity, msg);
 #endif
@@ -42,6 +47,8 @@ public:
    * @brief log Print a log message with the given priority.
    */
   void log(Priority, const std::string&);
+
+  void log(Priority sev, std::stringstream &msg);
 
   /**
    * @brief setLevel Set the maximum log level for the given logger.

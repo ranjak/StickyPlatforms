@@ -47,8 +47,17 @@ Tileset TSXTilesetLoader::loadTileset(const std::string &file, Display &display)
   else {
     for (TSX::Parser::Tile &tile : tsx.tileList) {
       std::shared_ptr<Image> tileImg = std::make_shared<Image>(display, tile.image.source);
+      float xRatio = static_cast<float>(Tile::SIZE) / static_cast<float>(tile.image.width);
+      float yRatio = static_cast<float>(Tile::SIZE) / static_cast<float>(tile.image.height);
 
-      tiles.emplace_back(tile.id, true, tileImg);
+      if (!tile.collisions.objects.empty()) {
+        TMX::Object &obj = tile.collisions.objects[0];
+        Rect<float> collision(obj.x*xRatio, obj.y*yRatio, obj.width*xRatio, obj.height*yRatio);
+
+        tiles.emplace_back(tile.id, true, tileImg, Rect<int>{}, collision);
+      }
+      else
+        tiles.emplace_back(tile.id, true, tileImg);
     }
   }
 

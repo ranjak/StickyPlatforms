@@ -136,26 +136,30 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   movementArea.y = std::min(destFacingPoint.y, box.y);
   movementArea.w = (movementArea.x == box.x) ? (destFacingPoint.x - box.x) : (box.x + box.w - destFacingPoint.x);
   movementArea.h = (movementArea.y == box.y) ? (destFacingPoint.y - box.y) : (box.y + box.h - destFacingPoint.y);
-  std::vector<Entity*> neighbours(getEntitiesInArea(movementArea));
+  std::vector<Entity*> neighbours(getEntitiesInArea(movementArea, [&](const Entity &e) { return &entity != &e && e.isObstacle(); }));
+
+  // Also check tile collisions
+  std::vector<Rect<float>> obstacles;
+
+  for (int i=movementArea.x/Tile::SIZE; i<=(movementArea.x+movementArea.w-1)/Tile::SIZE; i++) {
+    for (int j=movementArea.y/Tile::SIZE; j<=(movementArea.y+movementArea.h-1)/Tile::SIZE; j++) {
+
+      TileID tile = mTiles[i*mSize.y + j];
+      if (tile > 0 && mTilesets[tile].isObstacle())
+        obstacles.push_back(mTilesets[tile].getCollisionBox(i, j));
+    }
+  }
+
+  std::for_each(neighbours.begin(), neighbours.end(), [&](const Entity *e) { obstacles.push_back(e->getGlobalBox()); });
 
   // Check obstacles on the X axis
   if (direction.x > 0) {
     // Find the closest entity obstacle on X
-    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (**it).isObstacle() && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
-        destFacingPoint.x = std::min(destFacingPoint.x, ebox.x);
+    for (auto it=obstacles.begin(); it != obstacles.end(); it++) {
+      if (box.x < it->x && box.y + box.h > it->y && box.y < it->y + it->h)
+        destFacingPoint.x = std::min(destFacingPoint.x, it->x);
     }
-    // Find the closest tile obstacle on X
-    for (int i=facingPoint.x / Tile::SIZE; i<=(destFacingPoint.x - 1) / Tile::SIZE; i++) {
-      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
-        TileID &tile = mTiles[i*mSize.y + j];
-        if (tile > 0 && mTilesets[tile].isObstacle()) {
-          destFacingPoint.x = i * Tile::SIZE;
-          break;
-        }
-      }
-    }
+
     // Move on the X axis up to the closest obstacle found
     box.x = destFacingPoint.x - box.w;
     // Notify the entity if it didn't reach its goal
@@ -163,20 +167,11 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
       entity.onObstacleReached(Vector<int>(-1, 0));
   }
   else if (direction.x < 0) {
-    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (**it).isObstacle() && (box.y + box.h > ebox.y && box.y < ebox.y + ebox.h))
-        destFacingPoint.x = std::max(destFacingPoint.x, ebox.x + ebox.w);
+    for (auto it=obstacles.begin(); it != obstacles.end(); it++) {
+      if (box.x > it->x && box.y + box.h > it->y && box.y < it->y + it->h)
+        destFacingPoint.x = std::max(destFacingPoint.x, it->x + it->w);
     }
-    for (int i=(int)facingPoint.x / Tile::SIZE; i>=(int)destFacingPoint.x / Tile::SIZE; i--) {
-      for (int j=box.y / Tile::SIZE; j<=(box.y + box.h - 1) / Tile::SIZE; j++) {
-        TileID &tile = mTiles[i*mSize.y + j];
-        if (tile > 0 && mTilesets[tile].isObstacle()) {
-          destFacingPoint.x = std::min((i+1), mSize.x-1) * Tile::SIZE;
-          break;
-        }
-      }
-    }
+
     box.x = destFacingPoint.x;
     if (box.x != dest.x)
       entity.onObstacleReached(Vector<int>(1, 0));
@@ -184,39 +179,21 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 
   // Same for the Y axis
   if (direction.y > 0) {
-    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (**it).isObstacle() && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
-        destFacingPoint.y = std::min(destFacingPoint.y, ebox.y);
+    for (auto it=obstacles.begin(); it != obstacles.end(); it++) {
+      if (box.y < it->y && box.x + box.w > it->x && box.x < it->x + it->w)
+        destFacingPoint.y = std::min(destFacingPoint.y, it->y);
     }
-    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
-      for (int j=facingPoint.y / Tile::SIZE; j<=(destFacingPoint.y - 1) / Tile::SIZE; j++) {
-        TileID &tile = mTiles[i*mSize.y + j];
-        if (tile > 0 && mTilesets[tile].isObstacle()) {
-          destFacingPoint.y = j * Tile::SIZE;
-          break;
-        }
-      }
-    }
+
     box.y = destFacingPoint.y - box.h;
     if (box.y != dest.y)
       entity.onObstacleReached(Vector<int>(0, -1));
   }
   else if (direction.y < 0) {
-    for (auto it=neighbours.begin(); it != neighbours.end(); it++) {
-      Rect<float> ebox = (**it).getGlobalBox();
-      if (*it != &entity && (**it).isObstacle() && (box.x + box.w > ebox.x && box.x < ebox.x + ebox.w))
-        destFacingPoint.y = std::max(destFacingPoint.y, ebox.y + ebox.h);
+    for (auto it=obstacles.begin(); it != obstacles.end(); it++) {
+      if (box.y > it->y && box.x + box.w > it->x && box.x < it->x + it->w)
+        destFacingPoint.y = std::max(destFacingPoint.y, it->y + it->h);
     }
-    for (int i=box.x / Tile::SIZE; i<=(box.x + box.w - 1) / Tile::SIZE; i++) {
-      for (int j=(int)facingPoint.y / Tile::SIZE; j>=(int)destFacingPoint.y / Tile::SIZE; j--) {
-        TileID &tile = mTiles[i*mSize.y + j];
-        if (tile > 0 && mTilesets[tile].isObstacle()) {
-          destFacingPoint.y = std::min((j+1), mSize.y-1) * Tile::SIZE;
-          break;
-        }
-      }
-    }
+
     box.y = destFacingPoint.y;
     if (box.y != dest.y)
       entity.onObstacleReached(Vector<int>(0, 1));
@@ -226,11 +203,12 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   return box.x == dest.x && box.y == dest.y;
 }
 
-std::vector<Entity*> Level::getEntitiesInArea(const Rect<float> &area)
+template<typename Func>
+std::vector<Entity*> Level::getEntitiesInArea(const Rect<float> &area, Func &&pred)
 {
   std::vector<Entity*> entities;
   for (auto it=mEntities.begin(); it != mEntities.end(); it++) {
-    if (area.intersects((**it).getGlobalBox()))
+    if (pred(**it) && area.intersects((**it).getGlobalBox()))
       entities.push_back(it->get());
   }
 

@@ -51,10 +51,12 @@ public:
   /**
    * @brief getEntitiesInArea Get every entity which bounding box intersects with \p area.
    * @param area Rectangular area to scan for entities.
+   * @param pred Optional predicate to filter the entities.
    * @return Vector containing pointers to the entities that overlap \p area.
    * You do not own these pointers.
    */
-  std::vector<Entity *> getEntitiesInArea(const Rect<float> &area);
+  template<typename Func>
+  std::vector<Entity *> getEntitiesInArea(const Rect<float> &area, Func &&pred=[](){return true;});
 
   /**
    * @brief isOnGround Check whether \p entity is standing on ground (solid tile or entity).
