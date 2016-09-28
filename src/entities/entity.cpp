@@ -13,14 +13,15 @@ Entity::Entity() :
 
 }
 
-Entity::Entity(int x, int y, int w, int h, std::unique_ptr<Graphics> graphs, Entity *parent, bool isObstacle) :
+Entity::Entity(int x, int y, int w, int h, bool isObstacle, const std::string &name, std::unique_ptr<Graphics> graphs, Entity *parent) :
   mBoundingBox(x, y, w, h),
   mGraphics(std::move(graphs)),
   mParent(),
   mChildren(),
   mIsObstacle(isObstacle),
   mIsCollidable(true),
-  mIgnoresObstacles(false)
+  mIgnoresObstacles(false),
+  mName(name)
 {
   if (parent != nullptr)
     parent->addChild(this);

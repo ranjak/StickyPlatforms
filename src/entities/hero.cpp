@@ -13,7 +13,7 @@ namespace game {
 
 
 Hero::Hero() :
-  Entity(0, 0, Tile::SIZE, Tile::SIZE, std::unique_ptr<Graphics>(new Rectangle(Tile::SIZE, Tile::SIZE, Color::GREEN))),
+  Entity(0, 0, Tile::SIZE, Tile::SIZE, true, "Hero", std::unique_ptr<Graphics>(new Rectangle(Tile::SIZE, Tile::SIZE, Color::GREEN))),
   mState(new AirState(*this)),
   mOnGround(false),
   mMovement(*this),

@@ -98,29 +98,8 @@ namespace TMX {
     }
 
     for( rapidxml::xml_node<>* oGroup_node = root_node->first_node( "objectgroup" ); oGroup_node; oGroup_node = oGroup_node->next_sibling( "objectgroup" ) ) {
-      ObjectGroup oGroup;
-      std::cout << std::endl;
-      oGroup.color = presentOrDefault( oGroup_node->first_attribute( "color" ), "" );
-      std::cout << "Object Group Color: " << oGroup.color << std::endl;
-      oGroup.name = oGroup_node->first_attribute( "name" )->value();
-      std::cout << "Object Group Name: " << oGroup.name << std::endl;
-      oGroup.opacity = std::atof( presentOrDefault( oGroup_node->first_attribute( "opacity" ), "1.0" ) );
-      std::cout << "Object Group Opacity: " << oGroup.opacity << std::endl;
-      oGroup.visible = std::atoi( presentOrDefault( oGroup_node->first_attribute( "visible" ), "1" ) );
-      std::cout << "Object Group Visible: " << oGroup.visible << std::endl;
 
-      oGroup.offsetx = std::atof( presentOrDefault( oGroup_node->first_attribute( "offsetx" ), "0" ) );
-      std::cout << "Object Group Offset X: " << oGroup.offsetx << std::endl;
-
-      oGroup.offsety = std::atof( presentOrDefault( oGroup_node->first_attribute( "offsety" ), "0" ) );
-      std::cout << "Object Group Offset Y: " << oGroup.offsety << std::endl;
-
-      oGroup.draworder = presentOrDefault( oGroup_node->first_attribute( "draworder" ), "topdown" );
-      std::cout << "Object Group Draw Order: " << oGroup.draworder << std::endl;
-
-      if( oGroup_node->first_node( "properties" ) != 0 ) {
-        oGroup.property = parseProperties(oGroup_node->first_node( "properties" ));
-      }
+      ObjectGroup oGroup = parseObjectGroup(oGroup_node);
 
       objectGroup[oGroup.name] = oGroup;
     }

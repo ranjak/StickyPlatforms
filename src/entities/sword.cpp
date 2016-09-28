@@ -4,7 +4,7 @@
 namespace game {
 
 Sword::Sword(Entity *wielder) :
-  Entity(0, 0, 25, 8, std::unique_ptr<Graphics>(new Rectangle(25, 8, Color::BLUE)), wielder),
+  Entity(0, 0, 25, 8, false, "Sword", std::unique_ptr<Graphics>(new Rectangle(25, 8, Color::BLUE)), wielder),
   mMovement(*this)
 {
   mIgnoresObstacles = true;

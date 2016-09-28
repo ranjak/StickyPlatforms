@@ -15,14 +15,17 @@
 namespace game {
 
 
-Level::Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles) :
+Level::Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles, std::unique_ptr<Entity> playerStart) :
   mSize(width, height),
   mTilesets(std::move(tilesets)),
   mTiles(std::move(tiles)),
   mEntities(),
   mHero(hero.get())
 {
+  hero->setGlobalPos(playerStart->getGlobalPos());
+
   addEntity(std::move(hero));
+  addEntity(std::move(playerStart));
 }
 
 std::unique_ptr<Level> Level::loadFromTmx(const std::string &file, Display &display)
@@ -70,6 +73,11 @@ void Level::addEntity(std::unique_ptr<Entity> entity)
   mEntities.push_back(std::move(entity));
 }
 
+void Level::addEntities(std::vector<std::unique_ptr<Entity> > &&entities)
+{
+  std::move(entities.begin(), entities.end(), std::back_inserter(mEntities));
+}
+
 TileID *Level::tiles()
 {
   return mTiles.get();
@@ -97,6 +105,20 @@ void Level::handleCollisions(Entity &entity)
       entity.onCollision(*other);
     }
   }
+}
+
+bool Level::start(const std::string &startingPoint)
+{
+  // Find the requested PlayerStart entity
+  auto playerStart = std::find_if(mEntities.begin(), mEntities.end(), [&](const std::unique_ptr<Entity> &e) { return e->getName() == startingPoint; });
+
+  if (playerStart == mEntities.end()) {
+    game::error("Level::start: starting point \""+startingPoint+"\" not found.");
+    return false;
+  }
+
+  mHero->setGlobalPos((**playerStart).getGlobalPos());
+  return true;
 }
 
 bool Level::tryMoving(Entity &entity, const Vector<float> &dest)

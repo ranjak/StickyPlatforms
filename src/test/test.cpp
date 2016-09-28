@@ -38,7 +38,7 @@ std::unique_ptr<Level> Test::makeLevel(Display& display)
   std::unique_ptr<Level> level = Level::loadFromTmx("assets/maps/test.tmx", display);
 
   // Platform
-  level->addEntity(std::unique_ptr<Entity>(new Entity(150, 150, 50, 20, std::unique_ptr<Graphics>(new Rectangle(50, 20)), nullptr, true)));
+  //level->addEntity(std::unique_ptr<Entity>(new Entity(150, 150, 50, 20, std::unique_ptr<Graphics>(new Rectangle(50, 20)), nullptr, true)));
   //level->addEntity(std::unique_ptr<Entity>(new Enemy(lvlSize.x - 100, lvlSize.y - (Tile::SIZE*2), Tile::SIZE, Tile::SIZE)));
 
   return level;

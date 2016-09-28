@@ -24,24 +24,25 @@ set(SRC_LIST
     src/system/resource.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
-    src/entity.cpp
-    src/hero.cpp
+    src/entities/entity.cpp
+    src/entities/hero.cpp
     src/graphics.cpp
     src/rectangle.cpp
-    src/herostate.cpp
-    src/horizcontrolstate.cpp
-    src/groundstate.cpp
-    src/airstate.cpp
+    src/entities/states/herostate.cpp
+    src/entities/states/horizcontrolstate.cpp
+    src/entities/states/groundstate.cpp
+    src/entities/states/airstate.cpp
     src/world/level.cpp
     src/world/tile.cpp
     src/world/tileset.cpp
     src/world/tmxmaploader.cpp
     src/world/tsxtilesetloader.cpp
     src/test/test.cpp
-    src/camera.cpp
-    src/enemy.cpp
-    src/swordstate.cpp
-    src/sword.cpp
+    src/entities/camera.cpp
+    src/entities/enemy.cpp
+    src/entities/states/swordstate.cpp
+    src/entities/sword.cpp
+    src/entities/entityfactory.cpp
     src/movement.cpp
 )
 
@@ -54,6 +55,8 @@ include_directories(
     ${SDL2_IMAGE_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/entities
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/states
     ${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tmxparser/include
 )
 target_link_libraries(${PROJECT_NAME}

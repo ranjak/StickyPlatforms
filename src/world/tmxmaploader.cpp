@@ -6,45 +6,106 @@
 #include "hero.h"
 #include "log.h"
 #include "tsxtilesetloader.h"
+#include "entityfactory.h"
 #include <string>
 #include <memory>
 #include <cctype>
+#include <vector>
+#include <stdexcept>
 
 namespace game {
 
 
 std::unique_ptr<Level> TMXMapLoader::load(const std::string &file, Display &display)
 {
-  TMXMapLoader loader;
+  try {
+    return TMXMapLoader().loadMap(file, display);
+  }
+  catch (std::exception &e) {
+    game::error("Failed to load map file "+file+" ; reason: "+e.what());
+    return nullptr;
+  }
+}
 
+
+TMXMapLoader::TMXMapLoader() :
+  mPlayerStart(),
+  mEntities(),
+  mLevelSize(),
+  mTileRatio(),
+  mTilesets(),
+  mTilesArray()
+{
+
+}
+
+std::unique_ptr<Level> TMXMapLoader::loadMap(const std::string &file, Display &display)
+{
   TMX::Parser tmx(file.c_str());
 
-  // Load the map's tilesets
-  TilesetList tilesets;
-  for (TMX::Parser::Tileset tileset : tmx.tilesetList) {
-    tilesets.add(TSXTilesetLoader::loadTileset(tileset.source, display), tileset.firstGID);
-  }
+  mLevelSize.x = tmx.mapInfo.width;
+  mLevelSize.y = tmx.mapInfo.height;
 
-  // Fill the tile array
-  Vector<int> levelSize(tmx.mapInfo.width, tmx.mapInfo.height);
-  std::unique_ptr<TileID[]> tilesArray(new TileID[levelSize.x * levelSize.y]);
+  mTileRatio.x = static_cast<float>(Tile::SIZE) / static_cast<float>(tmx.mapInfo.tileWidth);
+  mTileRatio.y = static_cast<float>(Tile::SIZE) / static_cast<float>(tmx.mapInfo.tileHeight);
 
-  std::map<std::string, TMX::Parser::TileLayer>::iterator tiles = tmx.tileLayer.find("tiles");
-  if (tiles == tmx.tileLayer.end()) {
-    game::error("Level::loadFromTmx: A tile layer with name 'tiles' is required.");
-    return nullptr;
-  }
+  loadTiles(tmx, display);
 
-  if (!loader.loadTilesCsv(tiles->second.data.contents, tilesArray.get(), levelSize)) {
-    game::error("Level::loadFromTmx: CSV tile data is corrupt.");
-    return nullptr;
-  }
+  loadObjects(tmx);
 
-  std::unique_ptr<Level> level(new Level(levelSize.x, levelSize.y, std::unique_ptr<Hero>(new Hero), std::move(tilesets), std::move(tilesArray)));
+  std::unique_ptr<Level> level(new Level(mLevelSize.x, mLevelSize.y, std::unique_ptr<Hero>(new Hero), std::move(mTilesets), std::move(mTilesArray), std::move(mPlayerStart)));
+  level->addEntities(std::move(mEntities));
+
   return level;
 }
 
-TMXMapLoader::TMXMapLoader() :
+void TMXMapLoader::loadTiles(TMX::Parser &map, Display &display)
+{
+  // Load the map's tilesets
+  for (TMX::Parser::Tileset &tileset : map.tilesetList) {
+    mTilesets.add(TSXTilesetLoader::loadTileset(tileset.source, display), tileset.firstGID);
+  }
+
+  // Fill the tile array
+  mTilesArray.reset(new TileID[mLevelSize.x * mLevelSize.y]);
+
+  std::map<std::string, TMX::Parser::TileLayer>::iterator tiles = map.tileLayer.find("tiles");
+
+  if (tiles == map.tileLayer.end())
+    throw std::runtime_error("Level::loadFromTmx: A tile layer with name 'tiles' is required.");
+
+  if (!MapCsvParser().loadTilesCsv(tiles->second.data.contents, mTilesArray.get(), mLevelSize))
+    throw std::runtime_error("Level::loadFromTmx: CSV tile data is corrupt.");
+}
+
+void TMXMapLoader::loadObjects(TMX::Parser &map)
+{
+  auto mapEntities = map.objectGroup.find("entities");
+
+  if (mapEntities == map.objectGroup.end())
+    throw std::runtime_error("Could not find required playerStart object in the map file.");
+
+  for (TMX::Object &obj : mapEntities->second.objects) {
+
+    std::unique_ptr<Entity> entity = EntityFactory::create(obj.type, obj.name, Rect<int>(obj.x * mTileRatio.x, obj.y * mTileRatio.y, obj.width * mTileRatio.x, obj.height * mTileRatio.y));
+
+    if (entity == nullptr)
+      Log::getGlobal().get(Log::WARNING) << "TMXMapLoader: Unknown entity type: \""<<obj.type<<"\" for object with name \""<<obj.name<<"\" and id="<<obj.id<<std::endl;
+
+    else if (entity->getName() == "playerStart")
+      mPlayerStart = std::move(entity);
+
+    else
+      mEntities.push_back(std::move(entity));
+  }
+
+  if (!mPlayerStart)
+    throw std::runtime_error("Could not find required playerStart object in the map file.");
+}
+
+namespace {
+
+MapCsvParser::MapCsvParser() :
   mCsvIndex(0),
   mCsvEnded(false),
   mCsvError(false),
@@ -53,7 +114,7 @@ TMXMapLoader::TMXMapLoader() :
 
 }
 
-bool TMXMapLoader::loadTilesCsv(const std::string &tilesCsv, TileID *tilesArray, const Vector<int> &levelSize)
+bool MapCsvParser::loadTilesCsv(const std::string &tilesCsv, TileID *tilesArray, const Vector<int> &levelSize)
 {
   mTilesCsv = &tilesCsv;
   mCsvEnded = false;
@@ -79,7 +140,7 @@ bool TMXMapLoader::loadTilesCsv(const std::string &tilesCsv, TileID *tilesArray,
   return i == levelSize.x && j == levelSize.y;
 }
 
-int TMXMapLoader::readInt()
+int MapCsvParser::readInt()
 {
   std::string number = "";
 
@@ -97,13 +158,13 @@ int TMXMapLoader::readInt()
   }
 }
 
-void TMXMapLoader::readWhitespace()
+void MapCsvParser::readWhitespace()
 {
   while (!mCsvEnded && std::isspace(static_cast<int>(mTilesCsv->at(mCsvIndex))))
     readChar();
 }
 
-bool TMXMapLoader::readChar()
+bool MapCsvParser::readChar()
 {
   if (++mCsvIndex < mTilesCsv->size()) {
     return true;
@@ -114,7 +175,7 @@ bool TMXMapLoader::readChar()
   }
 }
 
-void TMXMapLoader::readSeparator()
+void MapCsvParser::readSeparator()
 {
   // Read any whites before
   readWhitespace();
@@ -128,5 +189,7 @@ void TMXMapLoader::readSeparator()
     mCsvError = true;
   }
 }
+
+} // namespace
 
 } // namespace game

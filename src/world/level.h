@@ -24,7 +24,7 @@ class Level
 {
 public:
 
-  Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles);
+  Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles, std::unique_ptr<Entity> playerStart);
 
   static std::unique_ptr<Level> loadFromTmx(const std::string &file, Display &display);
 
@@ -34,9 +34,13 @@ public:
 
   void addEntity(std::unique_ptr<Entity> entity);
 
+  void addEntities(std::vector<std::unique_ptr<Entity>> &&entities);
+
   TileID *tiles();
 
   void handleCollisions(Entity &entity);
+
+  bool start(const std::string &startingPoint="playerStart");
 
   /**
    * @brief tryMoving Try to move \p entity to \p dest, according to a linear trajectory.

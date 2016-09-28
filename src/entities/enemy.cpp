@@ -9,8 +9,8 @@
 namespace game {
 
 
-Enemy::Enemy(int x, int y, int w, int h) :
-  Entity(x, y, w, h, std::unique_ptr<Graphics>(new Rectangle(w, h, Color::RED))),
+Enemy::Enemy(int x, int y, int w, int h, const std::string &name) :
+  Entity(x, y, w, h, true, name, std::unique_ptr<Graphics>(new Rectangle(w, h, Color::RED))),
   mSpeed(75.f),
   mMovement(*this),
   mHealthPoints(3),

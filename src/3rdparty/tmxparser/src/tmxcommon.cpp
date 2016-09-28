@@ -7,7 +7,7 @@ Property::Property(Property::valType type, const std::string &value) :
 {
   switch (type) {
   case STRING:
-    strVal = value;
+    new (&strVal) std::string(value);
     break;
   case INT:
     intVal = std::stoi(value);
@@ -27,16 +27,39 @@ Property::~Property()
     strVal.std::string::~string();
 }
 
-Property::Property(const Property &p)
+Property::Property(const Property &p) :
+  type(p.type)
 {
-  this->operator =(p);
+  switch (type) {
+  case STRING:
+    new (&strVal) std::string(p.strVal);
+    break;
+  case INT:
+    intVal = p.intVal;
+    break;
+  case FLOAT:
+    floatVal = p.floatVal;
+    break;
+  case BOOL:
+    boolVal = p.boolVal;
+    break;
+  }
 }
 
 Property &Property::operator=(const Property &p)
 {
+  if (&p == this)
+    return *this;
+
+  if (type == STRING && p.type != STRING)
+    strVal.std::string::~string();
+
   switch (p.type) {
   case STRING:
-    strVal = p.strVal;
+    if (type == STRING)
+      strVal = p.strVal;
+    else
+      new (&strVal) std::string(p.strVal);
     break;
   case INT:
     intVal = p.intVal;
@@ -48,20 +71,18 @@ Property &Property::operator=(const Property &p)
     boolVal = p.boolVal;
     break;
   }
+
+  type = p.type;
 
   return *this;
 }
 
-Property::Property(Property &&p)
+Property::Property(Property &&p) :
+  type(p.type)
 {
-  this->operator =(std::move(p));
-}
-
-Property &Property::operator=(Property &&p)
-{
-  switch (p.type) {
+  switch (type) {
   case STRING:
-    strVal = std::move(p.strVal);
+    new (&strVal) std::string(std::move(p.strVal));
     break;
   case INT:
     intVal = p.intVal;
@@ -73,6 +94,35 @@ Property &Property::operator=(Property &&p)
     boolVal = p.boolVal;
     break;
   }
+}
+
+Property &Property::operator=(Property &&p)
+{
+  if (&p == this)
+    return *this;
+
+  if (type == STRING && p.type != STRING)
+    strVal.std::string::~string();
+
+  switch (p.type) {
+  case STRING:
+    if (type == STRING)
+      strVal = std::move(p.strVal);
+    else
+      new (&strVal) std::string(std::move(p.strVal));
+    break;
+  case INT:
+    intVal = p.intVal;
+    break;
+  case FLOAT:
+    floatVal = p.floatVal;
+    break;
+  case BOOL:
+    boolVal = p.boolVal;
+    break;
+  }
+
+  type = p.type;
 
   return *this;
 }

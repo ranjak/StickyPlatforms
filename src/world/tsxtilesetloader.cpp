@@ -46,7 +46,9 @@ Tileset TSXTilesetLoader::loadTileset(const std::string &file, Display &display)
   }
   else {
     for (TSX::Parser::Tile &tile : tsx.tileList) {
+
       std::shared_ptr<Image> tileImg = std::make_shared<Image>(display, tile.image.source);
+
       float xRatio = static_cast<float>(Tile::SIZE) / static_cast<float>(tile.image.width);
       float yRatio = static_cast<float>(Tile::SIZE) / static_cast<float>(tile.image.height);
 

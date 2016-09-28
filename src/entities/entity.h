@@ -20,7 +20,7 @@ class Entity
 {
 public:
   Entity();
-  Entity(int x, int y, int w=0, int h=0, std::unique_ptr<Graphics> graphs=nullptr, Entity *parent=nullptr, bool isObstacle=false);
+  Entity(int x, int y, int w=0, int h=0, bool isObstacle=false, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, Entity *parent=nullptr);
 
   virtual ~Entity();
 
@@ -69,6 +69,8 @@ public:
   const Rect<float> &getLocalBox() const;
   Rect<float> getGlobalBox() const;
 
+  const std::string &getName() const { return mName; }
+
 protected:
   Rect<float> mBoundingBox;
   std::unique_ptr<Graphics> mGraphics;
@@ -77,6 +79,7 @@ protected:
   bool mIsObstacle;
   bool mIsCollidable;
   bool mIgnoresObstacles;
+  std::string mName;
 };
 
 } // namespace game

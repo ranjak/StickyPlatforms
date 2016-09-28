@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="20" height="10" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="20">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="25" height="15" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="22">
  <tileset firstgid="1" source="grass.tsx"/>
- <layer name="tiles" width="20" height="10">
+ <layer name="tiles" width="25" height="15">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,9,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,9,0,0,0,0,0,0,6,7,7,8,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,3,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,4,4,4,
-1,2,2,2,2,2,2,2,2,2,2,3,0,0,0,4,4,4,4,4
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,9,0,0,0,0,0,0,6,7,7,8,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,4,4,4,4,4,0,0,0,
+1,2,2,2,2,2,2,2,2,2,2,3,0,0,0,4,4,4,4,4,4,4,0,0,0,
+4,4,4,4,4,4,4,4,4,4,4,4,0,0,0,4,4,4,4,4,4,4,0,0,0
 </data>
  </layer>
  <objectgroup name="entities">
-  <object id="9" gid="7" x="224" y="926" width="128" height="128"/>
-  <object id="10" gid="7" x="386" y="958" width="128" height="128" rotation="3.5"/>
-  <object id="12" x="1540" y="1160" width="372" height="114">
+  <object id="9" gid="7" x="224" y="1438" width="128" height="128"/>
+  <object id="10" gid="7" x="386" y="1470" width="128" height="128" rotation="3.5"/>
+  <object id="12" x="1536" y="1792" width="384" height="128">
    <properties>
     <property name="mybool" type="bool" value="true"/>
     <property name="prop">789
@@ -26,15 +31,17 @@
     <property name="str" value="mystr"/>
    </properties>
   </object>
-  <object id="14" x="58" y="1004" width="116" height="106">
+  <object id="14" x="646" y="1418.67" width="116" height="106">
    <ellipse/>
   </object>
-  <object id="15" x="746.333" y="849.678" visible="0">
+  <object id="15" x="746.333" y="1361.68">
    <polygon points="0,0 200,-4.67797 52,133.322 -106,133.322"/>
   </object>
-  <object id="17" x="239.25" y="690.167">
+  <object id="17" x="239.25" y="1202.17">
    <polyline points="0,0 146.667,-77.3333 186.667,36"/>
   </object>
+  <object id="20" name="playerStart" type="PlayerStart" x="0" y="1536" width="128" height="128"/>
+  <object id="21" name="badguy" type="Enemy" x="1408" y="1024" width="128" height="128"/>
  </objectgroup>
  <imagelayer name="image"/>
 </map>

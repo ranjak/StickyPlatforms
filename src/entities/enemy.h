@@ -9,7 +9,7 @@ namespace game {
 class Enemy : public Entity
 {
 public:
-  Enemy(int x, int y, int w, int h);
+  Enemy(int x, int y, int w, int h, const std::string &name);
 
   virtual void update(std::uint32_t step, GameState& game) override;
 
