@@ -1,4 +1,4 @@
-#include "movement.h"
+#include "movementcomponent.h"
 #include "entity.h"
 #include "gamestate.h"
 #include "world/level.h"
@@ -6,7 +6,7 @@
 
 namespace game {
 
-Movement::Movement(Entity &entity) :
+MovementComponent::MovementComponent(Entity &entity) :
   mVelocity(0.f, 0.f),
   mRemainder(0.f, 0.f),
   mEntity(entity)
@@ -14,7 +14,7 @@ Movement::Movement(Entity &entity) :
 
 }
 
-void Movement::update(uint32_t step, GameState &game)
+void MovementComponent::update(uint32_t step, GameState &game)
 {
   Rect<float> box = mEntity.getGlobalBox();
   // Only use integers for position. Store fractional part in a remainder.
@@ -34,7 +34,7 @@ void Movement::update(uint32_t step, GameState &game)
     game.getLevel().handleCollisions(mEntity);
 }
 
-Vector<float> &Movement::velocity()
+Vector<float> &MovementComponent::velocity()
 {
   return mVelocity;
 }

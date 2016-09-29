@@ -2,7 +2,7 @@
 #define SWORD_H
 
 #include "entity.h"
-#include "movement.h"
+#include "movementcomponent.h"
 
 namespace game {
 
@@ -14,7 +14,7 @@ public:
   void update(std::uint32_t step, GameState &game) override;
 
 private:
-  Movement mMovement;
+  MovementComponent mMovement;
 };
 
 } // namespace game

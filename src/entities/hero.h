@@ -6,7 +6,8 @@
 #include "herostate.h"
 #include "gamevector.h"
 #include "swordstate.h"
-#include "movement.h"
+#include "movementcomponent.h"
+#include "physicscomponent.h"
 #include <memory>
 
 namespace game {
@@ -25,19 +26,20 @@ public:
 
   void draw(Display &target, const Camera &camera) const override;
 
+  void setState(std::unique_ptr<HeroState> newState);
+
   Vector<float> &velocity();
 
   void swingSword();
   void stopSword();
 
 private:
-  void updatePhysics(uint32_t step, GameState &game);
-
-private:
   // State the hero is currently in
   std::unique_ptr<HeroState> mState;
-  bool mOnGround;
-  Movement mMovement;
+  // State to transition to on next update (set by setState)
+  std::unique_ptr<HeroState> mNextState;
+  MovementComponent mMovement;
+  PhysicsComponent mPhysics;
   // Sword-realted stuff
   bool mIsSlashing;
   SwordState mSwordState;

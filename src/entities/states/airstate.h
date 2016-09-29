@@ -13,13 +13,7 @@ public:
 
   void update(std::uint32_t step, GameState &game) override;
 
-  void enter() override;
-
   float getAcceleration() override;
-
-private:
-  static const float GRAVITY;
-  static const float FALL_SPEED;
 };
 
 }

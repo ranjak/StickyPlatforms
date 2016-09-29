@@ -15,8 +15,9 @@ namespace game {
 Hero::Hero() :
   Entity(0, 0, Tile::SIZE, Tile::SIZE, true, "Hero", std::unique_ptr<Graphics>(new Rectangle(Tile::SIZE, Tile::SIZE, Color::GREEN))),
   mState(new AirState(*this)),
-  mOnGround(false),
+  mNextState(),
   mMovement(*this),
+  mPhysics(mMovement),
   mIsSlashing(false),
   mSwordState(*this)
 {
@@ -24,9 +25,16 @@ Hero::Hero() :
 
 void Hero::update(uint32_t step, GameState &game)
 {
+  if (mNextState) {
+    mState.reset(mNextState.release());
+    mState->enter();
+  }
+
   mState->update(step, game);
 
-  updatePhysics(step, game);
+  mPhysics.update(step, game);
+
+  mMovement.update(step, game);
 
   if (mIsSlashing)
     mSwordState.update(step, game);
@@ -49,6 +57,11 @@ void Hero::draw(Display &target, const Camera &camera) const
     mSwordState.draw(target, camera);
 }
 
+void Hero::setState(std::unique_ptr<HeroState> newState)
+{
+  mNextState = std::move(newState);
+}
+
 Vector<float>& Hero::velocity()
 {
   return mMovement.velocity();
@@ -67,22 +80,6 @@ void Hero::swingSword()
 void Hero::stopSword()
 {
   mIsSlashing = false;
-}
-
-void Hero::updatePhysics(uint32_t step, GameState &game)
-{
-  mMovement.update(step, game);
-
-  // If we find out we're not currently on the ground, we'll switch to air state
-  bool onGround = game.getLevel().isOnGround(*this);
-
-  // Change state if we went from ground to air (and vice versa)
-  if (!onGround && mOnGround)
-    mState.reset(new AirState(*this));
-  else if (onGround && !mOnGround)
-    mState.reset(new GroundState(*this));
-
-  mOnGround = onGround;
 }
 
 } // namespace game

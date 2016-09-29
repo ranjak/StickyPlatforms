@@ -2,6 +2,7 @@
 #include "gamecommands.h"
 #include "gamestate.h"
 #include "hero.h"
+#include "airstate.h"
 
 namespace game {
 
@@ -18,12 +19,15 @@ void GroundState::update(std::uint32_t step, GameState &game)
 
   // Jump: set initial jump speed
   if (game.getCommands().isHit(Command::JUMP))
-    mHero.velocity().y = - 800.f;
+    mHero.velocity().y = - 1000.f;
+
+  if (!game.getLevel().isOnGround(mHero))
+    mHero.setState(std::unique_ptr<AirState>(new AirState(mHero)));
 }
 
 float GroundState::getAcceleration()
 {
-  return 2000.f;
+  return 2500.f;
 }
 
 }

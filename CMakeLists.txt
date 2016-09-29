@@ -43,7 +43,8 @@ set(SRC_LIST
     src/entities/states/swordstate.cpp
     src/entities/sword.cpp
     src/entities/entityfactory.cpp
-    src/movement.cpp
+    src/entities/movementcomponent.cpp
+    src/entities/physicscomponent.cpp
 )
 
 add_subdirectory(src/3rdparty/tmxparser)

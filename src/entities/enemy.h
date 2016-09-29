@@ -2,7 +2,8 @@
 #define ENEMY_H
 
 #include "entity.h"
-#include "movement.h"
+#include "movementcomponent.h"
+#include "physicscomponent.h"
 
 namespace game {
 
@@ -20,7 +21,8 @@ public:
 
 private:
   float mSpeed;
-  Movement mMovement;
+  MovementComponent mMovement;
+  PhysicsComponent mPhysics;
   int mHealthPoints;
   std::uint32_t mInvincibilityEnd;
 };

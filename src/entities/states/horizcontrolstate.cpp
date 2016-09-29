@@ -40,7 +40,7 @@ void HorizControlState::update(std::uint32_t step, GameState &game)
 
 float HorizControlState::getMaxSpeed()
 {
-  return 300.f;
+  return 400.f;
 }
 
 }

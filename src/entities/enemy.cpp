@@ -13,6 +13,7 @@ Enemy::Enemy(int x, int y, int w, int h, const std::string &name) :
   Entity(x, y, w, h, true, name, std::unique_ptr<Graphics>(new Rectangle(w, h, Color::RED))),
   mSpeed(75.f),
   mMovement(*this),
+  mPhysics(mMovement),
   mHealthPoints(3),
   mInvincibilityEnd(0)
 {
@@ -22,6 +23,7 @@ Enemy::Enemy(int x, int y, int w, int h, const std::string &name) :
 
 void Enemy::update(uint32_t step, GameState &game)
 {
+  mPhysics.update(step, game);
   mMovement.update(step, game);
 }
 
@@ -30,6 +32,9 @@ void Enemy::onObstacleReached(const Vector<int> &normal)
   // Hit something? Go in the opposite direction
   if (normal.x != 0)
     mMovement.velocity().x = mSpeed * normal.x;
+
+  if (normal.y * mMovement.velocity().y < 0)
+    mMovement.velocity().y = 0;
 }
 
 void Enemy::onCollision(Entity &entity)

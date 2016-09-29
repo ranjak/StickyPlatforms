@@ -9,10 +9,10 @@ namespace game {
 class Entity;
 class GameState;
 
-class Movement
+class MovementComponent
 {
 public:
-  Movement(Entity &entity);
+  MovementComponent(Entity &entity);
 
   void update(std::uint32_t step, GameState &game);
 
