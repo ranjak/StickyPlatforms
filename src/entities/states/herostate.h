@@ -5,8 +5,9 @@
 
 namespace game {
 
-class Hero;
+class PlayerInputComponent;
 class GameState;
+class Message;
 
 /**
  * @brief The current state the hero is in.
@@ -16,15 +17,21 @@ class GameState;
 class HeroState
 {
 public:
-    HeroState(Hero& hero);
+    HeroState(PlayerInputComponent& stateMachine);
+
+    virtual ~HeroState() = 0;
 
     virtual void update(std::uint32_t step, GameState &game);
 
     virtual void enter();
 
+    virtual void receiveMessage(Message &msg);
+
 protected:
-    Hero& mHero;
+    PlayerInputComponent& mStateMachine;
 };
+
+inline HeroState::~HeroState() {}
 
 }
 

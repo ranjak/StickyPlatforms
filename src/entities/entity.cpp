@@ -21,7 +21,8 @@ Entity::Entity(int x, int y, int w, int h, bool isObstacle, const std::string &n
   mIsObstacle(isObstacle),
   mIsCollidable(true),
   mIgnoresObstacles(false),
-  mName(name)
+  mName(name),
+  mComponents()
 {
   if (parent != nullptr)
     parent->addChild(this);
@@ -40,7 +41,8 @@ Entity::~Entity()
 
 void Entity::update(uint32_t step, GameState &game)
 {
-
+  for (std::unique_ptr<Component> &comp : mComponents)
+    comp->update(step, game);
 }
 
 void Entity::draw(Display &target, const Camera &camera) const
@@ -49,6 +51,17 @@ void Entity::draw(Display &target, const Camera &camera) const
     Vector<float> pos = camera.toCamCoords(getGlobalPos());
     mGraphics->draw(target, pos.x, pos.y);
   }
+}
+
+void Entity::sendMessage(std::unique_ptr<Message> message)
+{
+  for (std::unique_ptr<Component> &comp : mComponents)
+    comp->receiveMessage(*message);
+}
+
+void Entity::addComponent(std::unique_ptr<Component> component)
+{
+  mComponents.push_back(std::move(component));
 }
 
 void Entity::onObstacleReached(const Vector<int> &normal)

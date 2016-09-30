@@ -7,6 +7,7 @@
 #include "gamevector.h"
 #include "rect.h"
 #include "graphics.h"
+#include "component.h"
 
 namespace game {
 
@@ -36,6 +37,14 @@ public:
    * @param target Render target on which the entity will be drawn.
    */
   virtual void draw(Display& target, const Camera& camera) const;
+
+  /**
+   * @brief sendMessage Send a message to the components of this entity.
+   * @param message
+   */
+  void sendMessage(std::unique_ptr<Message> message);
+
+  void addComponent(std::unique_ptr<Component> component);
 
   /**
    * @brief onObstacleReached Function called by the level when this entity's movement
@@ -80,6 +89,7 @@ protected:
   bool mIsCollidable;
   bool mIgnoresObstacles;
   std::string mName;
+  std::vector<std::unique_ptr<Component>> mComponents;
 };
 
 } // namespace game

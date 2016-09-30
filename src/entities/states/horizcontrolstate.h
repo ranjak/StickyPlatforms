@@ -5,17 +5,23 @@
 
 namespace game {
 
+class WalkComponent;
 
 class HorizControlState : public HeroState
 {
 public:
-  HorizControlState(Hero &hero);
+  HorizControlState(PlayerInputComponent &stateMachine, WalkComponent &walkComp, float acceleration, float maxSpeed = 320.f);
 
   virtual void update(std::uint32_t step, GameState &game) override;
 
-  virtual float getMaxSpeed();
+  void enter() override;
 
-  virtual float getAcceleration() = 0;
+protected:
+  WalkComponent &mWalkComp;
+private:
+  int mDirection;
+  float mAcceleration;
+  float mMaxSpeed;
 };
 
 }

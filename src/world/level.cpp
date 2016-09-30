@@ -8,6 +8,7 @@
 #include "camera.h"
 #include "TMXParser.h"
 #include "world/tmxmaploader.h"
+#include "obstaclereachedmsg.h"
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
@@ -186,7 +187,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
     box.x = destFacingPoint.x - box.w;
     // Notify the entity if it didn't reach its goal
     if (box.x != dest.x)
-      entity.onObstacleReached(Vector<int>(-1, 0));
+      entity.sendMessage(std::unique_ptr<Message>(new ObstacleReachedMsg(Vector<int>(-1, 0))));
   }
   else if (direction.x < 0) {
     for (auto it=obstacles.begin(); it != obstacles.end(); it++) {
@@ -196,7 +197,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 
     box.x = destFacingPoint.x;
     if (box.x != dest.x)
-      entity.onObstacleReached(Vector<int>(1, 0));
+      entity.sendMessage(std::unique_ptr<Message>(new ObstacleReachedMsg(Vector<int>(1, 0))));
   }
 
   // Same for the Y axis
@@ -208,7 +209,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 
     box.y = destFacingPoint.y - box.h;
     if (box.y != dest.y)
-      entity.onObstacleReached(Vector<int>(0, -1));
+      entity.sendMessage(std::unique_ptr<Message>(new ObstacleReachedMsg(Vector<int>(0, -1))));
   }
   else if (direction.y < 0) {
     for (auto it=obstacles.begin(); it != obstacles.end(); it++) {
@@ -218,7 +219,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
 
     box.y = destFacingPoint.y;
     if (box.y != dest.y)
-      entity.onObstacleReached(Vector<int>(0, 1));
+      entity.sendMessage(std::unique_ptr<Message>(new ObstacleReachedMsg(Vector<int>(0, 1))));
   }
 
   entity.setGlobalPos(Vector<float>(box.x, box.y));

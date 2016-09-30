@@ -3,44 +3,48 @@
 #include "gamevector.h"
 #include "gamestate.h"
 #include "hero.h"
+#include "playerinputcomponent.h"
+#include "directionchangedmsg.h"
 #include <cmath>
 #include <algorithm>
 
 namespace game {
 
 
-HorizControlState::HorizControlState(Hero &hero) :
-  HeroState(hero)
+HorizControlState::HorizControlState(PlayerInputComponent &stateMachine, WalkComponent &walkComp, float acceleration, float maxSpeed) :
+  HeroState(stateMachine),
+  mWalkComp(walkComp),
+  mDirection(0),
+  mAcceleration(acceleration),
+  mMaxSpeed(maxSpeed)
 {
 
 }
 
 void HorizControlState::update(std::uint32_t step, GameState &game)
 {
-  Vector<float>& velocity = mHero.velocity();
+  int inputDirection = 0;
 
-  float accelAmount = getAcceleration() * step / 1000.f;
+  if (game.getCommands().isHeld(Command::LEFT))
+    inputDirection -= 1;
 
-  // Accelerate until max speed
-  if (game.getCommands().isHeld(Command::LEFT) && !game.getCommands().isHeld(Command::RIGHT))
-    velocity.x = std::max(-getMaxSpeed(), velocity.x - accelAmount);
+  if (game.getCommands().isHeld(Command::RIGHT))
+    inputDirection += 1;
 
-  else if (game.getCommands().isHeld(Command::RIGHT) && !game.getCommands().isHeld(Command::LEFT))
-    velocity.x = std::min(getMaxSpeed(), velocity.x + accelAmount);
+  if (inputDirection != mDirection) {
+    mWalkComp.setDirection(inputDirection);
+    mDirection = inputDirection;
+//    mStateMachine.getPlayer().sendMessage(std::unique_ptr<DirectionChangedMsg>(new DirectionChangedMsg(inputDirection)));
+  }
 
-  // No direction : decelerate until stop
-  else if (velocity.x > 0)
-    velocity.x = std::max(0.f, velocity.x - accelAmount);
-  else if (velocity.x < 0)
-    velocity.x = std::min(0.f, velocity.x + accelAmount);
-
-  if (game.getCommands().isHit(Command::SWORD))
-    mHero.swingSword();
+//  if (game.getCommands().isHit(Command::SWORD))
+  //    mHero.swingSword();
 }
 
-float HorizControlState::getMaxSpeed()
+void HorizControlState::enter()
 {
-  return 400.f;
+  mWalkComp.setMaxSpeed(mMaxSpeed);
+  mWalkComp.setAcceleration(mAcceleration);
 }
 
 }

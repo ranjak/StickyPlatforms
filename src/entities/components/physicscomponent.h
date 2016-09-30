@@ -1,6 +1,7 @@
 #ifndef PHYSICSCOMPONENT_H
 #define PHYSICSCOMPONENT_H
 
+#include "component.h"
 #include <cstdint>
 
 namespace game {
@@ -8,12 +9,14 @@ namespace game {
 class GameState;
 class MovementComponent;
 
-class PhysicsComponent
+class PhysicsComponent : public Component
 {
 public:
   PhysicsComponent(MovementComponent &movement);
 
-  void update(std::uint32_t step, GameState &game);
+  void update(std::uint32_t step, GameState &game) override;
+
+  void receiveMessage(Message &message) override;
 
 private:
   float mGravity;

@@ -8,6 +8,7 @@ namespace game {
 
 class Display;
 class Camera;
+class Hero;
 
 class SwordState : public HeroState
 {

@@ -4,6 +4,10 @@
 #include "world/level.h"
 #include "gamestate.h"
 #include "sword.h"
+#include "basicaicomponent.h"
+#include "movementcomponent.h"
+#include "physicscomponent.h"
+#include "walkcomponent.h"
 #include <cmath>
 
 namespace game {
@@ -12,29 +16,20 @@ namespace game {
 Enemy::Enemy(int x, int y, int w, int h, const std::string &name) :
   Entity(x, y, w, h, true, name, std::unique_ptr<Graphics>(new Rectangle(w, h, Color::RED))),
   mSpeed(75.f),
-  mMovement(*this),
-  mPhysics(mMovement),
   mHealthPoints(3),
   mInvincibilityEnd(0)
 {
-  // Set initial velocity
-  mMovement.velocity().x = - mSpeed;
-}
+  std::unique_ptr<MovementComponent> mvt(new MovementComponent(*this));
+  std::unique_ptr<WalkComponent> walk(new WalkComponent(*mvt));
 
-void Enemy::update(uint32_t step, GameState &game)
-{
-  mPhysics.update(step, game);
-  mMovement.update(step, game);
-}
+  walk->setMaxSpeed(mSpeed);
+  walk->setAcceleration(2000.f);
+  walk->setDirection(-1);
 
-void Enemy::onObstacleReached(const Vector<int> &normal)
-{
-  // Hit something? Go in the opposite direction
-  if (normal.x != 0)
-    mMovement.velocity().x = mSpeed * normal.x;
-
-  if (normal.y * mMovement.velocity().y < 0)
-    mMovement.velocity().y = 0;
+  addComponent(std::unique_ptr<Component>(new BasicAiComponent(*this)));
+  addComponent(std::unique_ptr<Component>(new PhysicsComponent(*mvt)));
+  addComponent(std::move(walk));
+  addComponent(std::move(mvt));
 }
 
 void Enemy::onCollision(Entity &entity)

@@ -1,6 +1,7 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
+#include "component.h"
 #include "gamevector.h"
 #include <cstdint>
 
@@ -9,7 +10,7 @@ namespace game {
 class Entity;
 class GameState;
 
-class MovementComponent
+class MovementComponent : public Component
 {
 public:
   MovementComponent(Entity &entity);

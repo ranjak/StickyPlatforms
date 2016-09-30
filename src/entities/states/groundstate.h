@@ -12,12 +12,9 @@ namespace game {
 class GroundState : public HorizControlState
 {
 public:
-  GroundState(Hero& hero);
+  GroundState(PlayerInputComponent &stateMachine, WalkComponent &walkComp);
 
   void update(std::uint32_t step, GameState &game) override;
-
-  float getAcceleration() override;
-
 };
 
 }

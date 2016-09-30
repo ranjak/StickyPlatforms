@@ -40,16 +40,25 @@ set(SRC_LIST
     src/test/test.cpp
     src/entities/camera.cpp
     src/entities/enemy.cpp
-    src/entities/states/swordstate.cpp
     src/entities/sword.cpp
     src/entities/entityfactory.cpp
-    src/entities/movementcomponent.cpp
-    src/entities/physicscomponent.cpp
+    src/entities/components/movementcomponent.cpp
+    src/entities/components/physicscomponent.cpp
+    src/entities/components/walkcomponent.cpp
+    src/entities/components/playerinputcomponent.cpp
+    src/entities/components/basicaicomponent.cpp
+)
+
+set(HEADER_LIST
+  src/entities/components/component.h
+  src/entities/components/message.h
+  src/entities/components/directionchangedmsg.h
+  src/entities/components/obstaclereachedmsg.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)
 
-add_executable(game1 ${SRC_LIST} $<TARGET_OBJECTS:tmxparser>)
+add_executable(game1 ${SRC_LIST} ${HEADER_LIST} $<TARGET_OBJECTS:tmxparser>)
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
@@ -58,6 +67,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/states
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components
     ${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tmxparser/include
 )
 target_link_libraries(${PROJECT_NAME}
