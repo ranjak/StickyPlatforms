@@ -71,3 +71,11 @@ O9/03/2016
   For 09/28/2016:
   * Flexible tile bounding boxes
   * Load entities from map files: support for at least a "player start" entity, and the enemy.
+  
+09/30/2016
+
+  Now that I have better support for TMX maps, I'm going to prototype more gameplay.
+  First I'd like to focus on player movement. My goal is speed and fluidity.
+  The idea is to have the player face off against equally mobile enemies and/or a large number of weaker ones.
+  For 10/06:
+    * Refined player moveset: more flexible jumps, stitch to and climb walls/platforms, air stomp move.
