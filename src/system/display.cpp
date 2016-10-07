@@ -7,11 +7,11 @@
 namespace game {
 
 
-Display::Display() :
+Display::Display(int winW, int winH) :
   mWindow(nullptr),
   mRenderer(nullptr)
 {
-
+  init(winW, winH);
 }
 
 Display::~Display()
@@ -23,7 +23,14 @@ Display::~Display()
 
 void Display::init(int winW, int winH)
 {
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  // In debug mode, the game will stop responding on breakpoints, avoid annoying WM messages
+#ifndef NDEBUG
+  SDL_SetHint(SDL_HINT_VIDEO_X11_NET_WM_PING, "0");
+#endif
+
+  SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
       game::error(std::string("Failed to initialize SDL: ")+SDL_GetError());
       throw std::exception();
   }

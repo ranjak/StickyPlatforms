@@ -11,13 +11,12 @@ template<typename T> class Vector;
 class Display
 {
 public:
-  Display();
-  ~Display();
-
   /**
    * @brief Initialize the display components (window, renderer, etc.)
    */
-  void init(int winW, int winH);
+  Display(int winW, int winH);
+  ~Display();
+
 
   void setCameraSize(int w, int h);
 
@@ -29,6 +28,9 @@ public:
   SDL_Renderer* getRenderer();
 
   Vector<int> getWindowSize();
+
+private:
+  void init(int winW, int winH);
 
 private:
   SDL_Window* mWindow;
