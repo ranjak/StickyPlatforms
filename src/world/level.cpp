@@ -159,8 +159,8 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   Rect<float> movementArea;
   movementArea.x = std::min(destFacingPoint.x, box.x);
   movementArea.y = std::min(destFacingPoint.y, box.y);
-  movementArea.w = (movementArea.x == box.x) ? (destFacingPoint.x - box.x) : (box.x + box.w - destFacingPoint.x);
-  movementArea.h = (movementArea.y == box.y) ? (destFacingPoint.y - box.y) : (box.y + box.h - destFacingPoint.y);
+  movementArea.w = std::max(box.w, (movementArea.x == box.x) ? (destFacingPoint.x - box.x) : (box.x + box.w - destFacingPoint.x));
+  movementArea.h = std::max(box.h, (movementArea.y == box.y) ? (destFacingPoint.y - box.y) : (box.y + box.h - destFacingPoint.y));
   std::vector<Entity*> neighbours(getEntitiesInArea(movementArea, [&](const Entity &e) { return &entity != &e && e.isObstacle(); }));
 
   // Also check tile collisions

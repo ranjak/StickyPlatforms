@@ -53,10 +53,10 @@ void PhysicsComponent::receiveMessage(Message &message)
     const Vector<int> &normal = static_cast<ObstacleReachedMsg &>(message).normal;
 
     if (normal.x != 0)
-      mVelocity.x = 0.f;
+      mVelocity.x /= 2.f;
 
     if (normal.y != 0)
-      mVelocity.y = 0.f;
+      mVelocity.y /= 2.f;
 
     break;
   }
