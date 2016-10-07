@@ -1,23 +1,19 @@
 #ifndef HORIZCONTROLSTATE_H
 #define HORIZCONTROLSTATE_H
 
-#include "herostate.h"
+#include "actorstate.h"
 
 namespace game {
 
-class WalkComponent;
+class ActorControlComponent;
 
-class HorizControlState : public HeroState
+class HorizControlState : public ActorState
 {
 public:
-  HorizControlState(PlayerInputComponent &stateMachine, WalkComponent &walkComp, float acceleration, float maxSpeed = 320.f);
+  HorizControlState(ActorControlComponent &stateMachine, float acceleration, float maxSpeed = 320.f);
 
   virtual void update(std::uint32_t step, GameState &game) override;
 
-  void enter() override;
-
-protected:
-  WalkComponent &mWalkComp;
 private:
   int mDirection;
   float mAcceleration;

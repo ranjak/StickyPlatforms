@@ -38,8 +38,11 @@ public:
   void draw(Display& target) const;
 
   GameCommands &getCommands();
+  const GameCommands &getCommands() const;
 
   Level& getLevel();
+
+  const Level& getLevel() const;
 
   Camera &getCamera();
   const Camera &getCamera() const;

@@ -3,11 +3,10 @@
 #include "color.h"
 #include "world/level.h"
 #include "gamestate.h"
-#include "sword.h"
 #include "basicaicomponent.h"
-#include "movementcomponent.h"
+#include "actorcontrolcomponent.h"
 #include "physicscomponent.h"
-#include "walkcomponent.h"
+#include "make_unique.h"
 #include <cmath>
 
 namespace game {
@@ -19,28 +18,24 @@ Enemy::Enemy(int x, int y, int w, int h, const std::string &name) :
   mHealthPoints(3),
   mInvincibilityEnd(0)
 {
-  std::unique_ptr<MovementComponent> mvt(new MovementComponent(*this));
-  std::unique_ptr<WalkComponent> walk(new WalkComponent(*mvt));
+  std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>();
+  std::unique_ptr<PhysicsComponent> physics = std::make_unique<PhysicsComponent>(*this);
+  std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*this, *physics, *input);
 
-  walk->setMaxSpeed(mSpeed);
-  walk->setAcceleration(2000.f);
-  walk->setDirection(-1);
-
-  addComponent(std::unique_ptr<Component>(new BasicAiComponent(*this)));
-  addComponent(std::unique_ptr<Component>(new PhysicsComponent(*mvt)));
-  addComponent(std::move(walk));
-  addComponent(std::move(mvt));
+  addComponent(std::move(input));
+  addComponent(std::move(control));
+  addComponent(std::move(physics));
 }
 
 void Enemy::onCollision(Entity &entity)
 {
-  std::uint32_t now = 0;
-  Sword *sword = dynamic_cast<Sword *>(&entity);
+//  std::uint32_t now = 0;
+//  Sword *sword = dynamic_cast<Sword *>(&entity);
 
-  if (sword != nullptr && (now=GameState::current().now()) > mInvincibilityEnd) {
-    mHealthPoints--;
-    mInvincibilityEnd = now + 200;
-  }
+//  if (sword != nullptr && (now=GameState::current().now()) > mInvincibilityEnd) {
+//    mHealthPoints--;
+//    mInvincibilityEnd = now + 200;
+//  }
 }
 
 bool Enemy::isDead() const

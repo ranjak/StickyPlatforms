@@ -2,17 +2,9 @@
 #define HERO_H
 
 #include "entity.h"
-#include "rectangle.h"
-#include "herostate.h"
-#include "gamevector.h"
-#include "movementcomponent.h"
-#include "physicscomponent.h"
-#include "walkcomponent.h"
-#include <memory>
 
 namespace game {
 
-class HeroState;
 class Camera;
 
 class Hero : public Entity

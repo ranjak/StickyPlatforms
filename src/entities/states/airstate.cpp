@@ -3,12 +3,14 @@
 #include "hero.h"
 #include "groundstate.h"
 #include "gamestate.h"
-#include "playerinputcomponent.h"
+#include "actorcontrolcomponent.h"
+#include "physicscomponent.h"
+#include "make_unique.h"
 
 namespace game {
 
-AirState::AirState(PlayerInputComponent& stateMachine, WalkComponent &walkComp) :
-    HorizControlState(stateMachine, walkComp, 1200.f)
+AirState::AirState(ActorControlComponent &stateMachine) :
+    HorizControlState(stateMachine, 1200.f)
 {
 
 }
@@ -17,8 +19,8 @@ void AirState::update(std::uint32_t step, GameState &game)
 {
   HorizControlState::update(step, game);
 
-  if (game.getLevel().isOnGround(mStateMachine.getPlayer()))
-    mStateMachine.setState(std::unique_ptr<GroundState>(new GroundState(mStateMachine, mWalkComp)));
+  if (mStateMachine.physics().isOnGround())
+    mStateMachine.setState(std::make_unique<GroundState>(mStateMachine));
 }
 
 }

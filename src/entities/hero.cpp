@@ -1,11 +1,12 @@
 #include "hero.h"
-#include "airstate.h"
-#include "groundstate.h"
 #include "world/tile.h"
 #include "camera.h"
 #include "rectangle.h"
 #include "gamestate.h"
 #include "playerinputcomponent.h"
+#include "physicscomponent.h"
+#include "actorcontrolcomponent.h"
+#include "make_unique.h"
 #include <algorithm>
 #include <cmath>
 #include <memory>
@@ -18,14 +19,13 @@ Hero::Hero() :
 //  mIsSlashing(false),
 //  mSwordState(*this)
 {
-  std::unique_ptr<MovementComponent> mvt(new MovementComponent(*this));
-  std::unique_ptr<Component> physics(new PhysicsComponent(*mvt));
-  std::unique_ptr<WalkComponent> walk(new WalkComponent(*mvt));
+  std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
+  std::unique_ptr<PhysicsComponent> physics = std::make_unique<PhysicsComponent>(*this);
+  std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*this, *physics, *input);
 
-  addComponent(std::unique_ptr<Component>(new PlayerInputComponent(*this, *walk)));
-  addComponent(std::move(walk));
+  addComponent(std::move(input));
+  addComponent(std::move(control));
   addComponent(std::move(physics));
-  addComponent(std::move(mvt));
 }
 
 void Hero::draw(Display &target, const Camera &camera) const

@@ -43,7 +43,17 @@ GameCommands &GameState::getCommands()
   return mCommands;
 }
 
+const GameCommands &GameState::getCommands() const
+{
+  return mCommands;
+}
+
 Level &GameState::getLevel()
+{
+  return *mLevel;
+}
+
+const Level &GameState::getLevel() const
 {
   return *mLevel;
 }

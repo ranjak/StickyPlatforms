@@ -1,34 +1,21 @@
 #include "playerinputcomponent.h"
-#include "airstate.h"
+#include "gamestate.h"
 
 namespace game {
 
-PlayerInputComponent::PlayerInputComponent(Entity &player, WalkComponent &walkComp) :
-  mPlayer(player),
-  mState(),
-  mNextState(new AirState(*this, walkComp))
+bool PlayerInputComponent::isHit(Command cmd) const
 {
-
+  return GameState::current().getCommands().isHit(cmd);
 }
 
-void PlayerInputComponent::update(uint32_t step, GameState &game)
+bool PlayerInputComponent::isHeld(Command cmd) const
 {
-  if (mNextState) {
-    mState = std::move(mNextState);
-    mState->enter();
-  }
-
-  mState->update(step, game);
+  return GameState::current().getCommands().isHeld(cmd);
 }
 
-void PlayerInputComponent::receiveMessage(Message &msg)
+bool PlayerInputComponent::isReleased(Command cmd) const
 {
-  mState->receiveMessage(msg);
-}
-
-void PlayerInputComponent::setState(std::unique_ptr<HeroState> newState)
-{
-  mNextState = std::move(newState);
+  return GameState::current().getCommands().isReleased(cmd);
 }
 
 } // namespace game

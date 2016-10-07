@@ -92,9 +92,11 @@ void Level::handleCollisions(Entity &entity)
   for (int i=box.x / Tile::SIZE; i<=(box.x+box.w - 1)/Tile::SIZE; i++) {
     for (int j=box.y / Tile::SIZE; j<=(box.y+box.h - 1)/Tile::SIZE; j++) {
 
-      if (mTiles[i*mSize.y + j] > 0) {
-        mTilesets[mTiles[i*mSize.y + j]].onCollision(entity, *this);
-        entity.onCollision(mTilesets[mTiles[i*mSize.y + j]], Vector<int>(i*Tile::SIZE, j*Tile::SIZE));
+      TileID tile = mTiles[i*mSize.y + j];
+      if (tile > 0 && mTilesets[tile].getCollisionBox(i, j).touches(box)) {
+
+        mTilesets[tile].onCollision(entity, *this);
+        entity.onCollision(mTilesets[tile], Vector<int>(i*Tile::SIZE, j*Tile::SIZE));
       }
     }
   }
@@ -238,9 +240,9 @@ std::vector<Entity*> Level::getEntitiesInArea(const Rect<float> &area, Func &&pr
   return entities;
 }
 
-bool Level::isOnGround(Entity &entity)
+bool Level::isOnGround(Entity &entity) const
 {
-  Rect<float> box = entity.getGlobalBox();
+  const Rect<float> &box = entity.getGlobalBox();
 
   // At the boundaries of the level ?
   if (box.y + box.h >= mSize.y * Tile::SIZE)
@@ -257,7 +259,7 @@ bool Level::isOnGround(Entity &entity)
   // Any entity below ?
   for (auto it=mEntities.begin(); it != mEntities.end(); it++) {
 
-    Rect<float> obox = (**it).getGlobalBox();
+    const Rect<float> &obox = (**it).getGlobalBox();
 
     if (it->get() != &entity && (box.y + box.h == obox.y) && (box.x + box.w > obox.x) && (box.x < obox.x + obox.w))
       return true;

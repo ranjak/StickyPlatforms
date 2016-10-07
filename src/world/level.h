@@ -67,7 +67,7 @@ public:
    * @param entity
    * @return \c true if \p entity is on ground.
    */
-  bool isOnGround(Entity &entity);
+  bool isOnGround(Entity &entity) const;
 
   /**
    * @brief getFacingObstacle Cehck whether an entity is facing a blocking tile along the given direction.

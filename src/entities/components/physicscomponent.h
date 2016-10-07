@@ -2,6 +2,7 @@
 #define PHYSICSCOMPONENT_H
 
 #include "component.h"
+#include "gamevector.h"
 #include <cstdint>
 
 namespace game {
@@ -12,17 +13,22 @@ class MovementComponent;
 class PhysicsComponent : public Component
 {
 public:
-  PhysicsComponent(MovementComponent &movement);
+  PhysicsComponent(Entity &owner);
 
   void update(std::uint32_t step, GameState &game) override;
 
   void receiveMessage(Message &message) override;
 
+  Vector<float> &velocity() { return mVelocity; }
+
+  bool isOnGround();
+
 private:
+  Vector<float> mVelocity;
+  Vector<float> mRemainder;
+  Entity& mEntity;
   float mGravity;
   float mFallSpeed;
-  // Component belonging to the owner of this component
-  MovementComponent &mMovement;
 };
 
 } // namespace game

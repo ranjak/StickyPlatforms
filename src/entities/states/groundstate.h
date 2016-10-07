@@ -7,12 +7,12 @@ namespace game {
 
 
 /**
- * @brief The state the hero is in when it's on the ground.
+ * @brief The state the actor is in when it's on the ground.
  */
 class GroundState : public HorizControlState
 {
 public:
-  GroundState(PlayerInputComponent &stateMachine, WalkComponent &walkComp);
+  GroundState(ActorControlComponent &stateMachine);
 
   void update(std::uint32_t step, GameState &game) override;
 };
