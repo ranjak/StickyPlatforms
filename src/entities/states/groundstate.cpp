@@ -9,8 +9,8 @@
 namespace game {
 
 
-GroundState::GroundState(ActorControlComponent &stateMachine) :
-  HorizControlState(stateMachine, 2500.f)
+GroundState::GroundState(ActorControlComponent &stateMachine, float maxSpeed) :
+  HorizControlState(stateMachine, 2500.f, maxSpeed)
 {
 
 }
@@ -24,7 +24,7 @@ void GroundState::update(std::uint32_t step, GameState &game)
     mStateMachine.physics().velocity().y = - 1000.f;
 
   if (!mStateMachine.physics().isOnGround())
-    mStateMachine.setState(std::make_unique<AirState>(mStateMachine));
+    mStateMachine.setState(ActorControlComponent::AIR);
 }
 
 }

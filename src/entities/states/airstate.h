@@ -9,7 +9,7 @@ namespace game {
 class AirState : public HorizControlState
 {
 public:
-  AirState(ActorControlComponent &stateMachine);
+  AirState(ActorControlComponent &stateMachine, float maxSpeed);
 
   void update(std::uint32_t step, GameState &game) override;
 };

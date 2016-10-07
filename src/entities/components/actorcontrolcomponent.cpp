@@ -1,24 +1,37 @@
 #include "actorcontrolcomponent.h"
 #include "airstate.h"
 #include "make_unique.h"
+#include "log.h"
+#include "entity.h"
 
 namespace game {
 
 
-ActorControlComponent::ActorControlComponent(Entity &entity, PhysicsComponent &physics, InputComponent &input) :
+ActorControlComponent::ActorControlComponent(Entity &entity, PhysicsComponent &physics, InputComponent &input, float maxSpeed) :
   mCurrentState(),
-  mNextState(std::make_unique<AirState>(*this)),
+  mNextState(AIR),
   mInput(input),
   mPhysics(physics),
-  mEntity(entity)
+  mEntity(entity),
+  mGroundState(*this, maxSpeed),
+  mAirState(*this, maxSpeed)
 {
 
 }
 
 void ActorControlComponent::update(uint32_t step, GameState &game)
 {
-  if (mNextState) {
-    mCurrentState = std::move(mNextState);
+  if (mNextState != NONE) {
+    switch (mNextState) {
+    case AIR:
+      mCurrentState = &mAirState;
+      break;
+    case GROUND:
+      mCurrentState = &mGroundState;
+      break;
+    default:
+      game::error("Entity "+mEntity.getName()+": unknown state: "+std::to_string(mNextState));
+    }
     mCurrentState->enter();
   }
 
@@ -30,9 +43,9 @@ void ActorControlComponent::receiveMessage(Message &msg)
   mCurrentState->receiveMessage(msg);
 }
 
-void ActorControlComponent::setState(std::unique_ptr<ActorState> newState)
+void ActorControlComponent::setState(State newState)
 {
-  mNextState = std::move(newState);
+  mNextState = newState;
 }
 
 

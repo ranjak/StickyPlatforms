@@ -21,7 +21,7 @@ Hero::Hero() :
 {
   std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
   std::unique_ptr<PhysicsComponent> physics = std::make_unique<PhysicsComponent>(*this);
-  std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*this, *physics, *input);
+  std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*this, *physics, *input, 300.f);
 
   addComponent(std::move(input));
   addComponent(std::move(control));
