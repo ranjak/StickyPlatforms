@@ -51,18 +51,18 @@ Rect<T> Rect<T>::getIntersection(const Rect &other) const
 template<typename T>
 Vector<int> Rect<T>::getCollisionNormal(const Rect &other) const
 {
-  Rect intersection = getIntersection(other);
+  Vector<int> normal(0, 0);
+  Vector<T> center = getCenter();
+  Vector<T> otherCenter = other.getCenter();
 
-  // Normal coordinates
-  // Check the region of the collision by comparing the two rectangles' centers
-  int nx = ((x+w) / 2 < (other.x+other.w) / 2) ? -1 : 1;
-  int ny = ((y+h) / 2 < (other.y+other.h) / 2) ? -1 : 1;
+  if (std::abs(center.y - otherCenter.y) < h/2 + other.h/2) {
+    normal.x = (x < other.x) ? -1 : 1;
+  }
+  else if (std::abs(center.x - otherCenter.x) < w/2 + other.w/2) {
+    normal.y = (y < other.y) ? -1 : 1;
+  }
 
-  // If the intersection is wider than tall, the collision has to be on the top or bottom
-  if (intersection.w >= intersection.h)
-    return Vector<int>(0, ny);
-  else
-    return Vector<int>(nx, 0);
+  return normal;
 }
 
 template<typename T>

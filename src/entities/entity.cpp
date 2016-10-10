@@ -9,15 +9,12 @@
 namespace game {
 
 
-Entity::Entity(EntityID id, EntityManager &container, int x, int y, int w, int h, bool isObstacle, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent) :
+Entity::Entity(EntityID id, EntityManager &container, int x, int y, int w, int h, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent) :
   id(id),
   mBoundingBox(x, y, w, h),
   mGraphics(std::move(graphs)),
   mParent(Entity::none),
   mChildren(),
-  mIsObstacle(isObstacle),
-  mIsCollidable(true),
-  mIgnoresObstacles(false),
   mName(name),
   mComponents(),
   mContainer(container)
@@ -63,36 +60,6 @@ void Entity::sendMessage(std::unique_ptr<Message> message)
 void Entity::addComponent(std::unique_ptr<Component> component)
 {
   mComponents.push_back(std::move(component));
-}
-
-void Entity::onObstacleReached(const Vector<int> &normal)
-{
-
-}
-
-void Entity::onCollision(Entity &entity)
-{
-
-}
-
-void Entity::onCollision(Tile &tile, Vector<int> pos)
-{
-
-}
-
-bool Entity::isObstacle() const
-{
-  return mIsObstacle;
-}
-
-bool Entity::isCollidable() const
-{
-  return mIsCollidable;
-}
-
-bool Entity::ignoresObstacles() const
-{
-  return mIgnoresObstacles;
 }
 
 bool Entity::isDead() const

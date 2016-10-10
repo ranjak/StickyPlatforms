@@ -1,9 +1,8 @@
 #include "basicaicomponent.h"
-#include "obstaclereachedmsg.h"
-#include "directionchangedmsg.h"
-#include "entity.h"
+#include "collisionmsg.h"
 #include "make_unique.h"
 #include "gamecommands.h"
+#include "gamevector.h"
 
 namespace game {
 
@@ -18,8 +17,8 @@ void BasicAiComponent::receiveMessage(Message &message)
 {
   switch (message.type) {
 
-  case Message::ObstacleReached:
-    mMsgQueue.push(std::make_unique<ObstacleReachedMsg>(static_cast<ObstacleReachedMsg &>(message)));
+  case Message::Collision:
+    mMsgQueue.push(std::make_unique<CollisionMsg>(static_cast<CollisionMsg &>(message)));
   default:
     break;
   }
@@ -32,15 +31,15 @@ void BasicAiComponent::processMessages()
     Message *msg = mMsgQueue.front().get();
 
     switch (msg->type) {
-    case Message::ObstacleReached:
+    case Message::Collision:
     {
-      int normalX = static_cast<ObstacleReachedMsg *>(msg)->normal.x;
+      const Vector<int> &normal = static_cast<CollisionMsg *>(msg)->normal;
 
-      if (isHeld(Command::RIGHT) && normalX < 0) {
+      if (isHeld(Command::RIGHT) && normal.x < 0) {
         release(Command::RIGHT);
         hold(Command::LEFT);
       }
-      else if (isHeld(Command::LEFT) && normalX > 0) {
+      else if (isHeld(Command::LEFT) && normal.x > 0) {
         release(Command::LEFT);
         hold(Command::RIGHT);
       }

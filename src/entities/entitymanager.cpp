@@ -8,9 +8,11 @@ namespace game {
 
 using EntityPair = std::map<EntityID, std::unique_ptr<Entity>>::value_type;
 
-EntityManager::EntityManager() :
+EntityManager::EntityManager(Level &level) :
   mNextId(0),
-  mEntities()
+  mPhysics(level),
+  mEntities(),
+  mLevel(level)
 {
 
 }
@@ -65,33 +67,6 @@ void EntityManager::draw(Display &display, const GameState &game) const
     if (entity.second->getGlobalBox().intersects(viewport))
       entity.second->draw(display, cam);
   }
-}
-
-void EntityManager::handleCollisions(Entity &entity)
-{
-  const Rect<float> &box = entity.getGlobalBox();
-
-  for (const EntityPair &other : mEntities) {
-    if (other.first != entity.id && other.second->isCollidable() && box.touches(other.second->getGlobalBox())) {
-      other.second->onCollision(entity);
-      entity.onCollision(*other.second);
-    }
-  }
-}
-
-bool EntityManager::isStandingOnEntity(Entity &entity) const
-{
-  const Rect<float> &box = entity.getGlobalBox();
-
-  for (const EntityPair &other : mEntities) {
-
-    const Rect<float> &obox = other.second->getGlobalBox();
-
-    if (other.first != entity.id && other.second->isObstacle() && (box.y + box.h == obox.y) && (box.x + box.w > obox.x) && (box.x < obox.x + obox.w))
-      return true;
-  }
-
-  return false;
 }
 
 } // namespace game

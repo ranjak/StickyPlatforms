@@ -15,6 +15,7 @@ class GameState;
 class Tile;
 class Display;
 template<typename T> class Rect;
+class PhysicsComponent;
 
 /**
  * @brief The Level class represents a game level.
@@ -34,28 +35,18 @@ public:
 
   TileID *tiles();
 
-  void handleCollisions(Entity &entity);
+  void checkTileCollisions(PhysicsComponent &object);
 
   bool start(const std::string &startingPoint="playerStart");
-
-  /**
-   * @brief tryMoving Try to move \p entity to \p dest, according to a linear trajectory.
-   * Obstacles are taken into account, and can prevent \p entity from reaching \p dest.
-   * In any case, \p entity 's position will be updated to reflect its actual movement.
-   * @param[in,out] entity The entity we want to move
-   * @param dest The destination of the movement
-   * @return \c true if \p entity could reach \p dest.
-   */
-  bool tryMoving(Entity &entity, const Vector<float> &dest);
 
   EntityManager &entities();
 
   /**
-   * @brief isOnGround Check whether \p entity is standing on ground (solid tile or entity).
-   * @param entity
-   * @return \c true if \p entity is on ground.
+   * @brief getObstaclesInArea Get the bounding boxes of every tile in a given area.
+   * @param area Rectangle in world pixel coordinates.
+   * @return Bounding boxes of every tile in \p area.
    */
-  bool isOnGround(Entity &entity) const;
+  std::vector<Rect<float>> getObstaclesInArea(const Rect<float> &area);
 
   /**
    * @brief getFacingObstacle Cehck whether an entity is facing a blocking tile along the given direction.
@@ -71,8 +62,8 @@ public:
 
   Entity *getHero();
 
-  const Vector<int> &getSize();
-  Vector<int> getPixelSize();
+  const Vector<int> &getSize() const;
+  Vector<float> getPixelSize() const;
 
 private:
   // Size in tiles

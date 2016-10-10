@@ -2,6 +2,7 @@
 #define ENTITYMANAGER_H
 
 #include "entity.h"
+#include "physicsmanager.h"
 #include <map>
 #include <memory>
 #include <cstdint>
@@ -12,6 +13,7 @@ namespace game {
 template<typename T> class Rect;
 class GameState;
 class Display;
+class Level;
 
 class EntityManager
 {
@@ -19,7 +21,7 @@ public:
   using Iterator = std::map<EntityID, std::unique_ptr<Entity>>::iterator;
   using ConstIterator = std::map<EntityID, std::unique_ptr<Entity>>::const_iterator;
 
-  EntityManager();
+  EntityManager(Level &level);
 
   EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos);
 
@@ -30,9 +32,9 @@ public:
 
   void draw(Display &display, const GameState &game) const;
 
-  void handleCollisions(Entity &entity);
+  Level &getLevel() { return mLevel; }
 
-  bool isStandingOnEntity(Entity &entity) const;
+  PhysicsManager &getPhysics() { return mPhysics; }
 
   /**
    * @brief getEntitiesInArea Get every entity which bounding box intersects with \p area.
@@ -56,7 +58,9 @@ public:
 
 private:
   EntityID mNextId;
+  PhysicsManager mPhysics;
   std::map<EntityID, std::unique_ptr<Entity>> mEntities;
+  Level &mLevel;
 };
 
 } // namespace game

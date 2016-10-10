@@ -8,7 +8,8 @@ struct Message
   enum Type
   {
     DirectionChanged,
-    ObstacleReached
+    ObstacleReached,
+    Collision
   };
 
   Message(Type type) : type(type) {}

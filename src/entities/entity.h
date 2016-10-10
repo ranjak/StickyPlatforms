@@ -49,28 +49,13 @@ public:
 
   void addComponent(std::unique_ptr<Component> component);
 
-  /**
-   * @brief onObstacleReached Function called by the level when this entity's movement
-   * is stopped by an obstacle (a tile or another entity).
-   * @param normal Normal of the collision.
-   * The normal is the direction of the obstacle's face on which the collision occured.
-   */
-  virtual void onObstacleReached(const Vector<int> &normal);
-
-  virtual void onCollision(Entity &entity);
-  virtual void onCollision(Tile &tile, Vector<int> pos);
-
-  /** Whether this entity can block the way of other entities */
-  bool isObstacle() const;
-  /** Whether this entity should be checked for collisions */
-  bool isCollidable() const;
-  bool ignoresObstacles() const;
-
   virtual bool isDead() const;
 
   void addChild(EntityID child);
   void removeChild(EntityID child);
   void detach();
+
+  EntityManager &manager() { return mContainer; }
 
   Vector<float> getLocalPos() const;
   Vector<float> getGlobalPos() const;
@@ -90,7 +75,7 @@ public:
   }
 
 private:
-  Entity(EntityID id, EntityManager &container, int x, int y, int w=0, int h=0, bool isObstacle=false, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
+  Entity(EntityID id, EntityManager &container, int x, int y, int w=0, int h=0, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
   friend class EntityFactory;
 
 public:
@@ -101,9 +86,6 @@ protected:
   std::unique_ptr<Graphics> mGraphics;
   EntityID mParent;
   std::vector<EntityID> mChildren;
-  bool mIsObstacle;
-  bool mIsCollidable;
-  bool mIgnoresObstacles;
   std::string mName;
   std::vector<std::unique_ptr<Component>> mComponents;
   EntityManager &mContainer;

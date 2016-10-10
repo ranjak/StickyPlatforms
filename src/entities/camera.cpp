@@ -16,7 +16,7 @@ Camera::Camera(int x, int y, int w, int h) :
 void Camera::update(uint32_t step, GameState &game)
 {
   Level& level = game.getLevel();
-  Vector<int> size = level.getPixelSize();
+  Vector<float> size = level.getPixelSize();
 
   // Track the hero, keep him in the middle.
   Rect<float> box = level.getHero()->getGlobalBox();
