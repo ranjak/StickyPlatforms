@@ -25,23 +25,22 @@ set(SRC_LIST
     src/system/mainloop.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
-    src/entities/entity.cpp
-    src/entities/hero.cpp
     src/graphics.cpp
     src/rectangle.cpp
-    src/entities/states/actorstate.cpp
-    src/entities/states/horizcontrolstate.cpp
-    src/entities/states/groundstate.cpp
-    src/entities/states/airstate.cpp
     src/world/level.cpp
     src/world/tile.cpp
     src/world/tileset.cpp
     src/world/tmxmaploader.cpp
     src/world/tsxtilesetloader.cpp
     src/test/test.cpp
+    src/entities/entity.cpp
     src/entities/camera.cpp
-    src/entities/enemy.cpp
     src/entities/entityfactory.cpp
+    src/entities/entitymanager.cpp
+    src/entities/states/actorstate.cpp
+    src/entities/states/horizcontrolstate.cpp
+    src/entities/states/groundstate.cpp
+    src/entities/states/airstate.cpp
     src/entities/components/physicscomponent.cpp
     src/entities/components/playerinputcomponent.cpp
     src/entities/components/autoinputcomponent.cpp

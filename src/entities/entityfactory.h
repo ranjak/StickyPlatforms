@@ -3,17 +3,19 @@
 
 #include <memory>
 #include <iosfwd>
+#include "entity.h"
 
 namespace game {
 
-class Entity;
 template<typename T> class Rect;
+class EntityManager;
 
 class EntityFactory
 {
-public:
+  friend class EntityManager;
+private:
 
-  static std::unique_ptr<Entity> create(const std::string &type, const std::string &name, const Rect<int> &pos);
+  static std::unique_ptr<Entity> create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id);
 };
 
 } // namespace game

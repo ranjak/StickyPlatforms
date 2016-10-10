@@ -16,12 +16,15 @@ class Display;
 class Camera;
 class Graphics;
 class Tile;
+class EntityManager;
+class EntityFactory;
+
+using EntityID = int;
 
 class Entity
 {
 public:
-  Entity();
-  Entity(int x, int y, int w=0, int h=0, bool isObstacle=false, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, Entity *parent=nullptr);
+  static const EntityID none = -1;
 
   virtual ~Entity();
 
@@ -65,8 +68,9 @@ public:
 
   virtual bool isDead() const;
 
-  void addChild(Entity *child);
-  void removeChild(Entity *child);
+  void addChild(EntityID child);
+  void removeChild(EntityID child);
+  void detach();
 
   Vector<float> getLocalPos() const;
   Vector<float> getGlobalPos() const;
@@ -80,16 +84,29 @@ public:
 
   const std::string &getName() const { return mName; }
 
+  friend std::ostream &operator<<(std::ostream &os, const Entity &e)
+  {
+    return os << "Entity(id="<<e.id<<",name="<<e.mName<<")";
+  }
+
+private:
+  Entity(EntityID id, EntityManager &container, int x, int y, int w=0, int h=0, bool isObstacle=false, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
+  friend class EntityFactory;
+
+public:
+  const EntityID id;
+
 protected:
   Rect<float> mBoundingBox;
   std::unique_ptr<Graphics> mGraphics;
-  Entity *mParent;
-  std::vector<Entity *> mChildren;
+  EntityID mParent;
+  std::vector<EntityID> mChildren;
   bool mIsObstacle;
   bool mIsCollidable;
   bool mIgnoresObstacles;
   std::string mName;
   std::vector<std::unique_ptr<Component>> mComponents;
+  EntityManager &mContainer;
 };
 
 } // namespace game

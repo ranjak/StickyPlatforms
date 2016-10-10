@@ -3,7 +3,6 @@
 #include "world/tile.h"
 #include "world/tileset.h"
 #include "TMXParser.h"
-#include "hero.h"
 #include "log.h"
 #include "tsxtilesetloader.h"
 #include "entityfactory.h"
@@ -29,8 +28,6 @@ std::unique_ptr<Level> TMXMapLoader::load(const std::string &file, Display &disp
 
 
 TMXMapLoader::TMXMapLoader() :
-  mPlayerStart(),
-  mEntities(),
   mLevelSize(),
   mTileRatio(),
   mTilesets(),
@@ -51,10 +48,10 @@ std::unique_ptr<Level> TMXMapLoader::loadMap(const std::string &file, Display &d
 
   loadTiles(tmx, display);
 
-  loadObjects(tmx);
+  std::unique_ptr<Level> level(new Level(mLevelSize.x, mLevelSize.y, std::move(mTilesets), std::move(mTilesArray)));
 
-  std::unique_ptr<Level> level(new Level(mLevelSize.x, mLevelSize.y, std::unique_ptr<Hero>(new Hero), std::move(mTilesets), std::move(mTilesArray), std::move(mPlayerStart)));
-  level->addEntities(std::move(mEntities));
+  loadObjects(tmx, level.get());
+
 
   return level;
 }
@@ -78,28 +75,24 @@ void TMXMapLoader::loadTiles(TMX::Parser &map, Display &display)
     throw std::runtime_error("Level::loadFromTmx: CSV tile data is corrupt.");
 }
 
-void TMXMapLoader::loadObjects(TMX::Parser &map)
+void TMXMapLoader::loadObjects(TMX::Parser &map, Level *level)
 {
   auto mapEntities = map.objectGroup.find("entities");
 
+  bool hasPlayerStart = false;
+
   if (mapEntities == map.objectGroup.end())
-    throw std::runtime_error("Could not find required playerStart object in the map file.");
+    throw std::runtime_error("Could not find required \"entities\" object layer in the map file.");
 
   for (TMX::Object &obj : mapEntities->second.objects) {
 
-    std::unique_ptr<Entity> entity = EntityFactory::create(obj.type, obj.name, Rect<int>(obj.x * mTileRatio.x, obj.y * mTileRatio.y, obj.width * mTileRatio.x, obj.height * mTileRatio.y));
+    EntityID entity = level->entities().makeEntity(obj.type, obj.name, Rect<float>(obj.x * mTileRatio.x, obj.y * mTileRatio.y, obj.width * mTileRatio.x, obj.height * mTileRatio.y));
 
-    if (entity == nullptr)
-      Log::getGlobal().get(Log::WARNING) << "TMXMapLoader: Unknown entity type: \""<<obj.type<<"\" for object with name \""<<obj.name<<"\" and id="<<obj.id<<std::endl;
-
-    else if (entity->getName() == "playerStart")
-      mPlayerStart = std::move(entity);
-
-    else
-      mEntities.push_back(std::move(entity));
+    if (entity != Entity::none && !hasPlayerStart)
+      hasPlayerStart = (obj.name == "playerStart");
   }
 
-  if (!mPlayerStart)
+  if (!hasPlayerStart)
     throw std::runtime_error("Could not find required playerStart object in the map file.");
 }
 

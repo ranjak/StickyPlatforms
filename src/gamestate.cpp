@@ -1,5 +1,4 @@
 #include "gamestate.h"
-#include "hero.h"
 #include "display.h"
 #include "test/test.h"
 #include "world/level.h"
@@ -24,6 +23,7 @@ GameState::GameState(Display &display, InputHandler &input, int camW, int camH) 
 {
   display.setCameraSize(camW, camH);
   currentGame = this;
+  mLevel->start();
 }
 
 
@@ -31,6 +31,7 @@ void GameState::update(uint32_t step)
 {
   mGameTime += step;
   mLevel->update(*this, step);
+  mCamera.update(step, *this);
 }
 
 void GameState::draw(Display &target) const

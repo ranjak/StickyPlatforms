@@ -1,7 +1,6 @@
 #include "world/level.h"
 #include "rectangle.h"
 #include "log.h"
-#include "hero.h"
 #include "rect.h"
 #include "entity.h"
 #include "gamestate.h"
@@ -16,17 +15,13 @@
 namespace game {
 
 
-Level::Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles, std::unique_ptr<Entity> playerStart) :
+Level::Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles) :
   mSize(width, height),
   mTilesets(std::move(tilesets)),
   mTiles(std::move(tiles)),
   mEntities(),
-  mHero(hero.get())
+  mHeroId(Entity::none)
 {
-  hero->setGlobalPos(playerStart->getGlobalPos());
-
-  addEntity(std::move(hero));
-  addEntity(std::move(playerStart));
 }
 
 std::unique_ptr<Level> Level::loadFromTmx(const std::string &file, Display &display)
@@ -36,18 +31,13 @@ std::unique_ptr<Level> Level::loadFromTmx(const std::string &file, Display &disp
 
 void Level::update(GameState &game, uint32_t step)
 {
-  for (const std::unique_ptr<Entity>& entity : mEntities) {
-    entity->update(step, game);
-  }
-  game.getCamera().update(step, game);
-
-  mEntities.erase(std::remove_if(mEntities.begin(), mEntities.end(), [](std::unique_ptr<Entity>& entity) {return entity->isDead();}), mEntities.end());
+  mEntities.update(step, game);
 }
 
 void Level::draw(Display &target, const GameState &game) const
 {
   const Camera& cam = game.getCamera();
-  Rect<float> viewport = cam.getGlobalBox();
+  Rect<float> viewport = cam.getViewport();
 
   // The camera might be too big for the level
   viewport.w = std::min(static_cast<int>(viewport.w), mSize.x * Tile::SIZE);
@@ -62,21 +52,7 @@ void Level::draw(Display &target, const GameState &game) const
     }
   }
 
-  // Draw entities
-  for (const std::unique_ptr<Entity>& entity : mEntities) {
-    if (entity->getGlobalBox().intersects(viewport))
-      entity->draw(target, cam);
-  }
-}
-
-void Level::addEntity(std::unique_ptr<Entity> entity)
-{
-  mEntities.push_back(std::move(entity));
-}
-
-void Level::addEntities(std::vector<std::unique_ptr<Entity> > &&entities)
-{
-  std::move(entities.begin(), entities.end(), std::back_inserter(mEntities));
+  mEntities.draw(target, game);
 }
 
 TileID *Level::tiles()
@@ -101,26 +77,21 @@ void Level::handleCollisions(Entity &entity)
     }
   }
 
-  // Check entity collisions
-  for (const std::unique_ptr<Entity> &other : mEntities) {
-    if (other.get() != &entity && other->isCollidable() && box.touches(other->getGlobalBox())) {
-      other->onCollision(entity);
-      entity.onCollision(*other);
-    }
-  }
+  mEntities.handleCollisions(entity);
 }
 
 bool Level::start(const std::string &startingPoint)
 {
   // Find the requested PlayerStart entity
-  auto playerStart = std::find_if(mEntities.begin(), mEntities.end(), [&](const std::unique_ptr<Entity> &e) { return e->getName() == startingPoint; });
+  Entity *playerStart = mEntities.getEntity(startingPoint);
 
-  if (playerStart == mEntities.end()) {
+  if (!playerStart) {
     game::error("Level::start: starting point \""+startingPoint+"\" not found.");
     return false;
   }
 
-  mHero->setGlobalPos((**playerStart).getGlobalPos());
+  mHeroId = mEntities.makeEntity("Hero", "Hero", playerStart->getGlobalBox());
+  assert(mHeroId != Entity::none);
   return true;
 }
 
@@ -161,7 +132,7 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   movementArea.y = std::min(destFacingPoint.y, box.y);
   movementArea.w = std::max(box.w, (movementArea.x == box.x) ? (destFacingPoint.x - box.x) : (box.x + box.w - destFacingPoint.x));
   movementArea.h = std::max(box.h, (movementArea.y == box.y) ? (destFacingPoint.y - box.y) : (box.y + box.h - destFacingPoint.y));
-  std::vector<Entity*> neighbours(getEntitiesInArea(movementArea, [&](const Entity &e) { return &entity != &e && e.isObstacle(); }));
+  std::vector<Entity*> neighbours(mEntities.getEntitiesInArea(movementArea, [&](const Entity &e) { return &entity != &e && e.isObstacle(); }));
 
   // Also check tile collisions
   std::vector<Rect<float>> obstacles;
@@ -228,16 +199,9 @@ bool Level::tryMoving(Entity &entity, const Vector<float> &dest)
   return box.x == dest.x && box.y == dest.y;
 }
 
-template<typename Func>
-std::vector<Entity*> Level::getEntitiesInArea(const Rect<float> &area, Func &&pred)
+EntityManager &Level::entities()
 {
-  std::vector<Entity*> entities;
-  for (auto it=mEntities.begin(); it != mEntities.end(); it++) {
-    if (pred(**it) && area.intersects((**it).getGlobalBox()))
-      entities.push_back(it->get());
-  }
-
-  return entities;
+  return mEntities;
 }
 
 bool Level::isOnGround(Entity &entity) const
@@ -257,15 +221,7 @@ bool Level::isOnGround(Entity &entity) const
   }
 
   // Any entity below ?
-  for (auto it=mEntities.begin(); it != mEntities.end(); it++) {
-
-    const Rect<float> &obox = (**it).getGlobalBox();
-
-    if (it->get() != &entity && (box.y + box.h == obox.y) && (box.x + box.w > obox.x) && (box.x < obox.x + obox.w))
-      return true;
-  }
-
-  return false;
+  return mEntities.isStandingOnEntity(entity);
 }
 
 bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle, int maxPoint)
@@ -354,9 +310,9 @@ bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direc
   return getFacingObstacle(box, direction, obstacle, maxPoint);
 }
 
-Hero *Level::getHero()
+Entity *Level::getHero()
 {
-  return mHero;
+  return mEntities.getEntity(mHeroId);
 }
 
 const Vector<int> &Level::getSize()

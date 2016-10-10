@@ -4,15 +4,15 @@
 #include "gamevector.h"
 #include "world/tile.h"
 #include "world/tileset.h"
+#include "entitymanager.h"
+#include "entity.h"
 #include <vector>
 #include <memory>
 
 namespace game {
 
 class GameState;
-class Entity;
 class Tile;
-class Hero;
 class Display;
 template<typename T> class Rect;
 
@@ -24,17 +24,13 @@ class Level
 {
 public:
 
-  Level(int width, int height, std::unique_ptr<Hero> hero, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles, std::unique_ptr<Entity> playerStart);
+  Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles);
 
   static std::unique_ptr<Level> loadFromTmx(const std::string &file, Display &display);
 
   void update(GameState &game, std::uint32_t step);
 
   void draw(Display &target, const GameState &game) const;
-
-  void addEntity(std::unique_ptr<Entity> entity);
-
-  void addEntities(std::vector<std::unique_ptr<Entity>> &&entities);
 
   TileID *tiles();
 
@@ -52,15 +48,7 @@ public:
    */
   bool tryMoving(Entity &entity, const Vector<float> &dest);
 
-  /**
-   * @brief getEntitiesInArea Get every entity which bounding box intersects with \p area.
-   * @param area Rectangular area to scan for entities.
-   * @param pred Optional predicate to filter the entities.
-   * @return Vector containing pointers to the entities that overlap \p area.
-   * You do not own these pointers.
-   */
-  template<typename Func>
-  std::vector<Entity *> getEntitiesInArea(const Rect<float> &area, Func &&pred=[](){return true;});
+  EntityManager &entities();
 
   /**
    * @brief isOnGround Check whether \p entity is standing on ground (solid tile or entity).
@@ -81,7 +69,7 @@ public:
   bool getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle, int maxPoint);
   bool getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle);
 
-  Hero* getHero();
+  Entity *getHero();
 
   const Vector<int> &getSize();
   Vector<int> getPixelSize();
@@ -93,8 +81,8 @@ private:
   // Static tiles the world is made of
   std::unique_ptr<TileID[]> mTiles;
   // Dynamic entities
-  std::vector<std::unique_ptr<Entity>> mEntities;
-  Hero* mHero;
+  EntityManager mEntities;
+  EntityID mHeroId;
 };
 
 }

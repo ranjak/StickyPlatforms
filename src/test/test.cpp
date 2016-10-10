@@ -1,11 +1,9 @@
 #include "test.h"
-#include "hero.h"
 #include "world/level.h"
 #include "world/tile.h"
 #include "image.h"
 #include "resource.h"
 #include "log.h"
-#include "enemy.h"
 #include <cstring>
 #include <memory>
 #include <vector>

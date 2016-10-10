@@ -1,12 +1,12 @@
 #ifndef TMXMAPLOADER_H
 #define TMXMAPLOADER_H
 
-#include <string>
-#include <memory>
-#include <vector>
 #include "world/tile.h"
 #include "gamevector.h"
 #include "world/tileset.h"
+#include <string>
+#include <memory>
+#include <vector>
 
 namespace TMX {
 class Parser;
@@ -31,11 +31,9 @@ private:
 
   void loadTiles(TMX::Parser &map, Display &display);
 
-  void loadObjects(TMX::Parser &map);
+  void loadObjects(TMX::Parser &map, Level *level);
 
 private:
-  std::unique_ptr<Entity> mPlayerStart;
-  std::vector<std::unique_ptr<Entity>> mEntities;
   Vector<int> mLevelSize;
   // Ratio between the tile size of the level file and the fixed tile size of the game
   Vector<float> mTileRatio;

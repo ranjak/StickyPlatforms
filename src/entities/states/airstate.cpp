@@ -1,6 +1,5 @@
 #include "airstate.h"
 #include "gamevector.h"
-#include "hero.h"
 #include "groundstate.h"
 #include "gamestate.h"
 #include "actorcontrolcomponent.h"

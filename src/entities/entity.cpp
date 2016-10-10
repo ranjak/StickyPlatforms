@@ -2,41 +2,42 @@
 #include "camera.h"
 #include "graphics.h"
 #include "log.h"
+#include "gamestate.h"
 #include <algorithm>
+#include <cassert>
 
 namespace game {
 
 
-Entity::Entity() :
-  Entity(0, 0, 0, 0)
-{
-
-}
-
-Entity::Entity(int x, int y, int w, int h, bool isObstacle, const std::string &name, std::unique_ptr<Graphics> graphs, Entity *parent) :
+Entity::Entity(EntityID id, EntityManager &container, int x, int y, int w, int h, bool isObstacle, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent) :
+  id(id),
   mBoundingBox(x, y, w, h),
   mGraphics(std::move(graphs)),
-  mParent(),
+  mParent(Entity::none),
   mChildren(),
   mIsObstacle(isObstacle),
   mIsCollidable(true),
   mIgnoresObstacles(false),
   mName(name),
-  mComponents()
+  mComponents(),
+  mContainer(container)
 {
-  if (parent != nullptr)
-    parent->addChild(this);
+  if (parent != Entity::none) {
+    Entity *parentPtr = mContainer.getEntity(parent);
+    assert(parentPtr);
+    parentPtr->addChild(id);
+  }
 }
 
 Entity::~Entity()
 {
   // Notify related entities
-  for (Entity *child : mChildren) {
-    child->mParent = nullptr;
+  for (EntityID child : mChildren) {
+    removeChild(child);
   }
 
-  if (mParent != nullptr)
-    mParent->removeChild(this);
+  if (mParent != Entity::none)
+    detach();
 }
 
 void Entity::update(uint32_t step, GameState &game)
@@ -99,23 +100,50 @@ bool Entity::isDead() const
   return false;
 }
 
-void Entity::addChild(Entity *child)
+void Entity::addChild(EntityID child)
 {
-  if (child->mParent)
-    child->mParent->removeChild(child);
+  Entity *childPtr = mContainer.getEntity(child);
+  if (!childPtr) {
+    Log::getGlobal().get(Log::WARNING) << *this << ": could not add child "<<child<<": no such entity"<<std::endl;
+    return;
+  }
 
-  child->mParent = this;
+  if (childPtr->mParent != Entity::none)
+    childPtr->detach();
+
+  childPtr->mParent = id;
   mChildren.push_back(child);
 }
 
-void Entity::removeChild(Entity *child)
+void Entity::removeChild(EntityID child)
 {
-  if (child->mParent == this) {
-    child->mParent = nullptr;
-    mChildren.erase(std::find(mChildren.begin(), mChildren.end(), child));
+  Entity *childPtr = mContainer.getEntity(child);
+
+  if (childPtr) {
+
+    if (childPtr->mParent == id) {
+      childPtr->mParent = Entity::none;
+    }
+    else {
+      Log::getGlobal().get(Log::WARNING) <<*this<<"::removeChild: "<<*childPtr<<" doesn't have "<<*this<<" as parent, can't remove from children list"<<std::endl;
+    }
   }
   else {
-    Log::getGlobal().get(Log::WARNING) << "Entity " << child << " doesn't have " << this << " as parent, can't remove from children list";
+    Log::getGlobal().get(Log::WARNING) << *this << "::removeChild: child "<<child<<" doesn't exist"<<std::endl;
+  }
+
+  mChildren.erase(std::find(mChildren.begin(), mChildren.end(), child));
+}
+
+void Entity::detach()
+{
+  if (mParent != Entity::none) {
+    Entity *parentPtr = mContainer.getEntity(mParent);
+    assert(parentPtr);
+    parentPtr->removeChild(id);
+  }
+  else {
+    Log::getGlobal().get(Log::WARNING) <<*this<<"::detach: can't detach orphan entity"<<std::endl;
   }
 }
 
@@ -126,8 +154,11 @@ Vector<float> Entity::getLocalPos() const
 
 Vector<float> Entity::getGlobalPos() const
 {
-  if (mParent) {
-    Vector<float> ppos = mParent->getGlobalPos();
+  if (mParent != Entity::none) {
+    Entity *parentPtr = mContainer.getEntity(mParent);
+    assert(parentPtr);
+
+    Vector<float> ppos = parentPtr->getGlobalPos();
     ppos.x += mBoundingBox.x;
     ppos.y += mBoundingBox.y;
     return ppos;
@@ -144,8 +175,11 @@ void Entity::setLocalPos(const Vector<float> &newPos)
 
 void Entity::setGlobalPos(const Vector<float> &newPos)
 {
-  if (mParent) {
-    Vector<float> ppos = mParent->getGlobalPos();
+  if (mParent != Entity::none) {
+    Entity *parentPtr = mContainer.getEntity(mParent);
+    assert(parentPtr);
+
+    Vector<float> ppos = parentPtr->getGlobalPos();
     mBoundingBox.x = newPos.x - ppos.x;
     mBoundingBox.y = newPos.y - ppos.y;
   }
@@ -167,8 +201,11 @@ const Rect<float> &Entity::getLocalBox() const
 
 Rect<float> Entity::getGlobalBox() const
 {
-  if (mParent) {
-    Rect<float> parentBox = mParent->getGlobalBox();
+  if (mParent != Entity::none) {
+    Entity *parentPtr = mContainer.getEntity(mParent);
+    assert(parentPtr);
+
+    Rect<float> parentBox = parentPtr->getGlobalBox();
     parentBox.x += mBoundingBox.x;
     parentBox.y += mBoundingBox.y;
     parentBox.w = mBoundingBox.w;

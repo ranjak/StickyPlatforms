@@ -23,6 +23,8 @@ public:
 
   bool isOnGround();
 
+  Entity &entity() { return mEntity; }
+
 private:
   Vector<float> mVelocity;
   Vector<float> mRemainder;

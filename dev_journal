@@ -79,3 +79,17 @@ O9/03/2016
   The idea is to have the player face off against equally mobile enemies and/or a large number of weaker ones.
   For 10/06:
     * Refined player moveset: more flexible jumps, stitch to and climb walls/platforms, air stomp move.
+    
+10/10/2016
+
+  Things didn't go as planned in terms of purely game-related progress, as I still haven't implemented any new gameplay feature (and the sword feature still hasn't been reintroduced).
+  The move to a component-based approach for the engine's entity system has induced a lot more work
+  than I first had guessed, also leading me to re-think some existing logic.
+  Entities are now addressed by a unique ID, which will make communication between them safer.
+  Before finally going back to gameplay, I want to unify collision response, which is currently
+  separated between onObstacleReached and onCollision methods. Ideally, I'd like to keep onCollision only.
+  For today:
+    * Unified collision handling.
+    * Bonus points if the sword is working again.
+  For 10/14:
+    * Objectives of 10/06.

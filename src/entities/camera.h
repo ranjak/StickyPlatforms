@@ -3,25 +3,28 @@
 
 #include "entity.h"
 #include "gamevector.h"
+#include "rect.h"
 #include <cstdint>
 
 namespace game {
 
-template<typename T> class Rect;
 
-class Camera : public Entity
+class Camera
 {
 public:
-  Camera();
   Camera(int x, int y, int w, int h);
 
-  void update(std::uint32_t step, GameState &game) override;
+  void update(std::uint32_t step, GameState &game);
+
+  const Rect<float> &getViewport() const;
 
   Vector<float> toCamCoords(const Vector<float>& levelCoords) const;
 
   template<typename T>
   Rect<T> toCamCoords(const Rect<T>& levelCoords) const;
 
+private:
+  Rect<float> mViewport;
 };
 
 }
