@@ -15,7 +15,7 @@ class GameState;
 class Tile;
 class Display;
 template<typename T> class Rect;
-class PhysicsComponent;
+class MovingPhysicsComponent;
 
 /**
  * @brief The Level class represents a game level.
@@ -35,7 +35,7 @@ public:
 
   TileID *tiles();
 
-  void checkTileCollisions(PhysicsComponent &object);
+  void checkTileCollisions(MovingPhysicsComponent &object);
 
   bool start(const std::string &startingPoint="playerStart");
 

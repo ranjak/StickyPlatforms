@@ -5,7 +5,8 @@
 
 namespace game {
 
-class PhysicsComponent;
+class MovingPhysicsComponent;
+class StaticPhysicsComponent;
 class Level;
 template<typename T> class Vector;
 
@@ -14,15 +15,19 @@ class PhysicsManager
 public:
   PhysicsManager(Level &level);
 
-  bool moveObject(PhysicsComponent *object, const Vector<float> &dest);
+  bool moveObject(MovingPhysicsComponent *object, const Vector<float> &dest);
 
-  void checkCollisions(PhysicsComponent *object);
+  void checkCollisions(MovingPhysicsComponent *object);
 
-  void addComponent(PhysicsComponent *cmp);
-  void removeComponent(PhysicsComponent *cmp);
+  void addComponent(MovingPhysicsComponent *cmp);
+  void removeComponent(MovingPhysicsComponent *cmp);
+
+  void addComponent(StaticPhysicsComponent *cmp);
+  void removeComponent(StaticPhysicsComponent *cmp);
 
 private:
-  std::vector<PhysicsComponent *> mComponents;
+  std::vector<MovingPhysicsComponent *> mMovingComps;
+  std::vector<StaticPhysicsComponent *> mStaticComps;
   Level &mLevel;
 };
 

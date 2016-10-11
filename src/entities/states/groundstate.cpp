@@ -2,7 +2,7 @@
 #include "gamecommands.h"
 #include "airstate.h"
 #include "actorcontrolcomponent.h"
-#include "physicscomponent.h"
+#include "movingphysicscomponent.h"
 #include "inputcomponent.h"
 #include "make_unique.h"
 

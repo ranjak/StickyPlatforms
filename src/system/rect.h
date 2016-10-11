@@ -18,8 +18,11 @@ public:
   Rect();
   Rect(T x, T y, T w, T h);
 
+  bool isValid() const;
+
   bool intersects(const Rect& other) const;
   bool touches(const Rect &other) const;
+  bool contains(const Rect &other) const;
 
   Rect<T> getIntersection(const Rect &other) const;
   Vector<int> getCollisionNormal(const Rect &other) const;

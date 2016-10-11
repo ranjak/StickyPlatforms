@@ -3,7 +3,7 @@
 #include "groundstate.h"
 #include "gamestate.h"
 #include "actorcontrolcomponent.h"
-#include "physicscomponent.h"
+#include "movingphysicscomponent.h"
 #include "make_unique.h"
 
 namespace game {

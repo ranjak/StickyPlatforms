@@ -20,6 +20,12 @@ Rect<T>::Rect(T x, T y, T w, T h) :
 }
 
 template<typename T>
+bool Rect<T>::isValid() const
+{
+  return w > 0 && h > 0;
+}
+
+template<typename T>
 bool Rect<T>::intersects(const Rect &other) const
 {
   return !(x + w <= other.x || x >= other.x + other.w)
@@ -31,6 +37,13 @@ bool Rect<T>::touches(const Rect &other) const
 {
   return !(x + w < other.x || x > other.x + other.w)
       && !(y + h < other.y || y > other.y + other.h);
+}
+
+template<typename T>
+bool Rect<T>::contains(const Rect &other) const
+{
+  return (x <= other.x && x+w >= other.x+other.w)
+      && (y <= other.y && y+h >= other.y+other.h);
 }
 
 template<typename T>

@@ -7,7 +7,7 @@
 namespace game {
 
 
-ActorControlComponent::ActorControlComponent(Entity &entity, PhysicsComponent &physics, InputComponent &input, float maxSpeed) :
+ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsComponent &physics, InputComponent &input, float maxSpeed) :
   mCurrentState(),
   mNextState(AIR),
   mInput(input),

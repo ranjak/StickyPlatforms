@@ -3,7 +3,7 @@
 #include "gamecommands.h"
 #include "gamevector.h"
 #include "actorcontrolcomponent.h"
-#include "physicscomponent.h"
+#include "movingphysicscomponent.h"
 #include <cmath>
 #include <algorithm>
 

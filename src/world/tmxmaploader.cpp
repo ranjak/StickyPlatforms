@@ -50,7 +50,7 @@ std::unique_ptr<Level> TMXMapLoader::loadMap(const std::string &file, Display &d
 
   std::unique_ptr<Level> level(new Level(mLevelSize.x, mLevelSize.y, std::move(mTilesets), std::move(mTilesArray)));
 
-  loadObjects(tmx, level.get());
+  loadObjects(tmx, *level);
 
 
   return level;
@@ -75,7 +75,7 @@ void TMXMapLoader::loadTiles(TMX::Parser &map, Display &display)
     throw std::runtime_error("Level::loadFromTmx: CSV tile data is corrupt.");
 }
 
-void TMXMapLoader::loadObjects(TMX::Parser &map, Level *level)
+void TMXMapLoader::loadObjects(TMX::Parser &map, Level &level)
 {
   auto mapEntities = map.objectGroup.find("entities");
 
@@ -86,7 +86,7 @@ void TMXMapLoader::loadObjects(TMX::Parser &map, Level *level)
 
   for (TMX::Object &obj : mapEntities->second.objects) {
 
-    EntityID entity = level->entities().makeEntity(obj.type, obj.name, Rect<float>(obj.x * mTileRatio.x, obj.y * mTileRatio.y, obj.width * mTileRatio.x, obj.height * mTileRatio.y));
+    EntityID entity = level.entities().makeEntity(obj.type, obj.name, Rect<float>(obj.x * mTileRatio.x, obj.y * mTileRatio.y, obj.width * mTileRatio.x, obj.height * mTileRatio.y));
 
     if (entity != Entity::none && !hasPlayerStart)
       hasPlayerStart = (obj.name == "playerStart");
@@ -94,6 +94,14 @@ void TMXMapLoader::loadObjects(TMX::Parser &map, Level *level)
 
   if (!hasPlayerStart)
     throw std::runtime_error("Could not find required playerStart object in the map file.");
+
+  // Place solid boxes around the map for proper collision handling at the edges
+  Vector<float> size = level.getPixelSize();
+
+  level.entities().makeEntity("invisibleWall", "bottom", Rect<float>(0.f, size.y, size.x, 10.f));
+  level.entities().makeEntity("invisibleWall", "top", Rect<float>(0.f, -10.f, size.x, 10.f));
+  level.entities().makeEntity("invisibleWall", "left", Rect<float>(-10.f, 0.f, 10.f, size.y));
+  level.entities().makeEntity("invisibleWall", "right", Rect<float>(size.x, 0.f, 10.f, size.y));
 }
 
 namespace {

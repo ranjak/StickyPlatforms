@@ -2,7 +2,8 @@
 #include "gamevector.h"
 #include "rect.h"
 #include "entity.h"
-#include "physicscomponent.h"
+#include "movingphysicscomponent.h"
+#include "staticphysicscomponent.h"
 #include "world/level.h"
 #include <cassert>
 #include <algorithm>
@@ -10,13 +11,14 @@
 namespace game {
 
 PhysicsManager::PhysicsManager(Level &level) :
-  mComponents(),
+  mMovingComps(),
+  mStaticComps(),
   mLevel(level)
 {
 
 }
 
-bool PhysicsManager::moveObject(PhysicsComponent *object, const Vector<float> &dest)
+bool PhysicsManager::moveObject(MovingPhysicsComponent *object, const Vector<float> &dest)
 {
   Entity &entity = object->entity();
 
@@ -60,7 +62,8 @@ bool PhysicsManager::moveObject(PhysicsComponent *object, const Vector<float> &d
 
   std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(movementArea);
 
-  std::for_each(mComponents.begin(), mComponents.end(), [&](PhysicsComponent *p) { if (p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
+  std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) { if (p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
+  std::for_each(mMovingComps.begin(), mMovingComps.end(), [&](MovingPhysicsComponent *p) { if (p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
 
   if (direction.x > 0) {
     // Find the closest obstacle on X
@@ -103,18 +106,26 @@ bool PhysicsManager::moveObject(PhysicsComponent *object, const Vector<float> &d
   return box.x == dest.x && box.y == dest.y;
 }
 
-void PhysicsManager::checkCollisions(PhysicsComponent *object)
+void PhysicsManager::checkCollisions(MovingPhysicsComponent *object)
 {
   mLevel.checkTileCollisions(*object);
   const Rect<float> &box = object->entity().getGlobalBox();
 
-  // We only need to check components after the given component,
-  // since any colllision with the preceding ones has laready been handled at that point.
+  for (StaticPhysicsComponent *other : mStaticComps) {
 
-  auto it = std::find(mComponents.begin(), mComponents.end(), object);
-  assert(it != mComponents.end());
+    if (box.touches(other->entity().getGlobalBox())) {
+      object->collide(*other);
+      other->collide(*object);
+    }
+  }
 
-  for (it += 1; it != mComponents.end(); it++) {
+  // We only need to check moving components after the given component,
+  // since any colllision with the preceding ones has already been handled at that point.
+
+  auto it = std::find(mMovingComps.begin(), mMovingComps.end(), object);
+  assert(it != mMovingComps.end());
+
+  for (it += 1; it != mMovingComps.end(); it++) {
 
     if (box.touches((*it)->entity().getGlobalBox())) {
       object->collide(**it);
@@ -123,19 +134,34 @@ void PhysicsManager::checkCollisions(PhysicsComponent *object)
   }
 }
 
-void PhysicsManager::addComponent(PhysicsComponent *cmp)
+void PhysicsManager::addComponent(MovingPhysicsComponent *cmp)
 {
-  assert(std::find(mComponents.begin(), mComponents.end(), cmp) == mComponents.end());
+  assert(std::find(mMovingComps.begin(), mMovingComps.end(), cmp) == mMovingComps.end());
 
-  mComponents.push_back(cmp);
+  mMovingComps.push_back(cmp);
 }
 
-void PhysicsManager::removeComponent(PhysicsComponent *cmp)
+void PhysicsManager::removeComponent(MovingPhysicsComponent *cmp)
 {
-  auto it = std::find(mComponents.begin(), mComponents.end(), cmp);
-  assert(it != mComponents.end());
+  auto it = std::find(mMovingComps.begin(), mMovingComps.end(), cmp);
+  assert(it != mMovingComps.end());
 
-  mComponents.erase(it);
+  mMovingComps.erase(it);
+}
+
+void PhysicsManager::addComponent(StaticPhysicsComponent *cmp)
+{
+  assert(std::find(mStaticComps.begin(), mStaticComps.end(), cmp) == mStaticComps.end());
+
+  mStaticComps.push_back(cmp);
+}
+
+void PhysicsManager::removeComponent(StaticPhysicsComponent *cmp)
+{
+  auto it = std::find(mStaticComps.begin(), mStaticComps.end(), cmp);
+  assert(it != mStaticComps.end());
+
+  mStaticComps.erase(it);
 }
 
 } // namespace game

@@ -7,7 +7,7 @@
 #include "camera.h"
 #include "TMXParser.h"
 #include "world/tmxmaploader.h"
-#include "physicscomponent.h"
+#include "movingphysicscomponent.h"
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
@@ -60,7 +60,7 @@ TileID *Level::tiles()
   return mTiles.get();
 }
 
-void Level::checkTileCollisions(PhysicsComponent &object)
+void Level::checkTileCollisions(MovingPhysicsComponent &object)
 {
   Rect<float> box = object.entity().getGlobalBox();
 
@@ -106,6 +106,8 @@ EntityManager &Level::entities()
 
 std::vector<Rect<float> > Level::getObstaclesInArea(const Rect<float> &area)
 {
+  assert(Rect<float>(0.f, 0.f, mSize.x*Tile::SIZE, mSize.y*Tile::SIZE).contains(area));
+
   std::vector<Rect<float>> obstacles;
 
   for (int i=area.x/Tile::SIZE; i<=(area.x+area.w-1)/Tile::SIZE; i++) {

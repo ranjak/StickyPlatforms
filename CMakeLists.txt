@@ -43,6 +43,8 @@ set(SRC_LIST
     src/entities/states/groundstate.cpp
     src/entities/states/airstate.cpp
     src/entities/components/physicscomponent.cpp
+    src/entities/components/staticphysicscomponent.cpp
+    src/entities/components/movingphysicscomponent.cpp
     src/entities/components/playerinputcomponent.cpp
     src/entities/components/autoinputcomponent.cpp
     src/entities/components/basicaicomponent.cpp

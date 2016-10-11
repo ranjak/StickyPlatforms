@@ -31,7 +31,7 @@ private:
 
   void loadTiles(TMX::Parser &map, Display &display);
 
-  void loadObjects(TMX::Parser &map, Level *level);
+  void loadObjects(TMX::Parser &map, Level &level);
 
 private:
   Vector<int> mLevelSize;

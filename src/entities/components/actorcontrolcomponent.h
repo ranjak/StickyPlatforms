@@ -11,7 +11,7 @@ namespace game {
 
 class ActorState;
 class InputComponent;
-class PhysicsComponent;
+class MovingPhysicsComponent;
 
 class ActorControlComponent : public Component
 {
@@ -22,20 +22,20 @@ public:
     NONE
   };
 
-  ActorControlComponent(Entity &entity, PhysicsComponent &physics, InputComponent &input, float maxSpeed);
+  ActorControlComponent(Entity &entity, MovingPhysicsComponent &physics, InputComponent &input, float maxSpeed);
 
   void update(uint32_t step, GameState &game) override;
   void receiveMessage(Message &msg) override;
   void setState(State newState);
 
-  PhysicsComponent &physics() { return mPhysics; }
+  MovingPhysicsComponent &physics() { return mPhysics; }
   InputComponent &input() { return mInput; }
 
 private:
   ActorState *mCurrentState;
   State mNextState;
   InputComponent &mInput;
-  PhysicsComponent &mPhysics;
+  MovingPhysicsComponent &mPhysics;
   Entity &mEntity;
   GroundState mGroundState;
   AirState mAirState;
