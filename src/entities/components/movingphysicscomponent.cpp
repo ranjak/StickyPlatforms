@@ -13,8 +13,6 @@ MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner) :
   PhysicsComponent(owner),
   mVelocity(0.f, 0.f),
   mRemainder(0.f, 0.f),
-  mGravity(2500.f),
-  mFallSpeed(800.f),
   mIsOnGround(false),
   mCollidingTiles()
 {
@@ -32,12 +30,6 @@ void MovingPhysicsComponent::update(uint32_t step, GameState &game)
   mCollidingEntities.clear();
   mCollidingTiles.clear();
   mIsOnGround = false;
-
-  // Apply gravity
-  if (mVelocity.y < mFallSpeed)
-    mVelocity.y += mGravity * step / 1000.f;
-  else
-    mVelocity.y = mFallSpeed;
 
   // Compute new position
   Rect<float> box = mEntity.getGlobalBox();
@@ -90,8 +82,7 @@ void MovingPhysicsComponent::collisionResponse(const Vector<int> &normal)
   if (normal.y != 0)
     mVelocity.y /= 2.f;
 
-  if (!mIsOnGround)
-    mIsOnGround = normal.y < 0;
+  mIsOnGround = mIsOnGround || normal.y < 0;
 }
 
 } // namespace game

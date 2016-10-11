@@ -4,6 +4,7 @@
 #include "rectangle.h"
 #include "movingphysicscomponent.h"
 #include "staticphysicscomponent.h"
+#include "gravitycomponent.h"
 #include "basicaicomponent.h"
 #include "playerinputcomponent.h"
 #include "actorcontrolcomponent.h"
@@ -30,6 +31,7 @@ std::unique_ptr<Entity> EntityFactory::create(const std::string &type, const std
 
     enemy->addComponent(std::move(input));
     enemy->addComponent(std::move(control));
+    enemy->addComponent(std::make_unique<GravityComponent>(*physics));
     enemy->addComponent(std::move(physics));
 
     return enemy;
@@ -45,6 +47,7 @@ std::unique_ptr<Entity> EntityFactory::create(const std::string &type, const std
 
     hero->addComponent(std::move(input));
     hero->addComponent(std::move(control));
+    hero->addComponent(std::make_unique<GravityComponent>(*physics));
     hero->addComponent(std::move(physics));
 
     return hero;

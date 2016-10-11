@@ -36,8 +36,6 @@ private:
 private:
   Vector<float> mVelocity;
   Vector<float> mRemainder;
-  float mGravity;
-  float mFallSpeed;
   bool mIsOnGround;
 
   std::vector<Vector<int>> mCollidingTiles;
