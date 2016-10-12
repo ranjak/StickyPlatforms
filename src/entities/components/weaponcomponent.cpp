@@ -8,7 +8,7 @@
 namespace game {
 
 WeaponComponent::WeaponComponent(Entity &owner) :
-  mSword(owner.manager().makeEntity("sword", owner.getName()+"_sword", Rect<float>(0.f, 0.f, 20.f, 8.f), owner.id)),
+  mSword(owner.manager().makeEntity("sword", owner.getName()+"_sword", Rect<float>(0.f, 0.f, 32.f, 8.f), owner.id)),
   mSwordComp(owner.manager().getEntity(mSword)->getComponent<SwordComponent>())
 {
 

@@ -104,6 +104,11 @@ EntityManager &Level::entities()
   return mEntities;
 }
 
+const EntityManager &Level::entities() const
+{
+  return mEntities;
+}
+
 std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area)
 {
   // Make sure we're inside the level's boundaries

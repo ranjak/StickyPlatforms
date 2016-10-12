@@ -23,9 +23,9 @@ EntityID EntityManager::makeEntity(const std::string &type, const std::string &n
   return EntityFactory::create(type, name, pos, *this, mNextId, parent);
 }
 
-Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent)
+Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &name, EntityGroup group, std::unique_ptr<Graphics> graphs, EntityID parent)
 {
-  std::unique_ptr<Entity> entity(new Entity(mNextId, *this, pos, name, std::move(graphs), parent));
+  std::unique_ptr<Entity> entity(new Entity(mNextId, *this, pos, name, group, std::move(graphs), parent));
 
   if (entity) {
     Entity *ret = entity.get();

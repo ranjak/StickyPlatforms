@@ -8,6 +8,7 @@
 #include "rect.h"
 #include "graphics.h"
 #include "component.h"
+#include "entitygroup.h"
 
 namespace game {
 
@@ -92,12 +93,12 @@ public:
   }
 
 private:
-  Entity(EntityID id, EntityManager &container, int x, int y, int w=0, int h=0, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
-  Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
+  Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name="", EntityGroup group=EntityGroup::NONE, std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
   friend class EntityManager;
 
 public:
   const EntityID id;
+  const EntityGroup group;
 
 protected:
   bool mIsEnabled;

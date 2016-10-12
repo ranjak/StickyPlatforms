@@ -11,11 +11,12 @@
 namespace game {
 
 
-Entity::Entity(EntityID id, EntityManager &container, int x, int y, int w, int h, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent) :
+Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name, EntityGroup group, std::unique_ptr<Graphics> graphs, EntityID parent) :
   id(id),
+  group(group),
   mIsEnabled(true),
   mIsDead(false),
-  mBoundingBox(x, y, w, h),
+  mBoundingBox(boundingBox),
   mGraphics(std::move(graphs)),
   mParent(Entity::none),
   mChildren(),
@@ -29,10 +30,6 @@ Entity::Entity(EntityID id, EntityManager &container, int x, int y, int w, int h
     parentPtr->addChild(*this);
   }
 }
-
-Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent) :
-  Entity(id, container, boundingBox.x, boundingBox.y, boundingBox.w, boundingBox.h, name, std::move(graphs), parent)
-{}
 
 Entity::~Entity()
 {

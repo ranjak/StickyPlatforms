@@ -52,17 +52,21 @@ set(SRC_LIST
     src/entities/components/actorcontrolcomponent.cpp
     src/entities/components/swordcomponent.cpp
     src/entities/components/weaponcomponent.cpp
+    src/entities/components/healthcomponent.cpp
+    src/entities/components/damagecomponent.cpp
 )
 
 # Header-only sources, explicitly added so that IDEs can see them
 set(HEADER_LIST
   src/system/make_unique.h
+  src/entities/entitygroup.h
   src/entities/components/component.h
   src/entities/components/inputcomponent.h
   src/entities/components/message.h
   src/entities/components/directionchangedmsg.h
   src/entities/components/collisionmsg.h
   src/entities/components/childremovedmsg.h
+  src/entities/components/message/damagemsg.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)
@@ -77,6 +81,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/states
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components/message
     ${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tmxparser/include
 )
 target_link_libraries(${PROJECT_NAME}

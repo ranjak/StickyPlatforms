@@ -32,20 +32,16 @@ void HorizControlState::update(std::uint32_t step, GameState &game)
 
   Vector<float>& velocity = mStateMachine.physics().velocity();
 
+  float targetSpeed = mMaxSpeed * inputDirection;
+
   float accelAmount = mAcceleration * step / 1000.f;
 
-  // Accelerate until max speed
-  if (inputDirection < 0 && velocity.x > - mMaxSpeed)
-    velocity.x = std::max(-mMaxSpeed, velocity.x - accelAmount);
-
-  else if (inputDirection > 0 && velocity.x < mMaxSpeed)
-    velocity.x = std::min(mMaxSpeed, velocity.x + accelAmount);
-
-  // No direction : decelerate until stop
-  else if (velocity.x > 0)
-    velocity.x = std::max(0.f, velocity.x - accelAmount);
-  else if (velocity.x < 0)
-    velocity.x = std::min(0.f, velocity.x + accelAmount);
+  if (targetSpeed - velocity.x > 0) {
+    velocity.x += std::min(accelAmount, targetSpeed-velocity.x);
+  }
+  else if (targetSpeed - velocity.x < 0) {
+    velocity.x += std::max(-accelAmount, targetSpeed-velocity.x);
+  }
 
   if (inputDirection != 0)
     mDirection = inputDirection;

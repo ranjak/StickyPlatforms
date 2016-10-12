@@ -2,6 +2,7 @@
 #define ENTITYMANAGER_H
 
 #include "entity.h"
+#include "entitygroup.h"
 #include "physicsmanager.h"
 #include <map>
 #include <memory>
@@ -25,7 +26,7 @@ public:
   EntityManager(Level &level);
 
   EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none);
-  Entity *makeEntity(const Rect<float> &pos, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=Entity::none);
+  Entity *makeEntity(const Rect<float> &pos, const std::string &name="", EntityGroup group=EntityGroup::NONE, std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=Entity::none);
 
   Entity *getEntity(EntityID id) const;
   Entity *getEntity(const std::string &name) const;

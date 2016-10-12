@@ -10,7 +10,8 @@ struct Message
     DirectionChanged,
     ObstacleReached,
     Collision,
-    ChildRemoved
+    ChildRemoved,
+    Damage
   };
 
   Message(Type type) : type(type) {}

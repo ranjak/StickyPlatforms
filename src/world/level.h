@@ -40,6 +40,7 @@ public:
   bool start(const std::string &startingPoint="playerStart");
 
   EntityManager &entities();
+  const EntityManager &entities() const;
 
   /**
    * @brief getObstaclesInArea Get the bounding boxes of every tile in a given area.
