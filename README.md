@@ -24,7 +24,7 @@ So far, the game has been tested on Linux only, but it should work at least on W
 When running the game, make sure your working directory is the source directory, where the `assets` folder is, otherwise the game won't find it.
 
 Use the arrow keys to move around, and Space to jump. Use 'C' to swing your sword.
-You're the green block, the enemy is the red one. He can't kill you, but you can kill him!
+You're the green block, the enemy is the red one. Beware, as he will hurt you on contact. Hit him with your sword to defend yourself!
 
 ## License
 
