@@ -17,7 +17,7 @@ template<typename T> class Rect;
 class MovingPhysicsComponent : public PhysicsComponent
 {
 public:
-  MovingPhysicsComponent(Entity &owner);
+  MovingPhysicsComponent(Entity &owner, bool isObstacle=true);
 
   ~MovingPhysicsComponent();
 

@@ -9,8 +9,8 @@
 
 namespace game {
 
-MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner) :
-  PhysicsComponent(owner),
+MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle) :
+  PhysicsComponent(owner, isObstacle),
   mVelocity(0.f, 0.f),
   mRemainder(0.f, 0.f),
   mIsOnGround(false),
@@ -26,8 +26,8 @@ MovingPhysicsComponent::~MovingPhysicsComponent()
 
 void MovingPhysicsComponent::update(uint32_t step, GameState &game)
 {
-  // Collisions from last update are irrelevant
-  mCollidingEntities.clear();
+  PhysicsComponent::update(step, game);
+
   mCollidingTiles.clear();
   mIsOnGround = false;
 
@@ -68,7 +68,7 @@ void MovingPhysicsComponent::collide(Tile &tile, const Vector<int> &location)
 
   Vector<int> normal = mEntity.getGlobalBox().getCollisionNormal(tile.getCollisionBox(location.x, location.y));
 
-  mEntity.sendMessage(std::make_unique<CollisionMsg>(location, normal));
+  mEntity.sendMessage(std::make_unique<CollisionMsg>(location, normal, tile.isObstacle()));
 
   if (tile.isObstacle())
     collisionResponse(normal);

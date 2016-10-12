@@ -46,7 +46,7 @@ public:
    * @param area Rectangle in world pixel coordinates.
    * @return Bounding boxes of every tile in \p area.
    */
-  std::vector<Rect<float>> getObstaclesInArea(const Rect<float> &area);
+  std::vector<Rect<float>> getObstaclesInArea(Rect<float> area);
 
   /**
    * @brief getFacingObstacle Cehck whether an entity is facing a blocking tile along the given direction.

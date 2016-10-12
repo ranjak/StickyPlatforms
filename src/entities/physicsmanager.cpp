@@ -31,20 +31,7 @@ bool PhysicsManager::moveObject(MovingPhysicsComponent *object, const Vector<flo
 
   Vector<float> destFacingPoint(facingPoint.x + direction.x, facingPoint.y + direction.y);
 
-  // Do not go beyond the level's boundaries
-  const Vector<float> &levelSize = mLevel.getPixelSize();
-
-  if (destFacingPoint.x < 0)
-    destFacingPoint.x = 0;
-  else if (destFacingPoint.x > levelSize.x)
-    destFacingPoint.x = levelSize.x;
-
-  if (destFacingPoint.y < 0)
-    destFacingPoint.y = 0;
-  else if (destFacingPoint.y > levelSize.y)
-    destFacingPoint.y = levelSize.y;
-
-  if (!object->isObstacle()) {
+  if (!object->isObstacle() || !object->isCollidable()) {
 
     box.x = (direction.x >= 0) ? destFacingPoint.x-box.w : destFacingPoint.x;
     box.y = (direction.y >= 0) ? destFacingPoint.y-box.h : destFacingPoint.y;
@@ -62,8 +49,8 @@ bool PhysicsManager::moveObject(MovingPhysicsComponent *object, const Vector<flo
 
   std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(movementArea);
 
-  std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) { if (p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
-  std::for_each(mMovingComps.begin(), mMovingComps.end(), [&](MovingPhysicsComponent *p) { if (p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
+  std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) { if (p->isCollidable() && p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
+  std::for_each(mMovingComps.begin(), mMovingComps.end(), [&](MovingPhysicsComponent *p) { if (p->isCollidable() && p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
 
   if (direction.x > 0) {
     // Find the closest obstacle on X
@@ -113,7 +100,7 @@ void PhysicsManager::checkCollisions(MovingPhysicsComponent *object)
 
   for (StaticPhysicsComponent *other : mStaticComps) {
 
-    if (box.touches(other->entity().getGlobalBox())) {
+    if (other->isCollidable() && box.touches(other->entity().getGlobalBox())) {
       object->collide(*other);
       other->collide(*object);
     }
@@ -127,7 +114,7 @@ void PhysicsManager::checkCollisions(MovingPhysicsComponent *object)
 
   for (it += 1; it != mMovingComps.end(); it++) {
 
-    if (box.touches((*it)->entity().getGlobalBox())) {
+    if ((*it)->isCollidable() && box.touches((*it)->entity().getGlobalBox())) {
       object->collide(**it);
       (*it)->collide(*object);
     }

@@ -9,7 +9,7 @@ namespace game {
 class StaticPhysicsComponent : public PhysicsComponent
 {
 public:
-  StaticPhysicsComponent(Entity &owner);
+  StaticPhysicsComponent(Entity &owner, bool isObstacle=true);
 
   ~StaticPhysicsComponent();
 };

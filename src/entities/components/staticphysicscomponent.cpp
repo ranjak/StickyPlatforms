@@ -4,8 +4,8 @@
 
 namespace game {
 
-StaticPhysicsComponent::StaticPhysicsComponent(Entity &owner) :
-  PhysicsComponent(owner)
+StaticPhysicsComponent::StaticPhysicsComponent(Entity &owner, bool isObstacle) :
+  PhysicsComponent(owner, isObstacle)
 {
   owner.manager().getPhysics().addComponent(this);
 }

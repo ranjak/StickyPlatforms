@@ -8,22 +8,25 @@
 #include "basicaicomponent.h"
 #include "playerinputcomponent.h"
 #include "actorcontrolcomponent.h"
+#include "swordcomponent.h"
+#include "weaponcomponent.h"
 #include "log.h"
 #include "make_unique.h"
 #include "world/tile.h"
 #include "color.h"
+#include "entitymanager.h"
 #include <string>
 
 namespace game {
 
-std::unique_ptr<Entity> EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id)
+EntityID EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id, EntityID parent)
 {
   if (type == "PlayerStart")
-    return std::unique_ptr<Entity>(new Entity(id, manager, pos.x, pos.y, 0, 0, name));
+    return manager.makeEntity(pos, name, nullptr, parent)->id;
 
   else if (type == "Enemy") {
 
-    std::unique_ptr<Entity> enemy(new Entity(id, manager, pos.x, pos.y, pos.w, pos.h, name, std::make_unique<Rectangle>(pos.w, pos.h, Color::RED)));
+    Entity *enemy = manager.makeEntity(pos, name, std::make_unique<Rectangle>(pos.w, pos.h, Color::RED), parent);
 
     std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*enemy);
@@ -34,12 +37,12 @@ std::unique_ptr<Entity> EntityFactory::create(const std::string &type, const std
     enemy->addComponent(std::make_unique<GravityComponent>(*physics));
     enemy->addComponent(std::move(physics));
 
-    return enemy;
+    return enemy->id;
   }
 
   else if (type == "Hero") {
 
-    std::unique_ptr<Entity> hero(new Entity(id, manager, pos.x, pos.y, Tile::SIZE, Tile::SIZE, name, std::make_unique<Rectangle>(Tile::SIZE, Tile::SIZE, Color::GREEN)));
+    Entity *hero = manager.makeEntity(pos, name, std::make_unique<Rectangle>(Tile::SIZE, Tile::SIZE, Color::GREEN), parent);
 
     std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero);
@@ -49,21 +52,39 @@ std::unique_ptr<Entity> EntityFactory::create(const std::string &type, const std
     hero->addComponent(std::move(control));
     hero->addComponent(std::make_unique<GravityComponent>(*physics));
     hero->addComponent(std::move(physics));
+    hero->addComponent(std::make_unique<WeaponComponent>(*hero));
 
-    return hero;
+    return hero->id;
+  }
+
+  else if (type == "sword") {
+
+    if (parent == Entity::none) {
+      game::error("EntityFactory: couldn't create sword (id="+std::to_string(id)+",name="+name+"): no parent specified");
+      return Entity::none;
+    }
+    Entity *sword = manager.makeEntity(pos, name, std::make_unique<Rectangle>(pos.w, pos.h, Color::BLUE), parent);
+
+    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*sword, false);
+
+    sword->addComponent(std::make_unique<SwordComponent>(*physics));
+    sword->addComponent(std::move(physics));
+
+    return sword->id;
   }
 
   else if (type == "invisibleWall") {
-    std::unique_ptr<Entity> wall(new Entity(id, manager, pos.x, pos.y, pos.w, pos.h, name));
 
-    wall->addComponent(std::make_unique<StaticPhysicsComponent>(*wall));
+    Entity *wall = manager.makeEntity(pos, name, nullptr, parent);
 
-    return wall;
+    wall->addComponent(std::make_unique<StaticPhysicsComponent>(*wall, true));
+
+    return wall->id;
   }
 
   else {
     Log::getGlobal().get(Log::WARNING) << "Unknown entity type: "<<type<<" for entity "<<name<<std::endl;
-    return nullptr;
+    return Entity::none;
   }
 }
 

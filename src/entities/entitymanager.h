@@ -14,6 +14,7 @@ template<typename T> class Rect;
 class GameState;
 class Display;
 class Level;
+class Graphics;
 
 class EntityManager
 {
@@ -23,7 +24,8 @@ public:
 
   EntityManager(Level &level);
 
-  EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos);
+  EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none);
+  Entity *makeEntity(const Rect<float> &pos, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=Entity::none);
 
   Entity *getEntity(EntityID id) const;
   Entity *getEntity(const std::string &name) const;

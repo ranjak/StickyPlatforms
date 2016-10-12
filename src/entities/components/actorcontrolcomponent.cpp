@@ -1,4 +1,5 @@
 #include "actorcontrolcomponent.h"
+#include "weaponcomponent.h"
 #include "airstate.h"
 #include "make_unique.h"
 #include "log.h"

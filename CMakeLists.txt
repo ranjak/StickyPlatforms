@@ -50,14 +50,19 @@ set(SRC_LIST
     src/entities/components/autoinputcomponent.cpp
     src/entities/components/basicaicomponent.cpp
     src/entities/components/actorcontrolcomponent.cpp
+    src/entities/components/swordcomponent.cpp
+    src/entities/components/weaponcomponent.cpp
 )
 
+# Header-only sources, explicitly added so that IDEs can see them
 set(HEADER_LIST
+  src/system/make_unique.h
   src/entities/components/component.h
   src/entities/components/inputcomponent.h
   src/entities/components/message.h
   src/entities/components/directionchangedmsg.h
   src/entities/components/collisionmsg.h
+  src/entities/components/childremovedmsg.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)

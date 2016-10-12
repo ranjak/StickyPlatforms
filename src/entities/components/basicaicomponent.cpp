@@ -33,17 +33,19 @@ void BasicAiComponent::processMessages()
     switch (msg->type) {
     case Message::Collision:
     {
-      const Vector<int> &normal = static_cast<CollisionMsg *>(msg)->normal;
+      CollisionMsg *colmsg = static_cast<CollisionMsg *>(msg);
 
-      if (isHeld(Command::RIGHT) && normal.x < 0) {
-        release(Command::RIGHT);
-        hold(Command::LEFT);
+      if (colmsg->isObstacle)
+      {
+        if (isHeld(Command::RIGHT) && colmsg->normal.x < 0) {
+          release(Command::RIGHT);
+          hold(Command::LEFT);
+        }
+        else if (isHeld(Command::LEFT) && colmsg->normal.x > 0) {
+          release(Command::LEFT);
+          hold(Command::RIGHT);
+        }
       }
-      else if (isHeld(Command::LEFT) && normal.x > 0) {
-        release(Command::LEFT);
-        hold(Command::RIGHT);
-      }
-
       break;
     }
     default:

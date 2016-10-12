@@ -30,6 +30,9 @@ public:
 
   MovingPhysicsComponent &physics() { return mPhysics; }
   InputComponent &input() { return mInput; }
+  Entity &entity() { return mEntity; }
+
+  int getDirection();
 
 private:
   ActorState *mCurrentState;

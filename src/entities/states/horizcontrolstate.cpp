@@ -4,6 +4,7 @@
 #include "gamevector.h"
 #include "actorcontrolcomponent.h"
 #include "movingphysicscomponent.h"
+#include "weaponcomponent.h"
 #include <cmath>
 #include <algorithm>
 
@@ -12,7 +13,7 @@ namespace game {
 
 HorizControlState::HorizControlState(ActorControlComponent &stateMachine, float acceleration, float maxSpeed) :
   ActorState(stateMachine),
-  mDirection(0),
+  mDirection(1),
   mAcceleration(acceleration),
   mMaxSpeed(maxSpeed)
 {
@@ -46,10 +47,19 @@ void HorizControlState::update(std::uint32_t step, GameState &game)
   else if (velocity.x < 0)
     velocity.x = std::min(0.f, velocity.x + accelAmount);
 
-  mDirection = inputDirection;
+  if (inputDirection != 0)
+    mDirection = inputDirection;
 
-//  if (game.getCommands().isHit(Command::SWORD))
-  //    mHero.swingSword();
+  if (mStateMachine.input().isHit(Command::SWORD)) {
+    WeaponComponent *weap = mStateMachine.entity().getComponent<WeaponComponent>();
+    if (weap)
+      weap->swing(mDirection);
+  }
+}
+
+int HorizControlState::getDirection()
+{
+  return mDirection;
 }
 
 }

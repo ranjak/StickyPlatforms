@@ -49,11 +49,28 @@ public:
 
   void addComponent(std::unique_ptr<Component> component);
 
-  virtual bool isDead() const;
+  template<typename CompType>
+  CompType *getComponent()
+  {
+    for (const std::unique_ptr<Component> &comp : mComponents) {
+      CompType *typedComp = dynamic_cast<CompType *>(comp.get());
+      if (typedComp)
+        return typedComp;
+    }
+    return nullptr;
+  }
 
-  void addChild(EntityID child);
+  bool isEnabled() const { return mIsEnabled; }
+  void setEnabled(bool enabled);
+
+  bool isDead() const { return mIsDead; }
+  void kill() { mIsDead = true; }
+
+  void addChild(Entity &child);
   void removeChild(EntityID child);
   void detach();
+
+  Entity *getParent();
 
   EntityManager &manager() { return mContainer; }
 
@@ -76,12 +93,15 @@ public:
 
 private:
   Entity(EntityID id, EntityManager &container, int x, int y, int w=0, int h=0, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
-  friend class EntityFactory;
+  Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name="", std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
+  friend class EntityManager;
 
 public:
   const EntityID id;
 
 protected:
+  bool mIsEnabled;
+  bool mIsDead;
   Rect<float> mBoundingBox;
   std::unique_ptr<Graphics> mGraphics;
   EntityID mParent;

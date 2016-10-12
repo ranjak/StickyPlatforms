@@ -6,12 +6,18 @@
 
 namespace game {
 
-PhysicsComponent::PhysicsComponent(Entity &owner) :
-  mIsObstacle(true),
+PhysicsComponent::PhysicsComponent(Entity &owner, bool isObstacle) :
+  mIsCollidable(true),
+  mIsObstacle(isObstacle),
   mEntity(owner),
   mCollidingEntities()
 {
 
+}
+
+void PhysicsComponent::update(uint32_t step, GameState &game)
+{
+  mCollidingEntities.clear();
 }
 
 void PhysicsComponent::collide(PhysicsComponent &other)
@@ -20,7 +26,7 @@ void PhysicsComponent::collide(PhysicsComponent &other)
 
   Vector<int> normal = mEntity.getGlobalBox().getCollisionNormal(other.entity().getGlobalBox());
 
-  mEntity.sendMessage(std::make_unique<CollisionMsg>(other.entity().id, normal));
+  mEntity.sendMessage(std::make_unique<CollisionMsg>(other.entity().id, normal, other.isObstacle()));
 }
 
 } // namespace game

@@ -3,6 +3,8 @@
 #include "graphics.h"
 #include "log.h"
 #include "gamestate.h"
+#include "childremovedmsg.h"
+#include "make_unique.h"
 #include <algorithm>
 #include <cassert>
 
@@ -11,6 +13,8 @@ namespace game {
 
 Entity::Entity(EntityID id, EntityManager &container, int x, int y, int w, int h, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent) :
   id(id),
+  mIsEnabled(true),
+  mIsDead(false),
   mBoundingBox(x, y, w, h),
   mGraphics(std::move(graphs)),
   mParent(Entity::none),
@@ -22,9 +26,13 @@ Entity::Entity(EntityID id, EntityManager &container, int x, int y, int w, int h
   if (parent != Entity::none) {
     Entity *parentPtr = mContainer.getEntity(parent);
     assert(parentPtr);
-    parentPtr->addChild(id);
+    parentPtr->addChild(*this);
   }
 }
+
+Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent) :
+  Entity(id, container, boundingBox.x, boundingBox.y, boundingBox.w, boundingBox.h, name, std::move(graphs), parent)
+{}
 
 Entity::~Entity()
 {
@@ -62,24 +70,18 @@ void Entity::addComponent(std::unique_ptr<Component> component)
   mComponents.push_back(std::move(component));
 }
 
-bool Entity::isDead() const
+void Entity::setEnabled(bool enabled)
 {
-  return false;
+  mIsEnabled = enabled;
 }
 
-void Entity::addChild(EntityID child)
+void Entity::addChild(Entity &child)
 {
-  Entity *childPtr = mContainer.getEntity(child);
-  if (!childPtr) {
-    Log::getGlobal().get(Log::WARNING) << *this << ": could not add child "<<child<<": no such entity"<<std::endl;
-    return;
-  }
+  if (child.mParent != Entity::none)
+    child.detach();
 
-  if (childPtr->mParent != Entity::none)
-    childPtr->detach();
-
-  childPtr->mParent = id;
-  mChildren.push_back(child);
+  child.mParent = id;
+  mChildren.push_back(child.id);
 }
 
 void Entity::removeChild(EntityID child)
@@ -90,6 +92,7 @@ void Entity::removeChild(EntityID child)
 
     if (childPtr->mParent == id) {
       childPtr->mParent = Entity::none;
+      sendMessage(std::make_unique<ChildRemovedMsg>(child));
     }
     else {
       Log::getGlobal().get(Log::WARNING) <<*this<<"::removeChild: "<<*childPtr<<" doesn't have "<<*this<<" as parent, can't remove from children list"<<std::endl;
@@ -112,6 +115,11 @@ void Entity::detach()
   else {
     Log::getGlobal().get(Log::WARNING) <<*this<<"::detach: can't detach orphan entity"<<std::endl;
   }
+}
+
+Entity *Entity::getParent()
+{
+  return (mParent != Entity::none) ? mContainer.getEntity(mParent) : nullptr;
 }
 
 Vector<float> Entity::getLocalPos() const

@@ -24,4 +24,9 @@ void ActorState::receiveMessage(Message &msg)
 
 }
 
+int ActorState::getDirection()
+{
+  return 0;
+}
+
 }

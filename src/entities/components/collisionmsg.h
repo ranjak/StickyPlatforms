@@ -9,9 +9,9 @@ namespace game {
 
 struct CollisionMsg : public Message
 {
-  CollisionMsg(EntityID entity, const Vector<int> &normal) : Message(Collision), entity(entity), tilePos(), normal(normal) {}
+  CollisionMsg(EntityID entity, const Vector<int> &normal, bool isObstacle) : Message(Collision), entity(entity), tilePos(), normal(normal), isObstacle(isObstacle) {}
 
-  CollisionMsg(const Vector<int> &tilePos, const Vector<int> &normal) : Message(Collision), entity(Entity::none), tilePos(tilePos), normal(normal) {}
+  CollisionMsg(const Vector<int> &tilePos, const Vector<int> &normal, bool isObstacle) : Message(Collision), entity(Entity::none), tilePos(tilePos), normal(normal), isObstacle(isObstacle) {}
 
   /** ID of the colliding entity, or Entity::none if this is a tile collision */
   const EntityID entity;
@@ -20,6 +20,8 @@ struct CollisionMsg : public Message
   const Vector<int> tilePos;
 
   const Vector<int> normal;
+
+  bool isObstacle;
 };
 
 }

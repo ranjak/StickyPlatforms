@@ -2,6 +2,7 @@
 #include "entityfactory.h"
 #include "gamestate.h"
 #include "rect.h"
+#include "log.h"
 #include <algorithm>
 
 namespace game {
@@ -17,16 +18,24 @@ EntityManager::EntityManager(Level &level) :
 
 }
 
-EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos)
+EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent)
 {
-  std::unique_ptr<Entity> entity = EntityFactory::create(type, name, pos, *this, mNextId);
+  return EntityFactory::create(type, name, pos, *this, mNextId, parent);
+}
+
+Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &name, std::unique_ptr<Graphics> graphs, EntityID parent)
+{
+  std::unique_ptr<Entity> entity(new Entity(mNextId, *this, pos, name, std::move(graphs), parent));
 
   if (entity) {
-    mEntities.insert(std::make_pair(mNextId, std::move(entity)));
-    return mNextId++;
+    Entity *ret = entity.get();
+    mEntities.insert(std::make_pair(mNextId++, std::move(entity)));
+    return ret;
   }
-  else
-    return Entity::none;
+  else {
+    game::error("EntityManager: Failed to create entity");
+    return nullptr;
+  }
 }
 
 Entity *EntityManager::getEntity(EntityID id) const
@@ -48,8 +57,12 @@ Entity *EntityManager::getEntity(const std::string &name) const
 
 void EntityManager::update(std::uint32_t step, GameState &game)
 {
+  for (EntityPair &entity : mEntities) {
+    if (entity.second->isEnabled())
+      entity.second->update(step, game);
+  }
+
   for (Iterator it=mEntities.begin(); it != mEntities.end();) {
-    it->second->update(step, game);
 
     if (it->second->isDead())
       it = mEntities.erase(it);
@@ -64,7 +77,7 @@ void EntityManager::draw(Display &display, const GameState &game) const
   const Rect<float> &viewport = cam.getViewport();
 
   for (const EntityPair &entity : mEntities) {
-    if (entity.second->getGlobalBox().intersects(viewport))
+    if (entity.second->isEnabled() && entity.second->getGlobalBox().intersects(viewport))
       entity.second->draw(display, cam);
   }
 }

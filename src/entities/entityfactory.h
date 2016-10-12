@@ -15,7 +15,7 @@ class EntityFactory
   friend class EntityManager;
 private:
 
-  static std::unique_ptr<Entity> create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id);
+  static EntityID create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id, EntityID parent);
 };
 
 } // namespace game
