@@ -6,6 +6,7 @@
 #include "SDL.h"
 #include <thread>
 #include <string>
+#include <algorithm>
 
 namespace game {
 

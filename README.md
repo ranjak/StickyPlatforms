@@ -10,6 +10,8 @@ A C++ compiler that supports C++11.
 
 ## Building
 
+### Linux
+
 ```
 mkdir build
 cd build
@@ -17,7 +19,15 @@ cmake ..
 make
 ```
 
-So far, the game has been tested on Linux only, but it should work at least on Windows and Mac as well.
+### Windows (MSVC)
+
+In CMake, before configuring the project, add a variable `SDL2_PATH` pointing to the root folder where SDL2 and SDL2_image libraries are located
+(the folder should contain `lib` and `ìnclude` subfolders).
+You can then proceed to configure, generate and build the project in Visual Studio.
+
+### Other
+
+So far, the game has been tested on Linux and Windows only, but it should work at least on Mac as well.
 
 ## Running
 

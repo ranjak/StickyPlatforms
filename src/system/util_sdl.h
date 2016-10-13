@@ -9,7 +9,7 @@ template<typename T>
 class Rect;
 
 template<typename T>
-struct SDL_Rect getSdlRect(const Rect<T> &rect);
+SDL_Rect getSdlRect(const Rect<T> &rect);
 
 }
 

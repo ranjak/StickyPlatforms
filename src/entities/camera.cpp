@@ -3,6 +3,7 @@
 #include "entity.h"
 #include "world/level.h"
 #include "util.h"
+#include <algorithm>
 
 namespace game {
 

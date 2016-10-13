@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <memory>
 #include <vector>
+#include <iostream>
+#include <string>
 #include "gamevector.h"
 #include "rect.h"
 #include "graphics.h"

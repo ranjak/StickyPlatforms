@@ -1,7 +1,9 @@
 #ifndef MAKE_UNIQUE_H
 #define MAKE_UNIQUE_H
 
-#ifndef __cpp_lib_make_unique
+#include "config.h"
+
+#ifndef HAVE_MAKE_UNIQUE
 
 #include <cstddef>
 #include <memory>
@@ -39,6 +41,6 @@ namespace std {
         make_unique(Args&&...) = delete;
 }
 
-#endif // __cpp_lib_make_unique
+#endif // HAVE_MAKE_UNIQUE
 
 #endif // MAKE_UNIQUE_H

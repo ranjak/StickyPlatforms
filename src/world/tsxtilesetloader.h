@@ -1,7 +1,7 @@
 #ifndef TSXTILESETLOADER_H
 #define TSXTILESETLOADER_H
 
-#include <iosfwd>
+#include <string>
 #include <memory>
 
 namespace game {

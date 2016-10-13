@@ -10,6 +10,16 @@ find_package(SDL2_image REQUIRED)
 
 # Project setup
 
+# Check for make_unique
+
+set(CMAKE_REQUIRED_FLAGS "-std=c++11")
+include(CheckCxxSourceCompiles)
+
+file(READ config/make_unique_test.cpp MAKE_UNIQUE_TEST_SRC)
+check_cxx_source_compiles("${MAKE_UNIQUE_TEST_SRC}" HAVE_MAKE_UNIQUE)
+configure_file(config/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
+
+
 set(SRC_LIST
     src/system/main.cpp
     src/system/inputhandler.cpp
@@ -66,12 +76,11 @@ set(HEADER_LIST
   src/entities/components/directionchangedmsg.h
   src/entities/components/collisionmsg.h
   src/entities/components/childremovedmsg.h
-  src/entities/components/message/damagemsg.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)
 
-add_executable(game1 ${SRC_LIST} ${HEADER_LIST} $<TARGET_OBJECTS:tmxparser>)
+add_executable(game1 WIN32 ${SRC_LIST} ${HEADER_LIST} $<TARGET_OBJECTS:tmxparser>)
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
@@ -83,6 +92,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components/message
     ${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tmxparser/include
+	${CMAKE_CURRENT_BINARY_DIR}/include
 )
 target_link_libraries(${PROJECT_NAME}
     ${SDL2_LIBRARY}
