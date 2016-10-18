@@ -49,6 +49,8 @@ public:
    */
   std::vector<Rect<float>> getObstaclesInArea(Rect<float> area);
 
+  Tile &getTileAt(const Vector<int> &tilePos);
+
   /**
    * @brief getFacingObstacle Cehck whether an entity is facing a blocking tile along the given direction.
    * @param box Bounding box of the entity

@@ -24,7 +24,7 @@ void GroundState::update(std::uint32_t step, GameState &game)
     mStateMachine.physics().velocity().y = - 1000.f;
 
   if (!mStateMachine.physics().isOnGround())
-    mStateMachine.setState(ActorControlComponent::AIR);
+    mStateMachine.setState(ActorControlComponent::AIR_CLINGABLE);
 }
 
 }

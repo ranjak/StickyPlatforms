@@ -27,6 +27,8 @@ public:
 
   bool isOnGround();
 
+  const std::vector<std::pair<Vector<int>, Vector<int>>> &getCollidingTiles() const;
+
   void collide(PhysicsComponent &other);
   void collide(Tile &tile, const Vector<int> &location);
 
@@ -38,7 +40,8 @@ private:
   Vector<float> mRemainder;
   bool mIsOnGround;
 
-  std::vector<Vector<int>> mCollidingTiles;
+  // Pair: tile position => collision normal
+  std::vector<std::pair<Vector<int>, Vector<int>>> mCollidingTiles;
 };
 
 } // namespace game

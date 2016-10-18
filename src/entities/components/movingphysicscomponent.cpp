@@ -54,6 +54,11 @@ bool MovingPhysicsComponent::isOnGround()
   return mIsOnGround;
 }
 
+const std::vector<std::pair<Vector<int>, Vector<int> > > &MovingPhysicsComponent::getCollidingTiles() const
+{
+  return mCollidingTiles;
+}
+
 void MovingPhysicsComponent::collide(PhysicsComponent &other)
 {
   PhysicsComponent::collide(other);
@@ -64,9 +69,9 @@ void MovingPhysicsComponent::collide(PhysicsComponent &other)
 
 void MovingPhysicsComponent::collide(Tile &tile, const Vector<int> &location)
 {
-  mCollidingTiles.push_back(location);
-
   Vector<int> normal = mEntity.getGlobalBox().getCollisionNormal(tile.getCollisionBox(location.x, location.y));
+
+  mCollidingTiles.push_back(std::make_pair(location, normal));
 
   mEntity.sendMessage(std::make_unique<CollisionMsg>(location, normal, tile.isObstacle()));
 

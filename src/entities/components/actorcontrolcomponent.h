@@ -4,7 +4,8 @@
 #include "component.h"
 #include "actorstate.h"
 #include "groundstate.h"
-#include "airstate.h"
+#include "airclingablestate.h"
+#include "clingstate.h"
 #include <vector>
 
 namespace game {
@@ -19,6 +20,8 @@ public:
   enum State {
     GROUND,
     AIR,
+    AIR_CLINGABLE,
+    CLING,
     NONE
   };
 
@@ -42,6 +45,8 @@ private:
   Entity &mEntity;
   GroundState mGroundState;
   AirState mAirState;
+  AirClingableState mAirClingableState;
+  ClingState mClingState;
 };
 
 } // namespace game

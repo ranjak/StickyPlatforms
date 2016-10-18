@@ -15,7 +15,9 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
   mPhysics(physics),
   mEntity(entity),
   mGroundState(*this, maxSpeed),
-  mAirState(*this, maxSpeed)
+  mAirState(*this, maxSpeed),
+  mAirClingableState(*this, maxSpeed),
+  mClingState(*this)
 {
 
 }
@@ -23,17 +25,29 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
 void ActorControlComponent::update(uint32_t step, GameState &game)
 {
   if (mNextState != NONE) {
+
+    if (mCurrentState)
+      mCurrentState->exit();
+
     switch (mNextState) {
     case AIR:
       mCurrentState = &mAirState;
       break;
+    case AIR_CLINGABLE:
+      mCurrentState = &mAirClingableState;
+      break;
     case GROUND:
       mCurrentState = &mGroundState;
+      break;
+    case CLING:
+      mCurrentState = &mClingState;
       break;
     default:
       game::error("Entity "+mEntity.getName()+": unknown state: "+std::to_string(mNextState));
     }
+
     mCurrentState->enter();
+    mNextState = NONE;
   }
 
   mCurrentState->update(step, game);

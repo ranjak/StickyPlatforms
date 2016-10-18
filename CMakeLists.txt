@@ -52,6 +52,8 @@ set(SRC_LIST
     src/entities/states/horizcontrolstate.cpp
     src/entities/states/groundstate.cpp
     src/entities/states/airstate.cpp
+    src/entities/states/airclingablestate.cpp
+    src/entities/states/clingstate.cpp
     src/entities/components/physicscomponent.cpp
     src/entities/components/staticphysicscomponent.cpp
     src/entities/components/movingphysicscomponent.cpp

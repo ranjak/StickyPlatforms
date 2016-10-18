@@ -19,6 +19,11 @@ void ActorState::enter()
 
 }
 
+void ActorState::exit()
+{
+
+}
+
 void ActorState::receiveMessage(Message &msg)
 {
 

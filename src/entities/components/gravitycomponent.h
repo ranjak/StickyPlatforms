@@ -14,10 +14,13 @@ public:
 
   void update(std::uint32_t step, GameState &game) override;
 
+  void setEnabled(bool enabled);
+
 private:
   MovingPhysicsComponent &mPhysics;
   float mGravity;
   float mFallSpeed;
+  bool mIsEnabled;
 };
 
 } // namespace game

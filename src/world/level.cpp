@@ -131,6 +131,13 @@ std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area)
   return obstacles;
 }
 
+Tile &Level::getTileAt(const Vector<int> &tilePos)
+{
+  assert(tilePos.x >= 0 && tilePos.x < mSize.x && tilePos.y >= 0 && tilePos.y < mSize.y);
+
+  return mTilesets[mTiles[tilePos.x*mSize.y + tilePos.y]];
+}
+
 bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle, int maxPoint)
 {
   // This function works for only a single coordinate at a time
