@@ -5,13 +5,19 @@
 
 namespace game {
 
+struct Message;
 
 class AirState : public HorizControlState
 {
 public:
-  AirState(ActorControlComponent &stateMachine, float maxSpeed);
+  AirState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed);
 
   void update(std::uint32_t step, GameState &game) override;
+
+  void receiveMessage(Message &msg) override;
+
+private:
+  float mMaxAirSpeed;
 };
 
 }

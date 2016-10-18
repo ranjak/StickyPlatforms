@@ -63,7 +63,7 @@ void Log::log(Priority sev, const std::string& msg)
 void Log::log(Priority sev, std::stringstream &msg)
 {
   if (sev <= mLevel) {
-    mOutput << msg.str() << std::endl;
+    mOutput << priorityToStr(sev) << msg.str() << std::endl;
   }
 }
 

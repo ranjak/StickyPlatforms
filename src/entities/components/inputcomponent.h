@@ -15,6 +15,18 @@ public:
   virtual bool isHit(Command cmd) const = 0;
   virtual bool isHeld(Command cmd) const = 0;
   virtual bool isReleased(Command cmd) const = 0;
+
+  int getDirection() const
+  {
+    int direction = 0;
+
+    if (isHeld(Command::LEFT))
+      direction = -1;
+    if (isHeld(Command::RIGHT))
+      direction += 1;
+
+    return direction;
+  }
 };
 
 } // namespace game

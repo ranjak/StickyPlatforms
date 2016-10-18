@@ -16,7 +16,7 @@ public:
 
   int getDirection() override;
 
-private:
+protected:
   int mDirection;
   float mAcceleration;
   float mMaxSpeed;

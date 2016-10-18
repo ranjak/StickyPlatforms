@@ -131,11 +131,18 @@ std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area)
   return obstacles;
 }
 
-Tile &Level::getTileAt(const Vector<int> &tilePos)
+Tile *Level::getTileAt(const Vector<int> &tilePos)
+{
+  return const_cast<Tile *>(static_cast<const Level &>(*this).getTileAt(tilePos));
+}
+
+const Tile *Level::getTileAt(const Vector<int> &tilePos) const
 {
   assert(tilePos.x >= 0 && tilePos.x < mSize.x && tilePos.y >= 0 && tilePos.y < mSize.y);
 
-  return mTilesets[mTiles[tilePos.x*mSize.y + tilePos.y]];
+  TileID tile = mTiles[tilePos.x*mSize.y + tilePos.y];
+
+  return (tile == 0) ? nullptr : &mTilesets[tile];
 }
 
 bool Level::getFacingObstacle(const Rect<float> &box, const Vector<float> &direction, Vector<int> &obstacle, int maxPoint)

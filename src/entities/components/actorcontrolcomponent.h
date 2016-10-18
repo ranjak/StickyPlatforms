@@ -6,6 +6,7 @@
 #include "groundstate.h"
 #include "airclingablestate.h"
 #include "clingstate.h"
+#include "climbingstate.h"
 #include <vector>
 
 namespace game {
@@ -22,10 +23,11 @@ public:
     AIR,
     AIR_CLINGABLE,
     CLING,
+    CLIMB,
     NONE
   };
 
-  ActorControlComponent(Entity &entity, MovingPhysicsComponent &physics, InputComponent &input, float maxSpeed);
+  ActorControlComponent(Entity &entity, MovingPhysicsComponent &physics, InputComponent &input, float maxSpeed, float maxAirSpeed);
 
   void update(uint32_t step, GameState &game) override;
   void receiveMessage(Message &msg) override;
@@ -47,6 +49,7 @@ private:
   AirState mAirState;
   AirClingableState mAirClingableState;
   ClingState mClingState;
+  ClimbingState mClimbState;
 };
 
 } // namespace game

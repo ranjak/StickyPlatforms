@@ -54,6 +54,7 @@ set(SRC_LIST
     src/entities/states/airstate.cpp
     src/entities/states/airclingablestate.cpp
     src/entities/states/clingstate.cpp
+    src/entities/states/climbingstate.cpp
     src/entities/components/physicscomponent.cpp
     src/entities/components/staticphysicscomponent.cpp
     src/entities/components/movingphysicscomponent.cpp

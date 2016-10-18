@@ -52,7 +52,7 @@ bool ClingState::canStillCling(GameState &game)
   const std::vector<std::pair<Vector<int>, Vector<int>>> &tileCollisions = mStateMachine.physics().getCollidingTiles();
 
   for (const std::pair<Vector<int>,Vector<int>> &col : tileCollisions) {
-    if (game.getLevel().getTileAt(col.first).isObstacle() && col.second.y > 0)
+    if (game.getLevel().getTileAt(col.first)->isObstacle() && col.second.y > 0)
       return true;
   }
 

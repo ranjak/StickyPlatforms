@@ -8,7 +8,7 @@ namespace game {
 class AirClingableState : public AirState
 {
 public:
-  AirClingableState(ActorControlComponent &stateMachine, float maxSpeed);
+  AirClingableState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed);
 
   void receiveMessage(Message &msg) override;
 };

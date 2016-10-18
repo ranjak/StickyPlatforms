@@ -33,7 +33,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*enemy);
-    std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*enemy, *physics, *input, 75.f);
+    std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*enemy, *physics, *input, 75.f, 75.f);
 
     enemy->addComponent(std::move(input));
     enemy->addComponent(std::move(control));
@@ -51,7 +51,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero);
-    std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f);
+    std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
 
     hero->addComponent(std::move(input));
     hero->addComponent(std::move(control));

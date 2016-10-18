@@ -6,14 +6,16 @@
 
 namespace game {
 
-AirClingableState::AirClingableState(ActorControlComponent &stateMachine, float maxSpeed) :
-  AirState(stateMachine, maxSpeed)
+AirClingableState::AirClingableState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed) :
+  AirState(stateMachine, maxSpeed, maxAirSpeed)
 {
 
 }
 
 void AirClingableState::receiveMessage(Message &msg)
 {
+  AirState::receiveMessage(msg);
+
   switch (msg.type) {
   case Message::Collision:
   {
