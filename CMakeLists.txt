@@ -13,7 +13,7 @@ find_package(SDL2_image REQUIRED)
 # Check for make_unique
 
 set(CMAKE_REQUIRED_FLAGS "-std=c++11")
-include(CheckCxxSourceCompiles)
+include(CheckCXXSourceCompiles)
 
 file(READ config/make_unique_test.cpp MAKE_UNIQUE_TEST_SRC)
 check_cxx_source_compiles("${MAKE_UNIQUE_TEST_SRC}" HAVE_MAKE_UNIQUE)
