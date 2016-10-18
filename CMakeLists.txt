@@ -72,10 +72,10 @@ set(HEADER_LIST
   src/entities/entitygroup.h
   src/entities/components/component.h
   src/entities/components/inputcomponent.h
-  src/entities/components/message.h
-  src/entities/components/directionchangedmsg.h
-  src/entities/components/collisionmsg.h
-  src/entities/components/childremovedmsg.h
+  src/entities/components/message/message.h
+  src/entities/components/message/directionchangedmsg.h
+  src/entities/components/message/collisionmsg.h
+  src/entities/components/message/childremovedmsg.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)
