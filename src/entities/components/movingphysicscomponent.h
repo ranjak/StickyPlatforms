@@ -17,7 +17,10 @@ template<typename T> class Rect;
 class MovingPhysicsComponent : public PhysicsComponent
 {
 public:
-  MovingPhysicsComponent(Entity &owner, bool isObstacle=true);
+  static const float GRAVITY;
+  static const float FALL_SPEED;
+
+  MovingPhysicsComponent(Entity &owner, bool isObstacle=true, bool hasGravity=true);
 
   ~MovingPhysicsComponent();
 
@@ -26,6 +29,8 @@ public:
   Vector<float> &velocity() { return mVelocity; }
 
   bool isOnGround();
+
+  void setGravityEnabled(bool enabled);
 
   const std::vector<std::pair<Vector<int>, Vector<int>>> &getCollidingTiles() const;
 
@@ -39,6 +44,7 @@ private:
   Vector<float> mVelocity;
   Vector<float> mRemainder;
   bool mIsOnGround;
+  bool mHasGravity;
 
   // Pair: tile position => collision normal
   std::vector<std::pair<Vector<int>, Vector<int>>> mCollidingTiles;

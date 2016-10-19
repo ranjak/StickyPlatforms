@@ -21,9 +21,9 @@ void GroundState::update(std::uint32_t step, GameState &game)
 
   // Jump: set initial jump speed
   if (mStateMachine.input().isHit(Command::JUMP))
-    mStateMachine.physics().velocity().y = - 1000.f;
+    mStateMachine.setState(ActorControlComponent::JUMP);
 
-  if (!mStateMachine.physics().isOnGround())
+  else if (!mStateMachine.physics().isOnGround())
     mStateMachine.setState(ActorControlComponent::AIR_CLINGABLE);
 }
 

@@ -10,10 +10,16 @@
 #include "inputcomponent.h"
 #include "rect.h"
 #include "log.h"
+#include "util.h"
 #include <algorithm>
 #include <cmath>
 
 namespace game {
+
+namespace {
+/** Zone in pixels above and below an edge where a climb animation can be triggered */
+const float CLIMB_TOLERANCE = 5.f;
+}
 
 AirState::AirState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed) :
     HorizControlState(stateMachine, 1200.f, maxSpeed),
@@ -62,7 +68,7 @@ void AirState::receiveMessage(Message &msg)
         const Tile *aboveFloor = level.getTileAt(Vector<int>(col.tilePos.x, col.tilePos.y-1));
         const Tile *aboveActor = level.getTileAt(Vector<int>(myBox.x / Tile::SIZE, col.tilePos.y-1));
 
-        if (myBox.y <= tileBox.y && (!aboveActor || !aboveActor->isObstacle()) && (!aboveFloor || !aboveFloor->isObstacle())) {
+        if (distance(tileBox.y, myBox.y) <= CLIMB_TOLERANCE && (!aboveActor || !aboveActor->isObstacle()) && (!aboveFloor || !aboveFloor->isObstacle())) {
           glog(Log::DBG, "Climbing!");
           mStateMachine.setState(ActorControlComponent::CLIMB);
         }

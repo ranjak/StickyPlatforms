@@ -4,7 +4,6 @@
 #include "rectangle.h"
 #include "movingphysicscomponent.h"
 #include "staticphysicscomponent.h"
-#include "gravitycomponent.h"
 #include "basicaicomponent.h"
 #include "playerinputcomponent.h"
 #include "actorcontrolcomponent.h"
@@ -37,7 +36,6 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     enemy->addComponent(std::move(input));
     enemy->addComponent(std::move(control));
-    enemy->addComponent(std::make_unique<GravityComponent>(*physics));
     enemy->addComponent(std::move(physics));
     enemy->addComponent(std::make_unique<HealthComponent>(*enemy, 3));
     enemy->addComponent(std::make_unique<DamageComponent>(1, EntityGroup::ALLY));
@@ -55,7 +53,6 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     hero->addComponent(std::move(input));
     hero->addComponent(std::move(control));
-    hero->addComponent(std::make_unique<GravityComponent>(*physics));
     hero->addComponent(std::move(physics));
     hero->addComponent(std::make_unique<WeaponComponent>(*hero));
     hero->addComponent(std::make_unique<HealthComponent>(*hero, 5));
@@ -71,7 +68,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     }
     Entity *sword = manager.makeEntity(pos, name, EntityGroup::NONE, std::make_unique<Rectangle>(pos.w, pos.h, Color::BLUE), parent);
 
-    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*sword, false);
+    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*sword, false, false);
 
     sword->addComponent(std::make_unique<SwordComponent>(*physics));
     sword->addComponent(std::move(physics));

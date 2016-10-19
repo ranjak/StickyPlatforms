@@ -6,14 +6,20 @@
 #include "make_unique.h"
 #include "physicsmanager.h"
 #include <cmath>
+#include <algorithm>
 
 namespace game {
 
-MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle) :
+const float MovingPhysicsComponent::GRAVITY = 2500.f;
+
+const float MovingPhysicsComponent::FALL_SPEED = 800.f;
+
+MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle, bool hasGravity) :
   PhysicsComponent(owner, isObstacle),
   mVelocity(0.f, 0.f),
   mRemainder(0.f, 0.f),
   mIsOnGround(false),
+  mHasGravity(hasGravity),
   mCollidingTiles()
 {
   mEntity.manager().getPhysics().addComponent(this);
@@ -27,6 +33,10 @@ MovingPhysicsComponent::~MovingPhysicsComponent()
 void MovingPhysicsComponent::update(uint32_t step, GameState &game)
 {
   PhysicsComponent::update(step, game);
+
+  if (!mIsOnGround && mHasGravity && mVelocity.y < FALL_SPEED) {
+    mVelocity.y = std::min(FALL_SPEED, mVelocity.y + GRAVITY*step / 1000.f);
+  }
 
   mCollidingTiles.clear();
   mIsOnGround = false;
@@ -52,6 +62,11 @@ void MovingPhysicsComponent::update(uint32_t step, GameState &game)
 bool MovingPhysicsComponent::isOnGround()
 {
   return mIsOnGround;
+}
+
+void MovingPhysicsComponent::setGravityEnabled(bool enabled)
+{
+  mHasGravity = enabled;
 }
 
 const std::vector<std::pair<Vector<int>, Vector<int> > > &MovingPhysicsComponent::getCollidingTiles() const

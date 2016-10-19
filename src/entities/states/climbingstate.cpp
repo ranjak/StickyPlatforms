@@ -1,6 +1,5 @@
 #include "climbingstate.h"
 #include "actorcontrolcomponent.h"
-#include "gravitycomponent.h"
 #include "entity.h"
 #include "movingphysicscomponent.h"
 #include "inputcomponent.h"
@@ -16,9 +15,7 @@ ClimbingState::ClimbingState(ActorControlComponent &stateMachine) :
 
 void ClimbingState::enter()
 {
-  GravityComponent *gravity = mStateMachine.entity().getComponent<GravityComponent>();
-  if (gravity)
-    gravity->setEnabled(false);
+  mStateMachine.physics().setGravityEnabled(false);
 
   mClimbDirection = mStateMachine.input().getDirection();
   mInitialPosX = mStateMachine.entity().getGlobalBox().x;
@@ -38,9 +35,7 @@ void ClimbingState::update(uint32_t step, GameState &game)
 
 void ClimbingState::exit()
 {
-  GravityComponent *gravity = mStateMachine.entity().getComponent<GravityComponent>();
-  if (gravity)
-    gravity->setEnabled(true);
+  mStateMachine.physics().setGravityEnabled(true);
 
   mStateMachine.physics().velocity().y = 0.f;
 }

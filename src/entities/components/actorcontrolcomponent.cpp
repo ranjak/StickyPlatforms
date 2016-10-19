@@ -17,6 +17,7 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
   mGroundState(*this, maxSpeed),
   mAirState(*this, maxSpeed, maxAirSpeed),
   mAirClingableState(*this, maxSpeed, maxAirSpeed),
+  mJumpState(*this, maxSpeed, maxAirSpeed),
   mClingState(*this),
   mClimbState(*this)
 {
@@ -27,15 +28,15 @@ void ActorControlComponent::update(uint32_t step, GameState &game)
 {
   if (mNextState != NONE) {
 
-    if (mCurrentState)
-      mCurrentState->exit();
-
     switch (mNextState) {
     case AIR:
       mCurrentState = &mAirState;
       break;
     case AIR_CLINGABLE:
       mCurrentState = &mAirClingableState;
+      break;
+    case JUMP:
+      mCurrentState = &mJumpState;
       break;
     case GROUND:
       mCurrentState = &mGroundState;
@@ -65,6 +66,9 @@ void ActorControlComponent::receiveMessage(Message &msg)
 void ActorControlComponent::setState(State newState)
 {
   mNextState = newState;
+
+  if (mCurrentState)
+    mCurrentState->exit();
 }
 
 

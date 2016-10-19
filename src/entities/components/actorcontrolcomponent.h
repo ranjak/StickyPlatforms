@@ -7,6 +7,7 @@
 #include "airclingablestate.h"
 #include "clingstate.h"
 #include "climbingstate.h"
+#include "jumpstate.h"
 #include <vector>
 
 namespace game {
@@ -22,6 +23,7 @@ public:
     GROUND,
     AIR,
     AIR_CLINGABLE,
+    JUMP,
     CLING,
     CLIMB,
     NONE
@@ -48,6 +50,7 @@ private:
   GroundState mGroundState;
   AirState mAirState;
   AirClingableState mAirClingableState;
+  JumpState mJumpState;
   ClingState mClingState;
   ClimbingState mClimbState;
 };

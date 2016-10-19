@@ -1,6 +1,5 @@
 #include "clingstate.h"
 #include "gamestate.h"
-#include "gravitycomponent.h"
 #include "actorcontrolcomponent.h"
 #include "inputcomponent.h"
 #include "movingphysicscomponent.h"
@@ -22,9 +21,7 @@ void ClingState::enter()
 {
   mClingTimeout = GameState::current().now() + 2000;
 
-  GravityComponent *gravity = mStateMachine.entity().getComponent<GravityComponent>();
-  if (gravity)
-    gravity->setEnabled(false);
+  mStateMachine.physics().setGravityEnabled(false);
 }
 
 void ClingState::update(uint32_t step, GameState &game)
@@ -38,9 +35,7 @@ void ClingState::update(uint32_t step, GameState &game)
 
 void ClingState::exit()
 {
-  GravityComponent *gravity = mStateMachine.entity().getComponent<GravityComponent>();
-  if (gravity)
-    gravity->setEnabled(true);
+  mStateMachine.physics().setGravityEnabled(true);
 }
 
 bool ClingState::canStillCling(GameState &game)
