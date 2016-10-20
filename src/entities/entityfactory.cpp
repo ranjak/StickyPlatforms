@@ -69,6 +69,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     Entity *sword = manager.makeEntity(pos, name, EntityGroup::NONE, std::make_unique<Rectangle>(pos.w, pos.h, Color::BLUE), parent);
 
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*sword, false, false);
+    physics->setIgnoresObstacles(true);
 
     sword->addComponent(std::make_unique<SwordComponent>(*physics));
     sword->addComponent(std::move(physics));

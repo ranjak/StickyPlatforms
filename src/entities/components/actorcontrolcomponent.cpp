@@ -19,39 +19,17 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
   mAirClingableState(*this, maxSpeed, maxAirSpeed),
   mJumpState(*this, maxSpeed, maxAirSpeed),
   mClingState(*this),
-  mClimbState(*this)
+  mClimbState(*this),
+  mClimbPlatformState(*this)
 {
 
 }
 
 void ActorControlComponent::update(uint32_t step, GameState &game)
 {
+  // For initialization, and states that might need a delayed call to enter()
   if (mNextState != NONE) {
-
-    switch (mNextState) {
-    case AIR:
-      mCurrentState = &mAirState;
-      break;
-    case AIR_CLINGABLE:
-      mCurrentState = &mAirClingableState;
-      break;
-    case JUMP:
-      mCurrentState = &mJumpState;
-      break;
-    case GROUND:
-      mCurrentState = &mGroundState;
-      break;
-    case CLING:
-      mCurrentState = &mClingState;
-      break;
-    case CLIMB:
-      mCurrentState = &mClimbState;
-      break;
-    default:
-      game::error("Entity "+mEntity.getName()+": unknown state: "+std::to_string(mNextState));
-    }
-
-    mCurrentState->enter();
+    setState(mNextState);
     mNextState = NONE;
   }
 
@@ -65,10 +43,36 @@ void ActorControlComponent::receiveMessage(Message &msg)
 
 void ActorControlComponent::setState(State newState)
 {
-  mNextState = newState;
-
   if (mCurrentState)
     mCurrentState->exit();
+
+  switch (newState) {
+  case AIR:
+    mCurrentState = &mAirState;
+    break;
+  case AIR_CLINGABLE:
+    mCurrentState = &mAirClingableState;
+    break;
+  case JUMP:
+    mCurrentState = &mJumpState;
+    break;
+  case GROUND:
+    mCurrentState = &mGroundState;
+    break;
+  case CLING:
+    mCurrentState = &mClingState;
+    break;
+  case CLIMB:
+    mCurrentState = &mClimbState;
+    break;
+  case CLIMB_PLATFORM:
+    mCurrentState = &mClimbPlatformState;
+    break;
+  default:
+    game::error("Entity "+mEntity.getName()+": unknown state: "+std::to_string(newState));
+  }
+
+  mCurrentState->enter();
 }
 
 

@@ -8,9 +8,9 @@ namespace game {
 class JumpState : public AirClingableState
 {
 public:
-  JumpState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float maxJumpHeight=160.f, float impulseTimeFrame=0.1f);
+  JumpState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float maxJumpHeight=128.f, float impulseTimeFrame=0.15f);
 
-  void enter() override;
+  void enter();
 
   void update(uint32_t step, GameState &game) override;
 

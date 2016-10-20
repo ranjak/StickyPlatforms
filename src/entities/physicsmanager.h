@@ -9,6 +9,7 @@ class MovingPhysicsComponent;
 class StaticPhysicsComponent;
 class Level;
 template<typename T> class Vector;
+template<typename T> class Rect;
 
 class PhysicsManager
 {
@@ -18,6 +19,8 @@ public:
   bool moveObject(MovingPhysicsComponent *object, const Vector<float> &dest);
 
   void checkCollisions(MovingPhysicsComponent *object);
+
+  std::vector<Rect<float>> getObstaclesInArea(const Rect<float> &area);
 
   void addComponent(MovingPhysicsComponent *cmp);
   void removeComponent(MovingPhysicsComponent *cmp);

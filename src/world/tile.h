@@ -13,6 +13,7 @@ class Display;
 class Camera;
 class Entity;
 class Level;
+template<typename T> class Vector;
 
 typedef int TileID;
 
@@ -47,6 +48,7 @@ public:
    * @return The collision box for this tile, offset by the proper coordinates in pixels.
    */
   Rect<float> getCollisionBox(int x, int y) const;
+  Rect<float> getCollisionBox(const Vector<int> &pos) const { return getCollisionBox(pos.x, pos.y); }
 
   /**
    * @brief draw Draw this tile at the given position in tile coordinates.

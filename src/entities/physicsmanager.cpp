@@ -31,7 +31,7 @@ bool PhysicsManager::moveObject(MovingPhysicsComponent *object, const Vector<flo
 
   Vector<float> destFacingPoint(facingPoint.x + direction.x, facingPoint.y + direction.y);
 
-  if (!object->isObstacle() || !object->isCollidable()) {
+  if (object->ignoresObstacles() || !object->isCollidable()) {
 
     box.x = (direction.x >= 0) ? destFacingPoint.x-box.w : destFacingPoint.x;
     box.y = (direction.y >= 0) ? destFacingPoint.y-box.h : destFacingPoint.y;
@@ -119,6 +119,22 @@ void PhysicsManager::checkCollisions(MovingPhysicsComponent *object)
       (*it)->collide(*object);
     }
   }
+}
+
+std::vector<Rect<float> > PhysicsManager::getObstaclesInArea(const Rect<float> &area)
+{
+  std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(area);
+
+  std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) {
+    if (p->isCollidable() && p->isObstacle() && area.intersects(p->entity().getGlobalBox()))
+      obstacles.push_back(p->entity().getGlobalBox());
+  });
+  std::for_each(mMovingComps.begin(), mMovingComps.end(), [&](MovingPhysicsComponent *p) {
+    if (p->isCollidable() && p->isObstacle() && area.intersects(p->entity().getGlobalBox()))
+      obstacles.push_back(p->entity().getGlobalBox());
+  });
+
+  return obstacles;
 }
 
 void PhysicsManager::addComponent(MovingPhysicsComponent *cmp)

@@ -10,7 +10,7 @@ class ClingState : public HorizControlState
 public:
   ClingState(ActorControlComponent &stateMachine);
 
-  void enter() override;
+  void enter();
 
   void update(uint32_t step, GameState &game) override;
 

@@ -2,6 +2,7 @@
 #define CLIMBINGSTATE_H
 
 #include "actorstate.h"
+#include "rect.h"
 
 namespace game {
 
@@ -25,6 +26,8 @@ private:
   int mClimbDirection;
   // Used to check whether the actor has made it over the obstacle
   float mInitialPosX;
+  // The solid over which we're climbing
+  Rect<float> mEdge;
 };
 
 } // namespace game

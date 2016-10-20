@@ -32,6 +32,9 @@ public:
 
   void setGravityEnabled(bool enabled);
 
+  bool ignoresObstacles() { return mIgnoresObstacles; }
+  void setIgnoresObstacles(bool ignore);
+
   const std::vector<std::pair<Vector<int>, Vector<int>>> &getCollidingTiles() const;
 
   void collide(PhysicsComponent &other);
@@ -45,6 +48,7 @@ private:
   Vector<float> mRemainder;
   bool mIsOnGround;
   bool mHasGravity;
+  bool mIgnoresObstacles;
 
   // Pair: tile position => collision normal
   std::vector<std::pair<Vector<int>, Vector<int>>> mCollidingTiles;

@@ -31,11 +31,12 @@ AirState::AirState(ActorControlComponent &stateMachine, float maxSpeed, float ma
 void AirState::update(std::uint32_t step, GameState &game)
 {
   HorizControlState::update(step, game);
+  MovingPhysicsComponent &physics = mStateMachine.physics();
 
   // Restrict movement in the air
-  mMaxSpeed = std::max(std::abs(mStateMachine.physics().velocity().x), mMaxAirSpeed);
+  mMaxSpeed = std::max(std::abs(physics.velocity().x), mMaxAirSpeed);
 
-  if (mStateMachine.physics().isOnGround())
+  if (physics.isOnGround() && physics.velocity().y >= 0.f)
     mStateMachine.setState(ActorControlComponent::GROUND);
 }
 
@@ -52,11 +53,11 @@ void AirState::receiveMessage(Message &msg)
       // Walljump
       if (input.isHit(Command::JUMP) && input.getDirection() == col.normal.x) {
         glog(Log::DBG, "Walljump!");
-        mStateMachine.physics().velocity().x = col.normal.x * 300.f;
-        mStateMachine.physics().velocity().y = -800.f;
+        mStateMachine.physics().velocity().x = col.normal.x * mMaxSpeed;
+        mStateMachine.setState(ActorControlComponent::JUMP);
       }
       // Climb an edge
-      else if (input.isHeld(Command::JUMP) && input.getDirection() == -col.normal.x) {
+      else if (/*input.isHeld(Command::JUMP) &&*/ input.getDirection() == -col.normal.x) {
 
         const Level &level = GameState::current().getLevel();
 
@@ -69,7 +70,7 @@ void AirState::receiveMessage(Message &msg)
         const Tile *aboveActor = level.getTileAt(Vector<int>(myBox.x / Tile::SIZE, col.tilePos.y-1));
 
         if (distance(tileBox.y, myBox.y) <= CLIMB_TOLERANCE && (!aboveActor || !aboveActor->isObstacle()) && (!aboveFloor || !aboveFloor->isObstacle())) {
-          glog(Log::DBG, "Climbing!");
+          glog(Log::DBG, "Climbing! FloorY="<<tileBox.y<<",ActorY="<<myBox.y);
           mStateMachine.setState(ActorControlComponent::CLIMB);
         }
       }

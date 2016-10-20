@@ -30,6 +30,34 @@ void ClingState::update(uint32_t step, GameState &game)
 
   if (!canStillCling(game)) {
     mStateMachine.setState(ActorControlComponent::AIR);
+    return;
+  }
+
+  // Climb through thin platforms
+  if (mStateMachine.input().isHeld(Command::UP)) {
+
+    const Rect<float> &box = mStateMachine.entity().getGlobalBox();
+    const std::vector<std::pair<Vector<int>, Vector<int>>> &tileCollisions = mStateMachine.physics().getCollidingTiles();
+
+    // Find the highest tile we need to climb over
+    // Remember, higher = lower y!
+    float highestTileY = game.getLevel().getPixelSize().y;
+
+    for (const std::pair<Vector<int>,Vector<int>> &col : tileCollisions) {
+
+      Tile &tile = *game.getLevel().getTileAt(col.first);
+
+      if (tile.isObstacle() && col.second.y > 0)
+        highestTileY = std::min(highestTileY, tile.getCollisionBox(col.first).y);
+    }
+
+    // Make sure the tile to climb over is thin enough
+    // also, there must not be any obstacle above the platform
+    if (highestTileY - box.y <= box.h &&
+        game.getLevel().getObstaclesInArea(Rect<float>(box.x, highestTileY-box.h, box.w, box.h)).empty())
+    {
+      mStateMachine.setState(ActorControlComponent::CLIMB_PLATFORM);
+    }
   }
 }
 
@@ -40,7 +68,7 @@ void ClingState::exit()
 
 bool ClingState::canStillCling(GameState &game)
 {
-  if (game.now() >= mClingTimeout || mStateMachine.input().isReleased(Command::JUMP))
+  if (game.now() > mClingTimeout || mStateMachine.input().isReleased(Command::JUMP))
     return false;
 
   // Make sure we're still in contact with a tile above us

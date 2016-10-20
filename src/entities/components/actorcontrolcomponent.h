@@ -8,6 +8,7 @@
 #include "clingstate.h"
 #include "climbingstate.h"
 #include "jumpstate.h"
+#include "climbplatformstate.h"
 #include <vector>
 
 namespace game {
@@ -26,6 +27,7 @@ public:
     JUMP,
     CLING,
     CLIMB,
+    CLIMB_PLATFORM,
     NONE
   };
 
@@ -53,6 +55,7 @@ private:
   JumpState mJumpState;
   ClingState mClingState;
   ClimbingState mClimbState;
+  ClimbPlatformState mClimbPlatformState;
 };
 
 } // namespace game

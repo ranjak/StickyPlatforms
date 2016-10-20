@@ -26,12 +26,9 @@ void JumpState::enter()
 
 void JumpState::update(uint32_t step, GameState &game)
 {
-  // If we don't take off immediately, the parent could put us back in GroundState
-  if (!mStateMachine.physics().isOnGround()) {
-    AirClingableState::update(step, game);
-  }
+  AirClingableState::update(step, game);
 
-  if (game.now() >= mImpulseEndTimestamp || mStateMachine.input().isReleased(Command::JUMP)) {
+  if (game.now() > mImpulseEndTimestamp || mStateMachine.input().isReleased(Command::JUMP)) {
     mStateMachine.setState(ActorControlComponent::AIR_CLINGABLE);
   }
 }
@@ -44,6 +41,10 @@ void JumpState::exit()
 float JumpState::computeInitialSpeed()
 {
   float g = MovingPhysicsComponent::GRAVITY;
+
+  // This computation is based on a polynom describing maximum height reached
+  // as a function of impulse speed, taking into account gravity
+  // and impulse time (time during which gravity is turned off).
 
   float discriminant = mImpulseTimeFrame*mImpulseTimeFrame - (2.f*(-mMaxJumpHeight))/g;
 

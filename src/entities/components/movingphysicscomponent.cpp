@@ -10,9 +10,9 @@
 
 namespace game {
 
-const float MovingPhysicsComponent::GRAVITY = 2500.f;
+const float MovingPhysicsComponent::GRAVITY = 3200.f;
 
-const float MovingPhysicsComponent::FALL_SPEED = 800.f;
+const float MovingPhysicsComponent::FALL_SPEED = 1000.f;
 
 MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle, bool hasGravity) :
   PhysicsComponent(owner, isObstacle),
@@ -20,6 +20,7 @@ MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle, b
   mRemainder(0.f, 0.f),
   mIsOnGround(false),
   mHasGravity(hasGravity),
+  mIgnoresObstacles(false),
   mCollidingTiles()
 {
   mEntity.manager().getPhysics().addComponent(this);
@@ -69,6 +70,11 @@ void MovingPhysicsComponent::setGravityEnabled(bool enabled)
   mHasGravity = enabled;
 }
 
+void MovingPhysicsComponent::setIgnoresObstacles(bool ignore)
+{
+  mIgnoresObstacles = ignore;
+}
+
 const std::vector<std::pair<Vector<int>, Vector<int> > > &MovingPhysicsComponent::getCollidingTiles() const
 {
   return mCollidingTiles;
@@ -78,7 +84,7 @@ void MovingPhysicsComponent::collide(PhysicsComponent &other)
 {
   PhysicsComponent::collide(other);
 
-  if (other.isObstacle())
+  if (other.isObstacle() && !mIgnoresObstacles)
     collisionResponse(mEntity.getGlobalBox().getCollisionNormal(other.entity().getGlobalBox()));
 }
 
@@ -90,7 +96,7 @@ void MovingPhysicsComponent::collide(Tile &tile, const Vector<int> &location)
 
   mEntity.sendMessage(std::make_unique<CollisionMsg>(location, normal, tile.isObstacle()));
 
-  if (tile.isObstacle())
+  if (tile.isObstacle() && !mIgnoresObstacles)
     collisionResponse(normal);
 }
 
