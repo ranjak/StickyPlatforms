@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="grass" tilewidth="128" tileheight="128" tilecount="8" columns="4">
+<tileset name="grass" tilewidth="128" tileheight="128" tilecount="10" columns="4">
  <terraintypes>
   <terrain name="Nouveau terrain" tile="6"/>
  </terraintypes>
@@ -40,5 +40,11 @@
   <objectgroup draworder="index">
    <object id="1" x="0" y="0" width="128" height="64"/>
   </objectgroup>
+ </tile>
+ <tile id="9">
+  <image width="128" height="128" source="../PNG/grass_earth_tiles/grass_earth_24.png"/>
+ </tile>
+ <tile id="10">
+  <image width="128" height="128" source="../PNG/grass_earth_tiles/grass_earth_25.png"/>
  </tile>
 </tileset>

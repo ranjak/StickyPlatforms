@@ -93,3 +93,12 @@ O9/03/2016
     * Bonus points if the sword is working again.
   For 10/14:
     * Objectives of 10/06.
+    
+10/21/2016
+
+  I have implemented most of the player movement features I had in mind. I haven't added air stomp yet,
+  as movement options have become somewhat rich now and I feel they need to be refined with some testing
+  before thinking about adding even more.
+  For today, I'm going to create one or more levels to try them out more thoroughly.
+  For 10/24:
+    * Have definitive player movement scheme.

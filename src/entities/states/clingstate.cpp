@@ -53,7 +53,7 @@ void ClingState::update(uint32_t step, GameState &game)
 
     // Make sure the tile to climb over is thin enough
     // also, there must not be any obstacle above the platform
-    if (highestTileY - box.y <= box.h &&
+    if (box.y - highestTileY <= box.h / 2.f &&
         game.getLevel().getObstaclesInArea(Rect<float>(box.x, highestTileY-box.h, box.w, box.h)).empty())
     {
       mStateMachine.setState(ActorControlComponent::CLIMB_PLATFORM);
