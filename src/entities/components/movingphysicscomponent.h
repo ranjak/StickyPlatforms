@@ -28,6 +28,13 @@ public:
 
   Vector<float> &velocity() { return mVelocity; }
 
+  /**
+   * @brief addAcceleration Apply an acceleration on the entity.
+   * The total acceleration applied to the entity is reset to 0 after every update.
+   * @param acceleration Acceleration vector in pixels/s²
+   */
+  void addAcceleration(const Vector<float> &acceleration);
+
   bool isOnGround();
 
   void setGravityEnabled(bool enabled);
@@ -46,6 +53,7 @@ private:
 private:
   Vector<float> mVelocity;
   Vector<float> mRemainder;
+  Vector<float> mAccelerationSum;
   bool mIsOnGround;
   bool mHasGravity;
   bool mIgnoresObstacles;

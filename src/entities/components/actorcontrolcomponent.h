@@ -41,9 +41,11 @@ public:
   InputComponent &input() { return mInput; }
   Entity &entity() { return mEntity; }
 
-  int getDirection();
+  float getMaxSpeed() const { return mMaxSpeed; }
 
 private:
+  float mMaxSpeed;
+
   ActorState *mCurrentState;
   State mNextState;
   InputComponent &mInput;

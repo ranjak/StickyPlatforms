@@ -14,10 +14,13 @@ const float MovingPhysicsComponent::GRAVITY = 3200.f;
 
 const float MovingPhysicsComponent::FALL_SPEED = 1000.f;
 
+static const Vector<float> gravityAccel(0.f, MovingPhysicsComponent::GRAVITY);
+
 MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle, bool hasGravity) :
   PhysicsComponent(owner, isObstacle),
   mVelocity(0.f, 0.f),
   mRemainder(0.f, 0.f),
+  mAccelerationSum(0.f, 0.f),
   mIsOnGround(false),
   mHasGravity(hasGravity),
   mIgnoresObstacles(false),
@@ -35,9 +38,12 @@ void MovingPhysicsComponent::update(uint32_t step, GameState &game)
 {
   PhysicsComponent::update(step, game);
 
-  if (!mIsOnGround && mHasGravity && mVelocity.y < FALL_SPEED) {
-    mVelocity.y = std::min(FALL_SPEED, mVelocity.y + GRAVITY*step / 1000.f);
-  }
+  if (!mIsOnGround && mHasGravity)
+    addAcceleration(gravityAccel);
+
+  // Apply acceleration to speed
+  mVelocity.x += mAccelerationSum.x*step / 1000.f;
+  mVelocity.y = std::min(FALL_SPEED, mVelocity.y + mAccelerationSum.y*step / 1000.f);
 
   mCollidingTiles.clear();
   mIsOnGround = false;
@@ -45,8 +51,7 @@ void MovingPhysicsComponent::update(uint32_t step, GameState &game)
   // Compute new position
   Rect<float> box = mEntity.getGlobalBox();
   // Only use integers for position. Store fractional part in a remainder.
-  mRemainder.x += mVelocity.x * step / 1000.f;
-  mRemainder.y += mVelocity.y * step / 1000.f;
+  mRemainder += mVelocity * step / 1000.f;
 
   Vector<float> destination(0.f, 0.f);
   mRemainder.x = std::modf(mRemainder.x, &destination.x);
@@ -56,8 +61,15 @@ void MovingPhysicsComponent::update(uint32_t step, GameState &game)
   destination.y += box.y;
 
   mEntity.manager().getPhysics().moveObject(this, destination);
-
   mEntity.manager().getPhysics().checkCollisions(this);
+
+  mAccelerationSum.x = 0.f;
+  mAccelerationSum.y = 0.f;
+}
+
+void MovingPhysicsComponent::addAcceleration(const Vector<float> &acceleration)
+{
+  mAccelerationSum += acceleration;
 }
 
 bool MovingPhysicsComponent::isOnGround()

@@ -53,7 +53,7 @@ void AirState::receiveMessage(Message &msg)
       // Walljump
       if (input.isHit(Command::JUMP) && input.getDirection() == col.normal.x) {
         glog(Log::DBG, "Walljump!");
-        mStateMachine.physics().velocity().x = col.normal.x * mMaxSpeed;
+        mStateMachine.physics().velocity().x = col.normal.x * mStateMachine.getMaxSpeed();
         mStateMachine.setState(ActorControlComponent::JUMP);
       }
       // Climb an edge

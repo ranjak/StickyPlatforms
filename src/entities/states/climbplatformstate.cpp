@@ -38,6 +38,7 @@ void ClimbPlatformState::enter()
   }
 
   physics.velocity().y = -400.f;
+  physics.velocity().x = 0.f;
 }
 
 void ClimbPlatformState::update(uint32_t step, GameState &game)
