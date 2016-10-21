@@ -49,6 +49,9 @@ void AirState::receiveMessage(Message &msg)
     // Special behavior if we're hugging a wall
     if (col.entity == Entity::none && col.normal.x != 0) {
 
+      mStateMachine.setState(ActorControlComponent::WALLHUG);
+
+      /*
       InputComponent &input = mStateMachine.input();
       // Walljump
       if (input.isHit(Command::JUMP) && input.getDirection() == col.normal.x) {
@@ -57,7 +60,7 @@ void AirState::receiveMessage(Message &msg)
         mStateMachine.setState(ActorControlComponent::JUMP);
       }
       // Climb an edge
-      else if (/*input.isHeld(Command::JUMP) &&*/ input.getDirection() == -col.normal.x) {
+      else if (input.getDirection() == -col.normal.x) {
 
         const Level &level = GameState::current().getLevel();
 
@@ -74,6 +77,7 @@ void AirState::receiveMessage(Message &msg)
           mStateMachine.setState(ActorControlComponent::CLIMB);
         }
       }
+      */
     }
   }
 }
