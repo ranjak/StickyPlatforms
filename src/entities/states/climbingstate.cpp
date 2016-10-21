@@ -46,6 +46,7 @@ void ClimbingState::update(uint32_t step, GameState &game)
   Vector<float> &velocity = mStateMachine.physics().velocity();
 
   if (pos.y + pos.h <= mEdge.y) {
+    mStateMachine.physics().setGravityEnabled(true);
     velocity.y = 0.f;
     velocity.x = mClimbDirection * 100.f;
   }

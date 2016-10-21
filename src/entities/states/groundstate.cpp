@@ -19,7 +19,6 @@ void GroundState::update(std::uint32_t step, GameState &game)
 {
   HorizControlState::update(step, game);
 
-  // Jump: set initial jump speed
   if (mStateMachine.input().isHit(Command::JUMP))
     mStateMachine.setState(ActorControlComponent::JUMP);
 
