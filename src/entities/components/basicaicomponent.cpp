@@ -1,5 +1,5 @@
 #include "basicaicomponent.h"
-#include "collisionmsg.h"
+#include "collision.h"
 #include "make_unique.h"
 #include "gamecommands.h"
 #include "gamevector.h"
@@ -17,8 +17,8 @@ void BasicAiComponent::receiveMessage(Message &message)
 {
   switch (message.type) {
 
-  case Message::Collision:
-    mMsgQueue.push(std::make_unique<CollisionMsg>(static_cast<CollisionMsg &>(message)));
+  case Message::OnCollision:
+    mMsgQueue.push(std::make_unique<Collision>(static_cast<Collision &>(message)));
   default:
     break;
   }
@@ -31,9 +31,9 @@ void BasicAiComponent::processMessages()
     Message *msg = mMsgQueue.front().get();
 
     switch (msg->type) {
-    case Message::Collision:
+    case Message::OnCollision:
     {
-      CollisionMsg *colmsg = static_cast<CollisionMsg *>(msg);
+      Collision *colmsg = static_cast<Collision *>(msg);
 
       if (colmsg->isObstacle)
       {

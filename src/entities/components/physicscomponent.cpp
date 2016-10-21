@@ -2,7 +2,7 @@
 #include "gamevector.h"
 #include "make_unique.h"
 #include "rect.h"
-#include "collisionmsg.h"
+#include "collision.h"
 
 namespace game {
 
@@ -26,7 +26,7 @@ void PhysicsComponent::collide(PhysicsComponent &other)
 
   Vector<int> normal = mEntity.getGlobalBox().getCollisionNormal(other.entity().getGlobalBox());
 
-  mEntity.sendMessage(std::make_unique<CollisionMsg>(other.entity().id, normal, other.isObstacle()));
+  mEntity.sendMessage(std::make_unique<Collision>(other.entity().id, other.entity().getGlobalBox(), normal, other.isObstacle()));
 }
 
 } // namespace game

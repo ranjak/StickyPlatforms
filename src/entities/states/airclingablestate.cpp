@@ -1,5 +1,5 @@
 #include "airclingablestate.h"
-#include "collisionmsg.h"
+#include "collision.h"
 #include "actorcontrolcomponent.h"
 #include "inputcomponent.h"
 #include "gamecommands.h"
@@ -17,9 +17,9 @@ void AirClingableState::receiveMessage(Message &msg)
   AirState::receiveMessage(msg);
 
   switch (msg.type) {
-  case Message::Collision:
+  case Message::OnCollision:
   {
-    CollisionMsg &colmsg = static_cast<CollisionMsg &>(msg);
+    Collision &colmsg = static_cast<Collision &>(msg);
 
     // For now, cling to tiles only.
     // TODO: add a "clingable" property, that can be used with entities as well

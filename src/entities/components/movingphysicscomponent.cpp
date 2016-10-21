@@ -1,10 +1,11 @@
 #include "movingphysicscomponent.h"
-#include "collisionmsg.h"
+#include "collision.h"
 #include "gamevector.h"
 #include "gamestate.h"
 #include "world/level.h"
 #include "make_unique.h"
 #include "physicsmanager.h"
+#include "entity.h"
 #include <cmath>
 #include <algorithm>
 
@@ -106,7 +107,7 @@ void MovingPhysicsComponent::collide(Tile &tile, const Vector<int> &location)
 
   mCollidingTiles.push_back(std::make_pair(location, normal));
 
-  mEntity.sendMessage(std::make_unique<CollisionMsg>(location, normal, tile.isObstacle()));
+  mEntity.sendMessage(std::make_unique<Collision>(Entity::none, tile.getCollisionBox(location), normal, tile.isObstacle()));
 
   if (tile.isObstacle() && !mIgnoresObstacles)
     collisionResponse(normal);

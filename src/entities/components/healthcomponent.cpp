@@ -1,6 +1,6 @@
 #include "healthcomponent.h"
 #include "movingphysicscomponent.h"
-#include "collisionmsg.h"
+#include "collision.h"
 #include "damagecomponent.h"
 #include "gamestate.h"
 
@@ -16,9 +16,9 @@ HealthComponent::HealthComponent(Entity &owner, int hp) :
 
 void HealthComponent::receiveMessage(Message &msg)
 {
-  if (msg.type == Message::Collision) {
+  if (msg.type == Message::OnCollision) {
 
-    CollisionMsg &col = static_cast<CollisionMsg &>(msg);
+    Collision &col = static_cast<Collision &>(msg);
 
     if (col.entity != Entity::none) {
 

@@ -8,8 +8,7 @@ struct Message
   enum Type
   {
     DirectionChanged,
-    ObstacleReached,
-    Collision,
+    OnCollision,
     ChildRemoved,
     Damage
   };

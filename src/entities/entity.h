@@ -27,7 +27,7 @@ using EntityID = int;
 class Entity
 {
 public:
-  static const EntityID none = -1;
+  static const EntityID none;
 
   virtual ~Entity();
 

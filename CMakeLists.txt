@@ -79,7 +79,7 @@ set(HEADER_LIST
   src/entities/components/inputcomponent.h
   src/entities/components/message/message.h
   src/entities/components/message/directionchangedmsg.h
-  src/entities/components/message/collisionmsg.h
+  src/entities/components/message/collision.h
   src/entities/components/message/childremovedmsg.h
 )
 

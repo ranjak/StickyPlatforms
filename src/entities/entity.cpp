@@ -10,6 +10,7 @@
 
 namespace game {
 
+const EntityID Entity::none = -1;
 
 Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name, EntityGroup group, std::unique_ptr<Graphics> graphs, EntityID parent) :
   id(id),

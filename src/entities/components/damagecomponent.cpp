@@ -1,5 +1,5 @@
 #include "damagecomponent.h"
-#include "collisionmsg.h"
+#include "collision.h"
 #include "healthcomponent.h"
 #include "entity.h"
 #include "gamestate.h"

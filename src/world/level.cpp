@@ -109,7 +109,7 @@ const EntityManager &Level::entities() const
   return mEntities;
 }
 
-std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area)
+std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area) const
 {
   // Make sure we're inside the level's boundaries
   area = area.getIntersection(Rect<float>(0.f, 0.f, mSize.x*Tile::SIZE, mSize.y*Tile::SIZE));

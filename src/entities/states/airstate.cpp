@@ -5,7 +5,7 @@
 #include "actorcontrolcomponent.h"
 #include "movingphysicscomponent.h"
 #include "make_unique.h"
-#include "collisionmsg.h"
+#include "collision.h"
 #include "entity.h"
 #include "inputcomponent.h"
 #include "rect.h"
@@ -42,19 +42,18 @@ void AirState::update(std::uint32_t step, GameState &game)
 
 void AirState::receiveMessage(Message &msg)
 {
-  if (msg.type == Message::Collision) {
+  if (msg.type == Message::OnCollision) {
 
-    CollisionMsg &col = static_cast<CollisionMsg &>(msg);
+    Collision &col = static_cast<Collision &>(msg);
 
     // Special behavior if we're hugging a wall
     if (col.entity == Entity::none && col.normal.x != 0) {
 
-      mStateMachine.setState(ActorControlComponent::WALLHUG);
+      //mStateMachine.setState(ActorControlComponent::WALLHUG);
 
-      /*
       InputComponent &input = mStateMachine.input();
       // Walljump
-      if (input.isHit(Command::JUMP) && input.getDirection() == col.normal.x) {
+      if (input.isHit(Command::JUMP)/* && input.getDirection() == col.normal.x*/) {
         glog(Log::DBG, "Walljump!");
         mStateMachine.physics().velocity().x = col.normal.x * mStateMachine.getMaxSpeed();
         mStateMachine.setState(ActorControlComponent::JUMP);
@@ -65,19 +64,15 @@ void AirState::receiveMessage(Message &msg)
         const Level &level = GameState::current().getLevel();
 
         // Make sure we aren't too low below floor level
-        const Rect<float> &tileBox = level.getTileAt(col.tilePos)->getCollisionBox(col.tilePos.x, col.tilePos.y);
+        const Rect<float> &tileBox = col.bbox;
         const Rect<float> &myBox = mStateMachine.entity().getGlobalBox();
 
-        // Also make sure there aren't obstacles above
-        const Tile *aboveFloor = level.getTileAt(Vector<int>(col.tilePos.x, col.tilePos.y-1));
-        const Tile *aboveActor = level.getTileAt(Vector<int>(myBox.x / Tile::SIZE, col.tilePos.y-1));
-
-        if (distance(tileBox.y, myBox.y) <= CLIMB_TOLERANCE && (!aboveActor || !aboveActor->isObstacle()) && (!aboveFloor || !aboveFloor->isObstacle())) {
+        // Also make sure there aren't obstacles above        
+        if (distance(tileBox.y, myBox.y) <= CLIMB_TOLERANCE && level.getObstaclesInArea(Rect<float>(myBox.x, tileBox.y-myBox.h, myBox.w+1.f, myBox.h)).empty()) {
           glog(Log::DBG, "Climbing! FloorY="<<tileBox.y<<",ActorY="<<myBox.y);
           mStateMachine.setState(ActorControlComponent::CLIMB);
         }
       }
-      */
     }
   }
 }

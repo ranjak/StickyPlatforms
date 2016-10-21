@@ -47,7 +47,7 @@ public:
    * @param area Rectangle in world pixel coordinates.
    * @return Bounding boxes of every tile in \p area.
    */
-  std::vector<Rect<float>> getObstaclesInArea(Rect<float> area);
+  std::vector<Rect<float>> getObstaclesInArea(Rect<float> area) const;
 
   Tile *getTileAt(const Vector<int> &tilePos);
   const Tile *getTileAt(const Vector<int> &tilePos) const;
