@@ -47,7 +47,7 @@ void AirState::receiveMessage(Message &msg)
     Collision &col = static_cast<Collision &>(msg);
 
     // Special behavior if we're hugging a wall
-    if (col.entity == Entity::none && col.normal.x != 0) {
+    if (col.isObstacle && col.normal.x != 0) {
 
       //mStateMachine.setState(ActorControlComponent::WALLHUG);
 
@@ -63,13 +63,19 @@ void AirState::receiveMessage(Message &msg)
 
         const Level &level = GameState::current().getLevel();
 
-        // Make sure we aren't too low below floor level
-        const Rect<float> &tileBox = col.bbox;
         const Rect<float> &myBox = mStateMachine.entity().getGlobalBox();
+        // The total space the climbing animation will take
+        Rect<float> climbBox {
+          (col.normal.x > 0) ? myBox.x-1.f : myBox.x,
+          col.bbox.y - myBox.h,
+          myBox.w + 1.f,
+          myBox.h
+        };
 
-        // Also make sure there aren't obstacles above        
-        if (distance(tileBox.y, myBox.y) <= CLIMB_TOLERANCE && level.getObstaclesInArea(Rect<float>(myBox.x, tileBox.y-myBox.h, myBox.w+1.f, myBox.h)).empty()) {
-          glog(Log::DBG, "Climbing! FloorY="<<tileBox.y<<",ActorY="<<myBox.y);
+
+        // Climb if there aren't obstacles above
+        if (distance(col.bbox.y, myBox.y) <= CLIMB_TOLERANCE && level.getObstaclesInArea(climbBox).empty()) {
+          glog(Log::DBG, "Climbing! FloorY="<<col.bbox.y<<",ActorY="<<myBox.y);
           mStateMachine.setState(ActorControlComponent::CLIMB);
         }
       }
