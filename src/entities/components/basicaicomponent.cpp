@@ -71,12 +71,10 @@ void BasicAiComponent::update(uint32_t step, GameState &game)
   else if (isHeld(Command::LEFT)) {
     for (const Collision &col : mPhysics.getCollisions()) {
 
-      // Facing a wall ?
       if (col.normal.x > 0) {
         turnAround = true;
         break;
       }
-      // Over a cliff ?
       else if (col.normal.y < 0 && (col.bbox.x <= ebox.x))
         turnAround = false;
     }

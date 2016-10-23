@@ -53,7 +53,7 @@ void ClingState::update(uint32_t step, GameState &game)
     // also, there must not be any obstacle above the platform
     // TODO: also check entities here instead of just tiles
     if (box.y - highestObstacleY <= box.h / 2.f &&
-        game.getLevel().getObstaclesInArea(Rect<float>(box.x, highestObstacleY-box.h, box.w, box.h)).empty())
+        game.getLevel().getObstaclesInArea(Rect<float>(box.x, highestObstacleY-box.h, box.w, box.h), mStateMachine.physics()).empty())
     {
       mStateMachine.setState(ActorControlComponent::CLIMB_PLATFORM);
     }

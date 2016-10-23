@@ -2,20 +2,6 @@
 
 namespace game {
 
-template<typename T>
-Vector<T>::Vector() :
-  x(),
-  y()
-{
-
-}
-
-
-template<typename T>
-Vector<T>::Vector(T x, T y) :
-  x(x),
-  y(y)
-{}
 
 template<typename T>
 Vector<T> Vector<T>::operator/(float scalar)

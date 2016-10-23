@@ -20,7 +20,7 @@ public:
 
   void checkCollisions(MovingPhysicsComponent *object);
 
-  std::vector<Rect<float>> getObstaclesInArea(const Rect<float> &area);
+  std::vector<Rect<float>> getObstaclesInArea(const Rect<float> &area, const MovingPhysicsComponent &object);
 
   void addComponent(MovingPhysicsComponent *cmp);
   void removeComponent(MovingPhysicsComponent *cmp);

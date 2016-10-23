@@ -75,7 +75,7 @@ void Level::checkTileCollisions(MovingPhysicsComponent &object)
     for (int j = minj; j <= maxj; j++) {
 
       TileID tile = mTiles[i*mSize.y + j];
-      if (tile > 0 && mTilesets[tile].getCollisionBox(i, j).touches(box)) {
+      if (tile > 0 && mTilesets[tile].getCollisionBox(i, j).touches(box) && !object.isIgnored(Vector<int>(i,j))) {
 
         mTilesets[tile].onCollision(object.entity(), *this);
         object.collide(mTilesets[tile], Vector<int>(i, j));
@@ -109,7 +109,7 @@ const EntityManager &Level::entities() const
   return mEntities;
 }
 
-std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area) const
+std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area, const MovingPhysicsComponent &object) const
 {
   // Make sure we're inside the level's boundaries
   area = area.getIntersection(Rect<float>(0.f, 0.f, mSize.x*Tile::SIZE, mSize.y*Tile::SIZE));
@@ -123,7 +123,7 @@ std::vector<Rect<float> > Level::getObstaclesInArea(Rect<float> area) const
     for (int j=area.y/Tile::SIZE; j<=(area.y+area.h-1)/Tile::SIZE; j++) {
 
       TileID tile = mTiles[i*mSize.y + j];
-      if (tile > 0 && mTilesets[tile].isObstacle())
+      if (tile > 0 && mTilesets[tile].isObstacle() && !object.isIgnored(Vector<int>(i,j)))
         obstacles.push_back(mTilesets[tile].getCollisionBox(i, j));
     }
   }

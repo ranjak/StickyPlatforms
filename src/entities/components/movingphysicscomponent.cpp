@@ -6,6 +6,7 @@
 #include "make_unique.h"
 #include "physicsmanager.h"
 #include "entity.h"
+#include "log.h"
 #include <cmath>
 #include <algorithm>
 
@@ -24,7 +25,9 @@ MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle, b
   mAccelerationSum(0.f, 0.f),
   mIsOnGround(false),
   mHasGravity(hasGravity),
-  mIgnoresObstacles(false)
+  mIgnoresObstacles(false),
+  mIgnoredEntities(),
+  mIgnoredTiles()
 {
   mEntity.manager().getPhysics().addComponent(this);
 }
@@ -45,7 +48,6 @@ void MovingPhysicsComponent::update(uint32_t step, GameState &game)
   mVelocity.x += mAccelerationSum.x*step / 1000.f;
   mVelocity.y = std::min(FALL_SPEED, mVelocity.y + mAccelerationSum.y*step / 1000.f);
 
-  mCollidingTiles.clear();
   mIsOnGround = false;
 
   // Compute new position
@@ -85,6 +87,52 @@ void MovingPhysicsComponent::setGravityEnabled(bool enabled)
 void MovingPhysicsComponent::setIgnoresObstacles(bool ignore)
 {
   mIgnoresObstacles = ignore;
+}
+
+bool MovingPhysicsComponent::isIgnored(EntityID other) const
+{
+  return std::find(mIgnoredEntities.begin(), mIgnoredEntities.end(), other) != mIgnoredEntities.end();
+}
+
+bool MovingPhysicsComponent::isIgnored(const Vector<int> &tile) const
+{
+  return std::find(mIgnoredTiles.begin(), mIgnoredTiles.end(), tile) != mIgnoredTiles.end();
+}
+
+void MovingPhysicsComponent::setIgnored(EntityID other, bool ignored)
+{
+  auto it = std::find(mIgnoredEntities.begin(), mIgnoredEntities.end(), other);
+
+  if (ignored) {
+    if (it != mIgnoredEntities.end())
+      Log::getGlobal().get(Log::WARNING) << "MovingPhysicsComponent::setIgnored: cannot set entity "<<other<<" as ignored because it already is"<<std::endl;
+    else
+      mIgnoredEntities.push_back(other);
+  }
+  else {
+    if (it == mIgnoredEntities.end())
+      Log::getGlobal().get(Log::WARNING) << "MovingPhysicsComponent::setIgnored: cannot set entity "<<other<<" as not ignored because is was not set as ignored"<<std::endl;
+    else
+      mIgnoredEntities.erase(it);
+  }
+}
+
+void MovingPhysicsComponent::setIgnored(const Vector<int> &tile, bool ignored)
+{
+  auto it = std::find(mIgnoredTiles.begin(), mIgnoredTiles.end(), tile);
+
+  if (ignored) {
+    if (it != mIgnoredTiles.end())
+      Log::getGlobal().get(Log::WARNING) << "MovingPhysicsComponent::setIgnored: cannot set tile "<<tile<<" as ignored because it already is"<<std::endl;
+    else
+      mIgnoredTiles.push_back(tile);
+  }
+  else {
+    if (it == mIgnoredTiles.end())
+      Log::getGlobal().get(Log::WARNING) << "MovingPhysicsComponent::setIgnored: cannot set tile "<<tile<<" as not ignored because is was not set as ignored"<<std::endl;
+    else
+      mIgnoredTiles.erase(it);
+  }
 }
 
 void MovingPhysicsComponent::collide(PhysicsComponent &other)

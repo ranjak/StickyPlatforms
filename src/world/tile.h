@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include "rect.h"
+#include "gamevector.h"
 
 namespace game {
 
@@ -13,7 +14,6 @@ class Display;
 class Camera;
 class Entity;
 class Level;
-template<typename T> class Vector;
 
 typedef int TileID;
 
@@ -25,7 +25,12 @@ class Tile
 {
 public:
   /** Size of a tile in pixels. Tiles have identical width and height. */
-  static const int SIZE;
+  constexpr static int SIZE = 32;
+
+  constexpr static Vector<int> pixelToTile(float x, float y)
+  {
+    return Vector<int>(static_cast<int>(x) / Tile::SIZE, static_cast<int>(y) / Tile::SIZE);
+  }
 
   Tile(TileID id,
        bool isObstacle = true,

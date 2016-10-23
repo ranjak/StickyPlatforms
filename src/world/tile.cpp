@@ -7,8 +7,7 @@
 
 namespace game {
 
-
-const int Tile::SIZE = 32;
+constexpr int Tile::SIZE;
 
 Tile::Tile(TileID id,
            bool isObstacle,

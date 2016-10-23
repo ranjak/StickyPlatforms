@@ -1,6 +1,8 @@
 #ifndef GAMEVECTOR_H
 #define GAMEVECTOR_H
 
+#include <iostream>
+
 namespace game {
 
 
@@ -8,18 +10,17 @@ template<typename T>
 class Vector
 {
 public:
-  Vector();
-  Vector(T x, T y);
+  constexpr Vector() : x(), y() {}
+  constexpr Vector(T x, T y) : x(x), y(y) {}
 
   Vector<T> operator /(float scalar);
   Vector<T> operator *(float scalar);
 
   Vector<T> &operator +=(const Vector<T> &right);
 
-  friend Vector<T> operator +(Vector<T> left, const Vector<T> &right)
+  friend std::ostream &operator<<(std::ostream &os, const Vector &v)
   {
-    left += right;
-    return left;
+    return os << "("<<v.x<<","<<v.y<<")";
   }
 
 public:
@@ -27,7 +28,24 @@ public:
   T y;
 };
 
+template<typename T>
+inline Vector<T> operator +(Vector<T> left, const Vector<T> &right)
+{
+  left += right;
+  return left;
+}
 
+template<typename T>
+inline bool operator ==(const Vector<T> &left, const Vector<T> &right)
+{
+  return left.x == right.x && left.y == right.y;
+}
+
+template<typename T>
+inline bool operator !=(const Vector<T> &left, const Vector<T> &right)
+{
+  return !(left == right);
+}
 
 } //namespace game
 

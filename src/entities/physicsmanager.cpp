@@ -47,10 +47,16 @@ bool PhysicsManager::moveObject(MovingPhysicsComponent *object, const Vector<flo
   movementArea.w = std::max(box.w, (movementArea.x == box.x) ? (destFacingPoint.x - box.x) : (box.x + box.w - destFacingPoint.x));
   movementArea.h = std::max(box.h, (movementArea.y == box.y) ? (destFacingPoint.y - box.y) : (box.y + box.h - destFacingPoint.y));
 
-  std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(movementArea);
+  std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(movementArea, *object);
 
-  std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) { if (p->isCollidable() && p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
-  std::for_each(mMovingComps.begin(), mMovingComps.end(), [&](MovingPhysicsComponent *p) { if (p->isCollidable() && p->isObstacle()) obstacles.push_back(p->entity().getGlobalBox()); });
+  std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) {
+    if (p->isCollidable() && p->isObstacle() && !object->isIgnored(p->entity().id))
+      obstacles.push_back(p->entity().getGlobalBox());
+  });
+  std::for_each(mMovingComps.begin(), mMovingComps.end(), [&](MovingPhysicsComponent *p) {
+    if (p->isCollidable() && p->isObstacle() && !object->isIgnored(p->entity().id))
+      obstacles.push_back(p->entity().getGlobalBox());
+  });
 
   if (direction.x > 0) {
     // Find the closest obstacle on X
@@ -100,7 +106,7 @@ void PhysicsManager::checkCollisions(MovingPhysicsComponent *object)
 
   for (StaticPhysicsComponent *other : mStaticComps) {
 
-    if (other->isCollidable() && box.touches(other->entity().getGlobalBox())) {
+    if (other->isCollidable() && box.touches(other->entity().getGlobalBox()) && !object->isIgnored(other->entity().id)) {
       object->collide(*other);
       other->collide(*object);
     }
@@ -114,23 +120,23 @@ void PhysicsManager::checkCollisions(MovingPhysicsComponent *object)
 
   for (it += 1; it != mMovingComps.end(); it++) {
 
-    if ((*it)->isCollidable() && box.touches((*it)->entity().getGlobalBox())) {
+    if ((*it)->isCollidable() && box.touches((*it)->entity().getGlobalBox()) && !object->isIgnored((*it)->entity().id) && !(*it)->isIgnored(object->entity().id)) {
       object->collide(**it);
       (*it)->collide(*object);
     }
   }
 }
 
-std::vector<Rect<float> > PhysicsManager::getObstaclesInArea(const Rect<float> &area)
+std::vector<Rect<float> > PhysicsManager::getObstaclesInArea(const Rect<float> &area, const MovingPhysicsComponent &object)
 {
-  std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(area);
+  std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(area, object);
 
   std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) {
-    if (p->isCollidable() && p->isObstacle() && area.intersects(p->entity().getGlobalBox()))
+    if (p->isCollidable() && p->isObstacle() && area.intersects(p->entity().getGlobalBox()) && !object.isIgnored(p->entity().id))
       obstacles.push_back(p->entity().getGlobalBox());
   });
   std::for_each(mMovingComps.begin(), mMovingComps.end(), [&](MovingPhysicsComponent *p) {
-    if (p->isCollidable() && p->isObstacle() && area.intersects(p->entity().getGlobalBox()))
+    if (p->isCollidable() && p->isObstacle() && area.intersects(p->entity().getGlobalBox()) && !object.isIgnored(p->entity().id))
       obstacles.push_back(p->entity().getGlobalBox());
   });
 
