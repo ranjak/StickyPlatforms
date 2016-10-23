@@ -17,7 +17,7 @@ struct Message
 
   virtual ~Message() = 0;
 
-  const Type type;
+  Type type;
 };
 
 inline Message::~Message() {}

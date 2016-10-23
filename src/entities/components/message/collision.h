@@ -13,11 +13,11 @@ struct Collision : public Message
   Collision(EntityID entity, const Rect<float> &bbox, const Vector<int> &normal, bool isObstacle) : Message(OnCollision), entity(entity), bbox(bbox), normal(normal), isObstacle(isObstacle) {}
 
   /** ID of the colliding entity, or Entity::none if this is a tile collision */
-  const EntityID entity;
+  EntityID entity;
 
-  const Rect<float> bbox;
+  Rect<float> bbox;
 
-  const Vector<int> normal;
+  Vector<int> normal;
 
   bool isObstacle;
 };

@@ -4,6 +4,7 @@
 #include "movingphysicscomponent.h"
 #include "inputcomponent.h"
 #include "gamestate.h"
+#include "collision.h"
 
 namespace game {
 
@@ -28,12 +29,10 @@ void ClimbingState::enter()
   const Level &level = GameState::current().getLevel();
 
   mEdge.y = level.getPixelSize().y;
-  for (const std::pair<Vector<int>,Vector<int>> &col : mStateMachine.physics().getCollidingTiles()) {
+  for (const Collision &col : mStateMachine.physics().getCollisions()) {
 
-    const Tile &tile = *level.getTileAt(col.first);
-
-    if (tile.isObstacle() && col.second.x == -mClimbDirection && tile.getCollisionBox(col.first).y < mEdge.y)
-      mEdge = tile.getCollisionBox(col.first);
+    if (col.isObstacle && col.normal.x == -mClimbDirection && col.bbox.y < mEdge.y)
+      mEdge = col.bbox;
   }
 
   // Velocity boost to climb over the obstacle

@@ -1,9 +1,9 @@
 #include "climbplatformstate.h"
 #include "movingphysicscomponent.h"
+#include "collision.h"
 #include "actorcontrolcomponent.h"
 #include "gamestate.h"
 #include "world/level.h"
-#include "world/tile.h"
 
 namespace game {
 
@@ -23,18 +23,16 @@ void ClimbPlatformState::enter()
   physics.setGravityEnabled(false);
   physics.setIgnoresObstacles(true);
 
-  const std::vector<std::pair<Vector<int>, Vector<int>>> &tileCollisions = physics.getCollidingTiles();
+  const std::vector<Collision> &collisions = physics.getCollisions();
 
   // Find the highest tile we need to climb over
   // Remember, higher = lower y!
   mPlatform.y = level.getPixelSize().y;
 
-  for (const std::pair<Vector<int>,Vector<int>> &col : tileCollisions) {
+  for (const Collision &col : collisions) {
 
-    const Tile &tile = *level.getTileAt(col.first);
-
-    if (tile.isObstacle() && col.second.y > 0 && tile.getCollisionBox(col.first).y < mPlatform.y)
-      mPlatform = tile.getCollisionBox(col.first);
+    if (col.isObstacle && col.normal.y > 0 && col.bbox.y < mPlatform.y)
+      mPlatform = col.bbox;
   }
 
   physics.velocity().y = -400.f;

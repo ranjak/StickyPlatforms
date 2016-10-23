@@ -3,6 +3,7 @@
 
 #include "component.h"
 #include "entity.h"
+#include "collision.h"
 #include <vector>
 
 namespace game {
@@ -22,6 +23,8 @@ public:
 
   Entity &entity() { return mEntity; }
 
+  const std::vector<Collision> &getCollisions() { return mCollisions; }
+
   void collide(PhysicsComponent &other);
 
 protected:
@@ -31,7 +34,7 @@ protected:
   bool mIsCollidable;
   bool mIsObstacle;
   Entity &mEntity;
-  std::vector<EntityID> mCollidingEntities;
+  std::vector<Collision> mCollisions;
 };
 
 } // namespace game

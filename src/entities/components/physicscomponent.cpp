@@ -10,23 +10,23 @@ PhysicsComponent::PhysicsComponent(Entity &owner, bool isObstacle) :
   mIsCollidable(true),
   mIsObstacle(isObstacle),
   mEntity(owner),
-  mCollidingEntities()
+  mCollisions()
 {
 
 }
 
 void PhysicsComponent::update(uint32_t step, GameState &game)
 {
-  mCollidingEntities.clear();
+  mCollisions.clear();
 }
 
 void PhysicsComponent::collide(PhysicsComponent &other)
 {
-  mCollidingEntities.push_back(other.entity().id);
-
   Vector<int> normal = mEntity.getGlobalBox().getCollisionNormal(other.entity().getGlobalBox());
 
-  mEntity.sendMessage(std::make_unique<Collision>(other.entity().id, other.entity().getGlobalBox(), normal, other.isObstacle()));
+  auto it = mCollisions.emplace(mCollisions.end(), other.entity().id, other.entity().getGlobalBox(), normal, other.isObstacle());
+
+  mEntity.sendMessage(std::make_unique<Collision>(*it));
 }
 
 } // namespace game

@@ -5,8 +5,8 @@
 #include "gamestate.h"
 #include "inputcomponent.h"
 #include "world/level.h"
-#include "world/tile.h"
 #include "physicsmanager.h"
+#include "collision.h"
 #include "util.h"
 #include "log.h"
 
@@ -45,32 +45,32 @@ void WallHugState::update(uint32_t step, GameState &game)
   }
 
   // Make sure we're still in contact with the wall
-  const std::vector<std::pair<Vector<int>, Vector<int>>> &tileCollisions = mStateMachine.physics().getCollidingTiles();
+  const std::vector<Collision> &collisions = mStateMachine.physics().getCollisions();
   Level &level = game.getLevel();
 
   int wallNormal = 0;
   bool canClimb = true;
 
-  for (const std::pair<Vector<int>,Vector<int>> &col : tileCollisions) {
+  for (const Collision &col : collisions) {
 
-    if (game.getLevel().getTileAt(col.first)->isObstacle()) {
+    if (col.isObstacle) {
 
-      canClimb = canClimb && col.second.y <= 0;
-      if (col.second.x != 0)
-        wallNormal = col.second.x;
+      canClimb = canClimb && col.normal.y <= 0;
+      if (col.normal.x != 0)
+        wallNormal = col.normal.x;
 
       // If we're trying to climb, make sure we can
-      if (canClimb && col.second.x != 0 && mStateMachine.input().getDirection() == -col.second.x) {
+      if (canClimb && col.normal.x != 0 && mStateMachine.input().getDirection() == -col.normal.x) {
 
-        // Make sure we aren't too low below floor level
-        const Rect<float> &tileBox = level.getTileAt(col.first)->getCollisionBox(col.first);
         const Rect<float> &myBox = mStateMachine.entity().getGlobalBox();
 
+        // Make sure we aren't too low below floor level
         // Also check the climb animation won't be blocked
-        if (distance(tileBox.y, myBox.y) <= CLIMB_TOLERANCE &&
-            level.entities().getPhysics().getObstaclesInArea(Rect<float>(myBox.x, tileBox.y-myBox.h, myBox.w+1.f, myBox.h)).empty())
+        // TODO check entities
+        if (distance(col.bbox.y, myBox.y) <= CLIMB_TOLERANCE &&
+            level.entities().getPhysics().getObstaclesInArea(Rect<float>(myBox.x, col.bbox.y-myBox.h, myBox.w+1.f, myBox.h)).empty())
         {
-          glog(Log::DBG, "Climbing! FloorY="<<tileBox.y<<",ActorY="<<myBox.y);
+          glog(Log::DBG, "Climbing! FloorY="<<col.bbox.y<<",ActorY="<<myBox.y);
           mStateMachine.setState(ActorControlComponent::CLIMB);
           return;
         }

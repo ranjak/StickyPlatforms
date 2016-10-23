@@ -42,8 +42,6 @@ public:
   bool ignoresObstacles() { return mIgnoresObstacles; }
   void setIgnoresObstacles(bool ignore);
 
-  const std::vector<std::pair<Vector<int>, Vector<int>>> &getCollidingTiles() const;
-
   void collide(PhysicsComponent &other);
   void collide(Tile &tile, const Vector<int> &location);
 
