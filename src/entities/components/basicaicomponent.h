@@ -9,11 +9,12 @@
 
 namespace game {
 
+class MovingPhysicsComponent;
 
 class BasicAiComponent : public AutoInputComponent
 {
 public:
-  BasicAiComponent();
+  BasicAiComponent(MovingPhysicsComponent &physics);
 
   void update(uint32_t step, GameState &game) override;
 
@@ -30,6 +31,7 @@ private:
 private:
   int mDirection;
   std::queue<std::unique_ptr<Message>, std::list<std::unique_ptr<Message>>> mMsgQueue;
+  MovingPhysicsComponent &mPhysics;
 };
 
 } // namespace game

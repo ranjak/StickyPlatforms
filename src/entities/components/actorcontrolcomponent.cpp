@@ -21,8 +21,7 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
   mJumpState(*this, maxSpeed, maxAirSpeed),
   mClingState(*this),
   mClimbState(*this),
-  mClimbPlatformState(*this),
-  mWallHugState(*this)
+  mClimbPlatformState(*this)
 {
 
 }
@@ -69,9 +68,6 @@ void ActorControlComponent::setState(State newState)
     break;
   case CLIMB_PLATFORM:
     mCurrentState = &mClimbPlatformState;
-    break;
-  case WALLHUG:
-    mCurrentState = &mWallHugState;
     break;
   default:
     game::error("Entity "+mEntity.getName()+": unknown state: "+std::to_string(newState));

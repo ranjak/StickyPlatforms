@@ -18,6 +18,8 @@ JumpState::JumpState(ActorControlComponent &stateMachine, float maxSpeed, float 
 
 void JumpState::enter()
 {
+  AirClingableState::enter();
+
   mImpulseEndTimestamp = GameState::current().now() + (mImpulseTimeFrame * 1000);
 
   mStateMachine.physics().velocity().y = mInitialSpeed;

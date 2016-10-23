@@ -19,22 +19,39 @@ namespace game {
 namespace {
 /** Zone in pixels above and below an edge where a climb animation can be triggered */
 const float CLIMB_TOLERANCE = 5.f;
+/** Time frame in milliseconds during which the user can perform a walljump */
+const int WALLJUMP_TIME = 100;
 }
 
 AirState::AirState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed) :
     HorizControlState(stateMachine, 1200.f, maxSpeed),
-    mMaxAirSpeed(maxAirSpeed)
+    mMaxAirSpeed(maxAirSpeed),
+    mWallHugNormal(0),
+    mWalljumpTimeFrame(WALLJUMP_TIME)
 {
 
 }
 
+void AirState::enter()
+{
+  mWallHugNormal = 0;
+  mWalljumpTimeFrame = WALLJUMP_TIME;
+}
+
 void AirState::update(std::uint32_t step, GameState &game)
 {
-  HorizControlState::update(step, game);
   MovingPhysicsComponent &physics = mStateMachine.physics();
 
-  // Restrict movement in the air
-  mMaxSpeed = std::max(std::abs(physics.velocity().x), mMaxAirSpeed);
+  if (mWallHugNormal != 0) {
+    updateWallHug(step, game);
+  }
+  else {
+
+    HorizControlState::update(step, game);
+
+    // Restrict movement in the air
+    mMaxSpeed = std::max(std::abs(physics.velocity().x), mMaxAirSpeed);
+  }
 
   if (physics.isOnGround() && physics.velocity().y >= 0.f)
     mStateMachine.setState(ActorControlComponent::GROUND);
@@ -47,21 +64,37 @@ void AirState::receiveMessage(Message &msg)
     Collision &col = static_cast<Collision &>(msg);
 
     // Special behavior if we're hugging a wall
-    if (col.isObstacle && col.normal.x != 0) {
+    if (col.isObstacle && col.normal.x != 0 && mStateMachine.input().getDirection() != col.normal.x) {
+      mWallHugNormal = col.normal.x;
+    }
+  }
+}
 
-      //mStateMachine.setState(ActorControlComponent::WALLHUG);
+void AirState::updateWallHug(std::uint32_t step, GameState &game)
+{
+  MovingPhysicsComponent &physics = mStateMachine.physics();
 
-      InputComponent &input = mStateMachine.input();
-      // Walljump
-      if (input.isHit(Command::JUMP)/* && input.getDirection() == col.normal.x*/) {
-        glog(Log::DBG, "Walljump!");
-        mStateMachine.physics().velocity().x = col.normal.x * mStateMachine.getMaxSpeed();
-        mStateMachine.setState(ActorControlComponent::JUMP);
-      }
-      // Climb an edge
-      else if (input.getDirection() == -col.normal.x) {
+  // Friction against the wall
+  if (physics.velocity().y > 0) {
+    physics.addAcceleration(Vector<float>(0.f, -MovingPhysicsComponent::GRAVITY/2.f));
+  }
 
-        const Level &level = GameState::current().getLevel();
+  // Make sure we're still in contact with the wall
+  const std::vector<Collision> &collisions = mStateMachine.physics().getCollisions();
+  Level &level = game.getLevel();
+
+  bool wallContact = false;
+  bool canClimb = true;
+
+  for (const Collision &col : collisions) {
+
+    if (col.isObstacle && col.normal.x == mWallHugNormal) {
+
+      wallContact = true;
+      canClimb = canClimb && col.normal.y <= 0;
+
+      // If we're trying to climb, make sure we can
+      if (canClimb && mStateMachine.input().getDirection() == -mWallHugNormal) {
 
         const Rect<float> &myBox = mStateMachine.entity().getGlobalBox();
         // The total space the climbing animation will take
@@ -72,15 +105,42 @@ void AirState::receiveMessage(Message &msg)
           myBox.h
         };
 
-
         // Climb if there aren't obstacles above
-        if (distance(col.bbox.y, myBox.y) <= CLIMB_TOLERANCE && level.getObstaclesInArea(climbBox).empty()) {
+        // TODO check entities
+        if (distance(col.bbox.y, myBox.y) <= CLIMB_TOLERANCE &&
+            level.entities().getPhysics().getObstaclesInArea(climbBox).empty())
+        {
           glog(Log::DBG, "Climbing! FloorY="<<col.bbox.y<<",ActorY="<<myBox.y);
           mStateMachine.setState(ActorControlComponent::CLIMB);
+          return;
         }
       }
     }
+    else if (col.isObstacle && col.normal.y > 0) {
+      canClimb = false;
+    }
   }
+
+  // Check whether the player wants to do a walljump
+  if (wallContact && mWalljumpTimeFrame >= 0 && mStateMachine.input().getDirection() == mWallHugNormal) {
+
+    if (mStateMachine.input().isHit(Command::JUMP)) {
+      glog(Log::DBG, "Walljump!");
+
+      physics.velocity().x = mWallHugNormal * mStateMachine.getMaxSpeed();
+      mStateMachine.setState(ActorControlComponent::JUMP);
+    }
+
+    mWalljumpTimeFrame -= step;
+  }
+  // If the player released the direction before the end of the timeframe without jumping, let go of the wall
+  else if (!wallContact || mWalljumpTimeFrame < WALLJUMP_TIME) {
+    glog(Log::DBG, "Lost wall contact");
+
+    mWallHugNormal = 0;
+    mWalljumpTimeFrame = WALLJUMP_TIME;
+  }
+
 }
 
 }

@@ -30,8 +30,8 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     Entity *enemy = manager.makeEntity(pos, name, EntityGroup::ENEMY, std::make_unique<Rectangle>(pos.w, pos.h, Color::RED), parent);
 
-    std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*enemy);
+    std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>(*physics);
     std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*enemy, *physics, *input, 75.f, 75.f);
 
     enemy->addComponent(std::move(input));
