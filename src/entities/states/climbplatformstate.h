@@ -22,12 +22,16 @@ public:
 
   void exit() override;
 
+  void receiveMessage(Message &msg) override;
+
 private:
   // Tallest platform over which we're climbing
   Rect<float> mPlatform;
   // Obstacles we need to go through in order to climb
   std::vector<EntityID> mEntityObstacles;
   std::vector<Vector<int>> mTileObstacles;
+  // If climbing was interrupted (unexpected obstacle)
+  bool mFalling;
 };
 
 } // namespace game

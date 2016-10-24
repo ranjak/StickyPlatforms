@@ -13,13 +13,15 @@ ClimbPlatformState::ClimbPlatformState(ActorControlComponent &stateMachine) :
   ActorState(stateMachine),
   mPlatform(),
   mEntityObstacles(),
-  mTileObstacles()
+  mTileObstacles(),
+  mFalling(false)
 {
 
 }
 
 void ClimbPlatformState::enter()
 {
+  mFalling = false;
   MovingPhysicsComponent &physics = mStateMachine.physics();
   const Level &level = GameState::current().getLevel();
 
@@ -34,7 +36,7 @@ void ClimbPlatformState::enter()
   // Ignore collisions with obstacles we need to pass through in order to climb
   for (const Collision &col : collisions) {
 
-    if (col.isObstacle && col.normal.y > 0) {
+    if (col.isObstacle /*&& col.normal.y > 0*/) {
 
       if (col.entity != Entity::none) {
         physics.setIgnored(col.entity, true);
@@ -57,11 +59,16 @@ void ClimbPlatformState::enter()
 
 void ClimbPlatformState::update(uint32_t step, GameState &game)
 {
-  // Over the platform ?
   const Rect<float> &box = mStateMachine.entity().getGlobalBox();
 
+  // Over the platform ?
   if (box.y + box.h <= mPlatform.y) {
+    mStateMachine.physics().velocity().y = 0.f;
     mStateMachine.setState(ActorControlComponent::AIR_CLINGABLE);
+  }
+  // Climbing interrupted -> fall through the platform
+  else if (mFalling && box.y >= mPlatform.y+mPlatform.h) {
+    mStateMachine.setState(ActorControlComponent::FALL);
   }
 }
 
@@ -70,7 +77,6 @@ void ClimbPlatformState::exit()
   MovingPhysicsComponent &physics = mStateMachine.physics();
 
   physics.setGravityEnabled(true);
-  physics.velocity().y = 0.f;
 
   // Re-enable collisions for ignored obstacles
   for (EntityID id : mEntityObstacles) {
@@ -82,6 +88,17 @@ void ClimbPlatformState::exit()
 
   mEntityObstacles.clear();
   mTileObstacles.clear();
+}
+
+void ClimbPlatformState::receiveMessage(Message &msg)
+{
+  if (msg.type == Message::OnCollision) {
+    mFalling = true;
+    mStateMachine.physics().setGravityEnabled(true);
+  }
+  else {
+    ActorState::receiveMessage(msg);
+  }
 }
 
 } // namespace game
