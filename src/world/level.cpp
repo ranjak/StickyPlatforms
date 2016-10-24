@@ -40,8 +40,8 @@ void Level::draw(Display &target, const GameState &game) const
   Rect<float> viewport = cam.getViewport();
 
   // The camera might be too big for the level
-  viewport.w = std::min(static_cast<int>(viewport.w), mSize.x * Tile::SIZE);
-  viewport.h = std::min(static_cast<int>(viewport.h), mSize.y * Tile::SIZE);
+  viewport.w = std::min(viewport.w, static_cast<float>(mSize.x * Tile::SIZE));
+  viewport.h = std::min(viewport.h, static_cast<float>(mSize.y * Tile::SIZE));
 
   // Draw tiles. They are drawn by column.
   for (int i=viewport.x / Tile::SIZE; i<=(viewport.x+viewport.w - 1) / Tile::SIZE; i++) {

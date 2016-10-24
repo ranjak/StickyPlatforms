@@ -7,7 +7,7 @@
 namespace game {
 
 class ActorControlComponent;
-class Message;
+struct Message;
 
 /**
  * @brief This state is a short animation during which the actor climbs over an edge.

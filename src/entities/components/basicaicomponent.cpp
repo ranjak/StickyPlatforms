@@ -18,10 +18,10 @@ BasicAiComponent::BasicAiComponent(MovingPhysicsComponent &physics) :
 
 void BasicAiComponent::receiveMessage(Message &message)
 {
-  switch (message.type) {
-  default:
-    break;
-  }
+  //switch (message.type) {
+  //default:
+  //  break;
+  //}
 }
 
 void BasicAiComponent::processMessages()
@@ -30,10 +30,10 @@ void BasicAiComponent::processMessages()
 
     Message *msg = mMsgQueue.front().get();
 
-    switch (msg->type) {
-    default:
-      break;
-    }
+    //switch (msg->type) {
+    //default:
+    //  break;
+    //}
 
     mMsgQueue.pop();
   }
@@ -43,7 +43,7 @@ void BasicAiComponent::update(uint32_t step, GameState &game)
 {
   AutoInputComponent::update(step, game);
 
-  processMessages();
+  //processMessages();
 
   // Turn around when we reach the edge of a platform or a wall
 

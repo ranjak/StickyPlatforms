@@ -7,7 +7,7 @@ namespace game {
 
 class Entity;
 class GameState;
-class Message;
+struct Message;
 
 class Component
 {

@@ -3,6 +3,7 @@
 #include "test/test.h"
 #include "world/level.h"
 #include <algorithm>
+#include <stdexcept>
 
 namespace game {
 
@@ -18,12 +19,15 @@ const GameState &GameState::current()
 GameState::GameState(Display &display, InputHandler &input, int camW, int camH) :
   mCommands(input),
   mLevel(std::move(Test::makeLevel(display))),
-  mCamera(0, 0, camW, camH),
+  mCamera(0.f, 0.f, static_cast<float>(camW), static_cast<float>(camH)),
   mGameTime(0)
 {
   display.setCameraSize(camW, camH);
   currentGame = this;
-  mLevel->start();
+  if (mLevel)
+    mLevel->start();
+  else
+    throw std::runtime_error("Failed to load level");
 }
 
 

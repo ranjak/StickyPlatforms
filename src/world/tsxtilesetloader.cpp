@@ -39,9 +39,9 @@ Tileset TSXTilesetLoader::loadTileset(const std::string &file, Display &display)
   // TODO handle "special" tiles
   if (singleImage) {
     for (size_t i=0; i<tsx.tileset.tileCount; i++) {
-      Rect<int> imgPos((i%tsx.tileset.columns)*tileSize.x, (i/tsx.tileset.columns)*tileSize.y, tileSize.x, tileSize.y);
+      Rect<int> imgPos(static_cast<int>(i%tsx.tileset.columns)*tileSize.x, static_cast<int>(i/tsx.tileset.columns)*tileSize.y, tileSize.x, tileSize.y);
 
-      tiles.emplace_back(i, true, tilesetImg, imgPos);
+      tiles.emplace_back(static_cast<TileID>(i), true, tilesetImg, imgPos);
     }
   }
   else {
@@ -56,10 +56,10 @@ Tileset TSXTilesetLoader::loadTileset(const std::string &file, Display &display)
         TMX::Object &obj = tile.collisions.objects[0];
         Rect<float> collision(obj.x*xRatio, obj.y*yRatio, obj.width*xRatio, obj.height*yRatio);
 
-        tiles.emplace_back(tile.id, true, tileImg, Rect<int>{}, collision);
+        tiles.emplace_back(static_cast<TileID>(tile.id), true, tileImg, Rect<int>{}, collision);
       }
       else
-        tiles.emplace_back(tile.id, true, tileImg);
+        tiles.emplace_back(static_cast<TileID>(tile.id), true, tileImg);
     }
   }
 

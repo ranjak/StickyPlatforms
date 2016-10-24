@@ -7,6 +7,7 @@
 #include "collision.h"
 #include "gamevector.h"
 #include <vector>
+#include <algorithm>
 
 namespace game {
 

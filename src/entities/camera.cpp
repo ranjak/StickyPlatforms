@@ -8,7 +8,7 @@
 namespace game {
 
 
-Camera::Camera(int x, int y, int w, int h) :
+Camera::Camera(float x, float y, float w, float h) :
   mViewport(x, y, w, h)
 {
 
@@ -43,13 +43,15 @@ Vector<float> Camera::toCamCoords(const Vector<float> &levelCoords) const
 }
 
 template<typename T>
-Rect<T> Camera::toCamCoords(const Rect<T> &levelCoords) const
+Rect<T> Camera::toCamCoords(Rect<T> levelCoords) const
 {
-  return Rect<T>(levelCoords.x - mViewport.x, levelCoords.y - mViewport.y, levelCoords.w, levelCoords.h);
+  levelCoords.x -= static_cast<T>(mViewport.x);
+  levelCoords.y -= static_cast<T>(mViewport.y);
+  return levelCoords;
 }
 
 
-template Rect<int> Camera::toCamCoords(const Rect<int> &levelCoords) const;
-template Rect<float> Camera::toCamCoords(const Rect<float> &levelCoords) const;
+template Rect<int> Camera::toCamCoords(Rect<int> levelCoords) const;
+template Rect<float> Camera::toCamCoords(Rect<float> levelCoords) const;
 
 }

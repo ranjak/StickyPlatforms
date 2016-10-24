@@ -6,7 +6,7 @@
 
 namespace game {
 
-class Message;
+struct Message;
 
 class DamageComponent : public Component
 {

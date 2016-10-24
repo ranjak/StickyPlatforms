@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "log.h"
 #include <cmath>
+#include <cassert>
 
 namespace game {
 
@@ -14,13 +15,14 @@ JumpState::JumpState(ActorControlComponent &stateMachine, float maxSpeed, float 
   mImpulseTimeFrame(impulseTimeFrame),
   mInitialSpeed(computeInitialSpeed())
 {
+  assert(impulseTimeFrame >= 0.f);
 }
 
 void JumpState::enter()
 {
   AirClingableState::enter();
 
-  mImpulseEndTimestamp = GameState::current().now() + (mImpulseTimeFrame * 1000);
+  mImpulseEndTimestamp = GameState::current().now() + static_cast<std::uint32_t>(mImpulseTimeFrame * 1000.f);
 
   mStateMachine.physics().velocity().y = mInitialSpeed;
   mStateMachine.physics().setGravityEnabled(false);

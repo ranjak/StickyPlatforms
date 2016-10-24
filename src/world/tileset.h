@@ -16,7 +16,7 @@ public:
   Tile &operator[] (TileID id);
   const Tile &operator[](TileID id) const;
 
-  int numTiles() const { return mTiles.size(); }
+  int numTiles() const { return static_cast<int>(mTiles.size()); }
 
   int maxId() const { return mMaxId; }
 

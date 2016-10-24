@@ -7,7 +7,7 @@ namespace game {
 
 class ActorControlComponent;
 class GameState;
-class Message;
+struct Message;
 
 /**
  * @brief The current state an actor is in.

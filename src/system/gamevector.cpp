@@ -6,13 +6,13 @@ namespace game {
 template<typename T>
 Vector<T> Vector<T>::operator/(float scalar)
 {
-  return Vector<T>(x / scalar, y / scalar);
+  return Vector<T>(static_cast<T>(x / scalar), static_cast<T>(y / scalar));
 }
 
 template<typename T>
 Vector<T> Vector<T>::operator*(float scalar)
 {
-  return Vector<T>(x * scalar, y * scalar);
+  return Vector<T>(static_cast<T>(x * scalar), static_cast<T>(y * scalar));
 }
 
 template<typename T>

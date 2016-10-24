@@ -12,7 +12,7 @@ namespace game {
 class Camera
 {
 public:
-  Camera(int x, int y, int w, int h);
+  Camera(float x, float y, float w, float h);
 
   void update(std::uint32_t step, GameState &game);
 
@@ -21,7 +21,7 @@ public:
   Vector<float> toCamCoords(const Vector<float>& levelCoords) const;
 
   template<typename T>
-  Rect<T> toCamCoords(const Rect<T>& levelCoords) const;
+  Rect<T> toCamCoords(Rect<T> levelCoords) const;
 
 private:
   Rect<float> mViewport;

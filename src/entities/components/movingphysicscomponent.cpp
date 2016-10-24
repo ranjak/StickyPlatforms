@@ -53,7 +53,7 @@ void MovingPhysicsComponent::update(uint32_t step, GameState &game)
   // Compute new position
   Rect<float> box = mEntity.getGlobalBox();
   // Only use integers for position. Store fractional part in a remainder.
-  mRemainder += mVelocity * step / 1000.f;
+  mRemainder += mVelocity * static_cast<float>(step) / 1000.f;
 
   Vector<float> destination(0.f, 0.f);
   mRemainder.x = std::modf(mRemainder.x, &destination.x);

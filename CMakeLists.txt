@@ -154,7 +154,9 @@ target_link_libraries(${PROJECT_NAME}
 
 set_property(TARGET game1 PROPERTY CXX_STANDARD 11)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter")
+if (NOT MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter")
+endif()
 
 if (NOT CMAKE_BUILD_TYPE MATCHES [Dd]ebug)
     add_definitions(-DNDEBUG)
