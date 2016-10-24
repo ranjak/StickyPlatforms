@@ -13,7 +13,6 @@ namespace game {
 
 HorizControlState::HorizControlState(ActorControlComponent &stateMachine, float acceleration, float maxSpeed) :
   ActorState(stateMachine),
-  mDirection(1),
   mAcceleration(acceleration),
   mMaxSpeed(maxSpeed)
 {
@@ -44,18 +43,13 @@ void HorizControlState::update(std::uint32_t step, GameState &game)
   }
 
   if (inputDirection != 0)
-    mDirection = inputDirection;
+    mStateMachine.setDirection(inputDirection);
 
   if (mStateMachine.input().isHit(Command::SWORD)) {
     WeaponComponent *weap = mStateMachine.entity().getComponent<WeaponComponent>();
     if (weap)
-      weap->swing(mDirection);
+      weap->swing(mStateMachine.getDirection());
   }
-}
-
-int HorizControlState::getDirection()
-{
-  return mDirection;
 }
 
 }

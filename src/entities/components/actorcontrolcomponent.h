@@ -45,8 +45,13 @@ public:
 
   float getMaxSpeed() const { return mMaxSpeed; }
 
+  int getDirection() const;
+  void setDirection(int direction);
+
 private:
   float mMaxSpeed;
+  // Direction the actor is facing. -1=left, 1=right, 0=unknown
+  int mDirection;
 
   ActorState *mCurrentState;
   State mNextState;

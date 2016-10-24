@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="15" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="22">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="15" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="24">
  <tileset firstgid="1" source="grass.tsx"/>
  <layer name="tiles" width="50" height="15">
   <data encoding="csv">
@@ -41,7 +41,9 @@
    <polyline points="0,0 146.667,-77.3333 186.667,36"/>
   </object>
   <object id="20" name="playerStart" type="PlayerStart" x="0" y="1536" width="128" height="128"/>
-  <object id="21" name="badguy" type="Enemy" x="1408" y="1024" width="64" height="64"/>
+  <object id="21" name="badguy" type="Enemy" x="1856" y="1088" width="64" height="64"/>
+  <object id="22" name="badguy" type="Enemy" x="3456" y="448" width="64" height="64"/>
+  <object id="23" name="badguy" type="Enemy" x="2208" y="832" width="64" height="64"/>
  </objectgroup>
  <imagelayer name="image"/>
 </map>

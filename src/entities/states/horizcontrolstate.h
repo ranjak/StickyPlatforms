@@ -14,10 +14,7 @@ public:
 
   virtual void update(std::uint32_t step, GameState &game) override;
 
-  int getDirection() override;
-
 protected:
-  int mDirection;
   float mAcceleration;
   float mMaxSpeed;
 };

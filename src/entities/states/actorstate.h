@@ -29,12 +29,6 @@ public:
 
     virtual void receiveMessage(Message &msg);
 
-    /**
-     * @brief getDirection Get the actor's facing direction.
-     * @return -1 if the actor is facing left, +1 if it's facing right.
-     */
-    virtual int getDirection();
-
 protected:
     ActorControlComponent& mStateMachine;
 };

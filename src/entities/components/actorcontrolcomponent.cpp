@@ -3,6 +3,8 @@
 #include "make_unique.h"
 #include "log.h"
 #include "entity.h"
+#include "movingphysicscomponent.h"
+#include <cassert>
 
 namespace game {
 
@@ -77,6 +79,22 @@ void ActorControlComponent::setState(State newState)
   }
 
   mCurrentState->enter();
+}
+
+int ActorControlComponent::getDirection() const
+{
+  // Direction set by the state?
+  if (mDirection != 0)
+    return mDirection;
+
+  // Movement direction? If none, face right by default.
+  return (mPhysics.velocity().x < 0.f) ? -1 : 1;
+}
+
+void ActorControlComponent::setDirection(int direction)
+{
+  assert(-1 <= direction && direction <= 1);
+  mDirection = direction;
 }
 
 

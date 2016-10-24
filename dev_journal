@@ -102,3 +102,12 @@ O9/03/2016
   For today, I'm going to create one or more levels to try them out more thoroughly.
   For 10/24:
     * Have definitive player movement scheme.
+    
+10/24/2016
+
+  I'm happy with the current player moveset. It might need a few minor tweaks, but appears solid so far.
+  Next step is to make the game look more like a game: For 10/26:
+    * Add success/failure states, level restart on failure (death)
+    * Add UI: health bar, informative text
+    * Add a level playlist feature
+  Once this is done, I could start working on making actual levels for the game.
