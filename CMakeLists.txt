@@ -71,7 +71,6 @@ set(SRC_LIST
     src/entities/components/damagecomponent.cpp
 )
 
-# Header-only sources, explicitly added so that IDEs can see them
 set(HEADER_LIST
   src/system/make_unique.h
   src/entities/entitygroup.h
@@ -81,6 +80,53 @@ set(HEADER_LIST
   src/entities/components/message/directionchangedmsg.h
   src/entities/components/message/collision.h
   src/entities/components/message/childremovedmsg.h
+  src/system/inputhandler.h
+  src/system/log.h
+  src/system/display.h
+  src/system/gamevector.h
+  src/system/color.h
+  src/system/rect.h
+  src/system/util.h
+  src/system/util_sdl.h
+  src/system/image.h
+  src/system/resource.h
+  src/system/mainloop.h
+  src/gamestate.h
+  src/gamecommands.h
+  src/graphics.h
+  src/rectangle.h
+  src/world/level.h
+  src/world/tile.h
+  src/world/tileset.h
+  src/world/tmxmaploader.h
+  src/world/tsxtilesetloader.h
+  src/test/test.h
+  src/entities/entity.h
+  src/entities/camera.h
+  src/entities/entityfactory.h
+  src/entities/entitymanager.h
+  src/entities/physicsmanager.h
+  src/entities/states/actorstate.h
+  src/entities/states/horizcontrolstate.h
+  src/entities/states/groundstate.h
+  src/entities/states/airstate.h
+  src/entities/states/airclingablestate.h
+  src/entities/states/jumpstate.h
+  src/entities/states/clingstate.h
+  src/entities/states/climbingstate.h
+  src/entities/states/climbplatformstate.h
+  src/entities/states/fallstate.h
+  src/entities/components/physicscomponent.h
+  src/entities/components/staticphysicscomponent.h
+  src/entities/components/movingphysicscomponent.h
+  src/entities/components/playerinputcomponent.h
+  src/entities/components/autoinputcomponent.h
+  src/entities/components/basicaicomponent.h
+  src/entities/components/actorcontrolcomponent.h
+  src/entities/components/swordcomponent.h
+  src/entities/components/weaponcomponent.h
+  src/entities/components/healthcomponent.h
+  src/entities/components/damagecomponent.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)
