@@ -7,6 +7,7 @@
 namespace game {
 
 class ActorControlComponent;
+class Message;
 
 /**
  * @brief This state is a short animation during which the actor climbs over an edge.
@@ -21,6 +22,8 @@ public:
   void update(uint32_t step, GameState &game) override;
 
   void exit() override;
+
+  void receiveMessage(Message &msg) override;
 
 private:
   int mClimbDirection;

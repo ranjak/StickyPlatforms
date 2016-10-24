@@ -1,6 +1,5 @@
 #include "actorcontrolcomponent.h"
 #include "weaponcomponent.h"
-#include "airstate.h"
 #include "make_unique.h"
 #include "log.h"
 #include "entity.h"
@@ -21,7 +20,8 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
   mJumpState(*this, maxSpeed, maxAirSpeed),
   mClingState(*this),
   mClimbState(*this),
-  mClimbPlatformState(*this)
+  mClimbPlatformState(*this),
+  mFallState(*this)
 {
 
 }
@@ -68,6 +68,9 @@ void ActorControlComponent::setState(State newState)
     break;
   case CLIMB_PLATFORM:
     mCurrentState = &mClimbPlatformState;
+    break;
+  case FALL:
+    mCurrentState = &mFallState;
     break;
   default:
     game::error("Entity "+mEntity.getName()+": unknown state: "+std::to_string(newState));

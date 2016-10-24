@@ -50,6 +50,7 @@ void ClimbingState::update(uint32_t step, GameState &game)
     velocity.x = mClimbDirection * 100.f;
   }
 
+  // Climbing done
   if (mInitialPosX != pos.x) {
     mStateMachine.setState(ActorControlComponent::AIR);
   }
@@ -61,6 +62,25 @@ void ClimbingState::exit()
 
   mStateMachine.physics().velocity().y = 0.f;
   mStateMachine.physics().velocity().x = 0.f;
+}
+
+void ClimbingState::receiveMessage(Message &msg)
+{
+  // Climb animation is interrupted when an obstacle is encountered
+  if (msg.type == Message::OnCollision) {
+
+    Collision &col = static_cast<Collision &>(msg);
+    const Rect<float> &box = mStateMachine.entity().getGlobalBox();
+
+    if ((col.normal.y > 0 && box.y+box.h > mEdge.y) ||  // Obstacle above
+        (col.normal.x == -mClimbDirection && col.bbox.y < mEdge.y && col.bbox.y+col.bbox.h > mEdge.y-box.h)) // Obstacle right atop the edge
+    {
+      mStateMachine.setState(ActorControlComponent::FALL);
+    }
+  }
+  else {
+    ActorState::receiveMessage(msg);
+  }
 }
 
 } // namespace game
