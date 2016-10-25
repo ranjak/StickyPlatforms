@@ -6,9 +6,10 @@
 
 namespace game {
 
-DamageComponent::DamageComponent(int points, EntityGroup target) :
+DamageComponent::DamageComponent(int points, EntityGroup target, bool ignoreInvincibility) :
   mDamagePoints(points),
-  mTarget(target)
+  mTarget(target),
+  mIgnoreInvincibility(ignoreInvincibility)
 {
 
 }

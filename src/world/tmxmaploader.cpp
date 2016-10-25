@@ -6,6 +6,9 @@
 #include "log.h"
 #include "tsxtilesetloader.h"
 #include "entityfactory.h"
+#include "damagecomponent.h"
+#include "make_unique.h"
+#include "entitygroup.h"
 #include <string>
 #include <memory>
 #include <cctype>
@@ -98,10 +101,13 @@ void TMXMapLoader::loadObjects(TMX::Parser &map, Level &level)
   // Place solid boxes around the map for proper collision handling at the edges
   Vector<float> size = level.getPixelSize();
 
-  level.entities().makeEntity("invisibleWall", "bottom", Rect<float>(0.f, size.y, size.x, 10.f));
+  EntityID bottom = level.entities().makeEntity("invisibleWall", "bottom", Rect<float>(0.f, size.y, size.x, 10.f));
   level.entities().makeEntity("invisibleWall", "top", Rect<float>(0.f, -10.f, size.x, 10.f));
   level.entities().makeEntity("invisibleWall", "left", Rect<float>(-10.f, 0.f, 10.f, size.y));
   level.entities().makeEntity("invisibleWall", "right", Rect<float>(size.x, 0.f, 10.f, size.y));
+
+  // Make the bottom of the level deadly
+  level.entities().getEntity(bottom)->addComponent(std::make_unique<DamageComponent>(99, EntityGroup::ANY, true));
 }
 
 namespace {

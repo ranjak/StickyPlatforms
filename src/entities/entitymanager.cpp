@@ -74,10 +74,10 @@ void EntityManager::update(std::uint32_t step, GameState &game)
 void EntityManager::draw(Display &display, const GameState &game) const
 {
   const Camera &cam = game.getCamera();
-  const Rect<float> &viewport = cam.getViewport();
+//  const Rect<float> &viewport = cam.getViewport();
 
   for (const EntityPair &entity : mEntities) {
-    if (entity.second->isEnabled() && entity.second->getGlobalBox().intersects(viewport))
+    if (entity.second->isEnabled() /*&& entity.second->getGlobalBox().intersects(viewport)*/)
       entity.second->draw(display, cam);
   }
 }

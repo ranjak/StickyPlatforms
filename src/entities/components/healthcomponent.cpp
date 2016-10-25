@@ -29,7 +29,7 @@ void HealthComponent::receiveMessage(Message &msg)
 
       DamageComponent *damage = other->getComponent<DamageComponent>();
 
-      if (damage && (damage->target() & mEntity.group) && GameState::current().now() > mInvincibilityEnd) {
+      if (damage && (damage->target() & mEntity.group) && (damage->ignoresInvincibility() || GameState::current().now() > mInvincibilityEnd)) {
 
         mHealthPoints -= damage->points();
 
