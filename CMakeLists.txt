@@ -30,13 +30,13 @@ set(SRC_LIST
     src/system/rect.cpp
     src/system/util.cpp
     src/system/util_sdl.cpp
-    src/system/image.cpp
     src/system/resource.cpp
     src/system/mainloop.cpp
+    src/system/graphics/image.cpp
+    src/system/graphics/graphics.cpp
+    src/system/graphics/rectangle.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
-    src/graphics.cpp
-    src/rectangle.cpp
     src/world/level.cpp
     src/world/tile.cpp
     src/world/tileset.cpp
@@ -88,13 +88,13 @@ set(HEADER_LIST
   src/system/rect.h
   src/system/util.h
   src/system/util_sdl.h
-  src/system/image.h
   src/system/resource.h
   src/system/mainloop.h
+  src/system/graphics/image.cpp
+  src/system/graphics/graphics.cpp
+  src/system/graphics/rectangle.cpp
   src/gamestate.h
   src/gamecommands.h
-  src/graphics.h
-  src/rectangle.h
   src/world/level.h
   src/world/tile.h
   src/world/tileset.h
@@ -138,12 +138,13 @@ include_directories(
     ${SDL2_IMAGE_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/system/graphics
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/states
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components/message
     ${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tmxparser/include
-	${CMAKE_CURRENT_BINARY_DIR}/include
+    ${CMAKE_CURRENT_BINARY_DIR}/include
 )
 target_link_libraries(${PROJECT_NAME}
     ${SDL2_LIBRARY}
