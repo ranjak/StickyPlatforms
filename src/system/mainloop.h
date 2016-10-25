@@ -5,13 +5,14 @@
 #include "inputhandler.h"
 #include "gamestate.h"
 #include <cstdint>
+#include <string>
 
 namespace game {
 
 class MainLoop
 {
 public:
-  MainLoop();
+  MainLoop(const std::string &initialLevel="assets/maps/test.tmx");
 
   MainLoop(const MainLoop &) = delete;
   MainLoop& operator=(const MainLoop &) = delete;

@@ -16,6 +16,7 @@ namespace game {
 
 
 Level::Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles) :
+  mFilename(),
   mSize(width, height),
   mTilesets(std::move(tilesets)),
   mTiles(std::move(tiles)),
@@ -26,7 +27,10 @@ Level::Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<Tile
 
 std::unique_ptr<Level> Level::loadFromTmx(const std::string &file, Display &display)
 {
-  return TMXMapLoader::load(file, display);
+  std::unique_ptr<Level> level = TMXMapLoader::load(file, display);
+
+  level->mFilename = file;
+  return level;
 }
 
 void Level::update(GameState &game, uint32_t step)
@@ -244,6 +248,11 @@ const Vector<int> &Level::getSize() const
 Vector<float> Level::getPixelSize() const
 {
   return Vector<float>(mSize.x, mSize.y) * Tile::SIZE;
+}
+
+const std::string &Level::getFilename() const
+{
+  return mFilename;
 }
 
 }

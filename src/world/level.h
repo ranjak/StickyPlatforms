@@ -8,6 +8,7 @@
 #include "entity.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 namespace game {
 
@@ -70,7 +71,10 @@ public:
   const Vector<int> &getSize() const;
   Vector<float> getPixelSize() const;
 
+  const std::string &getFilename() const;
+
 private:
+  std::string mFilename;
   // Size in tiles
   Vector<int> mSize;
   TilesetList mTilesets;

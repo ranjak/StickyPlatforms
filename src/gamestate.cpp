@@ -2,6 +2,7 @@
 #include "display.h"
 #include "test/test.h"
 #include "world/level.h"
+#include "log.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -16,31 +17,50 @@ const GameState &GameState::current()
   return *currentGame;
 }
 
-GameState::GameState(Display &display, InputHandler &input, int camW, int camH) :
+GameState::GameState(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel) :
   mCommands(input),
-  mLevel(std::move(Test::makeLevel(display))),
+  mLevel(),
+  mNextLevel(),
   mCamera(0.f, 0.f, static_cast<float>(camW), static_cast<float>(camH)),
-  mGameTime(0)
+  mGameTime(0),
+  mDisplay(display)
 {
   display.setCameraSize(camW, camH);
   currentGame = this;
-  if (mLevel)
-    mLevel->start();
-  else
-    throw std::runtime_error("Failed to load level");
+
+  if (initialLevel.empty())
+    game::error("GameState: cannot start, because no level file was given.");
+
+  mLevel = Level::loadFromTmx(initialLevel, mDisplay);
+  mLevel->start();
 }
 
 
 void GameState::update(uint32_t step)
 {
+  if (!mNextLevel.empty()) {
+    mLevel = Level::loadFromTmx(mNextLevel, mDisplay);
+    mLevel->start();
+    mNextLevel.clear();
+  }
+
   mGameTime += step;
   mLevel->update(*this, step);
   mCamera.update(step, *this);
+
+  // Reload the level if the hero dies
+  if (!mLevel->getHero())
+    loadLevel(mLevel->getFilename());
 }
 
 void GameState::draw(Display &target) const
 {
   mLevel->draw(target, *this);
+}
+
+void GameState::loadLevel(const std::string &levelFile)
+{
+  mNextLevel = levelFile;
 }
 
 GameCommands &GameState::getCommands()

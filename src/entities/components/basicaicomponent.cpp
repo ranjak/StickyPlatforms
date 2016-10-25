@@ -28,7 +28,7 @@ void BasicAiComponent::processMessages()
 {
   while (!mMsgQueue.empty()) {
 
-    Message *msg = mMsgQueue.front().get();
+//    Message *msg = mMsgQueue.front().get();
 
     //switch (msg->type) {
     //default:

@@ -11,10 +11,10 @@
 namespace game {
 
 
-MainLoop::MainLoop() :
+MainLoop::MainLoop(const std::string &initialLevel) :
   mDisplay(1280, 720),
   mInput(),
-  mGame(mDisplay, mInput, 640, 360),
+  mGame(mDisplay, mInput, 640, 360, initialLevel),
   mMaxFrameTime(0),
   mAccuFrameTimes(0),
   mNumFrameTimes(0)

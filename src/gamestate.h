@@ -1,18 +1,19 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include <cstdint>
-#include <memory>
 #include "gamecommands.h"
 #include "camera.h"
 #include "world/level.h"
+#include <cstdint>
+#include <memory>
+#include <string>
 
 namespace game {
 
 extern const std::uint32_t TIMESTEP;
 
-class Level;
 class InputHandler;
+class Display;
 
 /**
  * @brief The GameState class describes the state of the game at a given moment.
@@ -27,7 +28,7 @@ public:
    */
   static const GameState &current();
 
-  GameState(Display &display, InputHandler &input, int camW, int camH);
+  GameState(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel);
 
   /**
    * @brief update Update this state by the given amount of time.
@@ -37,11 +38,16 @@ public:
 
   void draw(Display& target) const;
 
+  /**
+   * @brief loadLevel Set a level file to be loaded at next update, replacing the current level.
+   * @param levelFile Path to the level file (relative to the game's executable directory)
+   */
+  void loadLevel(const std::string &levelFile);
+
   GameCommands &getCommands();
   const GameCommands &getCommands() const;
 
   Level& getLevel();
-
   const Level& getLevel() const;
 
   Camera &getCamera();
@@ -59,10 +65,14 @@ private:
   GameCommands mCommands;
   // Current level
   std::unique_ptr<Level> mLevel;
+  // Level to be loaded at next update
+  std::string mNextLevel;
   // Camera that tracks the player
   Camera mCamera;
   // Simulated game time, advances every time update() is called
   std::uint32_t mGameTime;
+
+  Display &mDisplay;
 };
 
 } //namespace game
