@@ -4,8 +4,11 @@
 #include "world/level.h"
 #include "log.h"
 #include "healthbar.h"
+#include "textwidget.h"
 #include "entity.h"
 #include "healthcomponent.h"
+#include "gamevector.h"
+#include "color.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -32,7 +35,8 @@ GameState::GameState(Display &display, InputHandler &input, int camW, int camH, 
   display.setCameraSize(camW, camH);
   currentGame = this;
 
-  mUI.addWidget<HealthBar>(Rect<float>(10.f, 10.f, 75.f, 15.f));
+  mUI.addWidget<HealthBar>(Rect<float>(20.f, 20.f, 150.f, 30.f));
+  mUI.addWidget<TextWidget>(display, "txt", "Welcome to game1!", 24, Vector<float>(100.f, 100.f));
 
   if (initialLevel.empty())
     game::error("GameState: cannot start, because no level file was given.");

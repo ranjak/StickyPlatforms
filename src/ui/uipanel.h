@@ -21,7 +21,7 @@ public:
   UIWidget *getByName(const std::string &widgetName);
 
   template<typename T, typename... Args>
-  void addWidget(Args... args)
+  void addWidget(Args&&... args)
   {
     mWidgets.push_back(std::make_unique<T>(std::forward<Args>(args)...));
   }

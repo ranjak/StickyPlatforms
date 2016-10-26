@@ -17,6 +17,9 @@ public:
   void draw(Display &target, const Rect<int> &dest) const override;
 
   void setColor(const Color &color) { mColor = color; }
+  void setSize(int w, int h);
+
+  Vector<float> getSize() const;
 
 private:
   // Fill color of the rectangle

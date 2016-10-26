@@ -24,8 +24,8 @@ Tile::Tile(TileID id,
 {
   // Unspecified position in the image ? Take the whole image
   if (mGraphicsPos.w <= 0 && mGraphics) {
-    mGraphicsPos.w = mGraphics->size().x;
-    mGraphicsPos.h = mGraphics->size().y;
+    mGraphicsPos.w = mGraphics->getSize().x;
+    mGraphicsPos.h = mGraphics->getSize().y;
   }
 
   glog(Log::DBG, "New Tile: id=" <<id<<",isObstacle="<<isObstacle<<",graphics="<<graphics<<",graphicsPos="<<graphicsPos<<",collisionBox="<<collisionBox);

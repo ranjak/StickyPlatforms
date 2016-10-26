@@ -1,4 +1,5 @@
 #include "uipanel.h"
+#include "display.h"
 
 namespace game {
 
@@ -9,6 +10,8 @@ UIPanel::UIPanel()
 
 void UIPanel::draw(Display &display) const
 {
+  display.useWindowCoordinates();
+
   for (const std::unique_ptr<UIWidget> &widget : mWidgets) {
     if (!widget->isHidden())
       widget->draw(display);

@@ -9,6 +9,8 @@
 
 namespace game {
 
+template<typename T> class Rect;
+
 class HealthBar : public UIWidget
 {
 public:
@@ -17,6 +19,7 @@ public:
   void draw(Display &display) const override;
 
   void setSize(float w, float h) override;
+  Vector<float> getSize() const override;
 
   void setHealth(int health, int maxHealth);
 

@@ -1,7 +1,7 @@
 #ifndef UIWIDGET_H
 #define UIWIDGET_H
 
-#include "rect.h"
+#include "gamevector.h"
 #include <string>
 
 namespace game {
@@ -11,12 +11,15 @@ class Display;
 class UIWidget
 {
 public:
-  UIWidget(const Rect<float> &bounds, const std::string &name="");
+  UIWidget(const Vector<float> &pos={}, const std::string &name="");
 
   virtual void draw(Display &display) const = 0;
 
   void setPosition(float x, float y);
   virtual void setSize(float w, float h);
+
+  virtual Vector<float> getSize() const = 0;
+  const Vector<float> &getPosition() { return mPos; }
 
   void setHidden(bool hidden);
   bool isHidden() const { return mHidden; }
@@ -24,8 +27,8 @@ public:
 public:
   const std::string name;
 protected:
-  Rect<float> mBounds;
   bool mHidden;
+  Vector<float> mPos;
 };
 
 } // namespace game

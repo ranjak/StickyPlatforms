@@ -2,6 +2,7 @@
 #define DISPLAY_H
 
 #include "SDL.h"
+#include "gamevector.h"
 
 namespace game {
 
@@ -20,6 +21,8 @@ public:
 
   void setCameraSize(int w, int h);
 
+  void useWindowCoordinates();
+
   /**
    * @brief render one frame.
    */
@@ -35,6 +38,8 @@ private:
 private:
   SDL_Window* mWindow;
   SDL_Renderer* mRenderer;
+  // Logical size, different from the window size.
+  Vector<int> mCameraSize;
 };
 
 }

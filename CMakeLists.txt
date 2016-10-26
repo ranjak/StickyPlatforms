@@ -7,6 +7,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 # Project setup
 
@@ -32,10 +33,12 @@ set(SRC_LIST
     src/system/util_sdl.cpp
     src/system/resource.cpp
     src/system/mainloop.cpp
+    src/system/graphics/texture.cpp
     src/system/graphics/image.cpp
     src/system/graphics/graphics.cpp
     src/system/graphics/rectangle.cpp
     src/system/graphics/frame.cpp
+    src/system/graphics/text.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
     src/world/level.cpp
@@ -72,6 +75,7 @@ set(SRC_LIST
     src/entities/components/damagecomponent.cpp
     src/ui/uiwidget.cpp
     src/ui/healthbar.cpp
+    src/ui/textwidget.cpp
     src/ui/uipanel.cpp
 )
 
@@ -94,10 +98,12 @@ set(HEADER_LIST
   src/system/util_sdl.h
   src/system/resource.h
   src/system/mainloop.h
+  src/system/graphics/texture.h
   src/system/graphics/image.h
   src/system/graphics/graphics.h
   src/system/graphics/rectangle.h
   src/system/graphics/frame.h
+  src/system/graphics/text.h
   src/gamestate.h
   src/gamecommands.h
   src/world/level.h
@@ -134,6 +140,7 @@ set(HEADER_LIST
   src/entities/components/damagecomponent.h
   src/ui/uiwidget.h
   src/ui/healthbar.h
+  src/ui/textwidget.h
   src/ui/uipanel.h
 )
 
@@ -158,6 +165,7 @@ include_directories(
 target_link_libraries(${PROJECT_NAME}
     ${SDL2_LIBRARY}
     ${SDL2_IMAGE_LIBRARIES}
+    ${SDL2_TTF_LIBRARIES}
 )
 
 # Build flags

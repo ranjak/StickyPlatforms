@@ -13,10 +13,19 @@ public:
   constexpr Vector() : x(), y() {}
   constexpr Vector(T x, T y) : x(x), y(y) {}
 
+  template<typename U>
+  Vector(const Vector<U> &v) : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
+
   Vector<T> operator /(float scalar);
   Vector<T> operator *(float scalar);
 
   Vector<T> &operator +=(const Vector<T> &right);
+
+  template<typename U>
+  explicit operator Vector<U>() const
+  {
+    return Vector<U>(*this);
+  }
 
   friend std::ostream &operator<<(std::ostream &os, const Vector &v)
   {

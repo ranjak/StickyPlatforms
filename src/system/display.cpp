@@ -9,7 +9,8 @@ namespace game {
 
 Display::Display(int winW, int winH) :
   mWindow(nullptr),
-  mRenderer(nullptr)
+  mRenderer(nullptr),
+  mCameraSize(winW, winH)
 {
   init(winW, winH);
 }
@@ -43,12 +44,21 @@ void Display::init(int winW, int winH)
 
 void Display::setCameraSize(int w, int h)
 {
-  if (SDL_RenderSetLogicalSize(mRenderer, w, h) < 0)
+  mCameraSize.x = w;
+  mCameraSize.y = h;
+}
+
+void Display::useWindowCoordinates()
+{
+  if (SDL_RenderSetScale(mRenderer, 1.f, 1.f) < 0)
     throw std::runtime_error(SDL_GetError());
 }
 
 void Display::render(const GameState &game)
 {
+  if (SDL_RenderSetLogicalSize(mRenderer, mCameraSize.x, mCameraSize.y) < 0)
+    throw std::runtime_error(SDL_GetError());
+
   SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
   SDL_RenderClear(mRenderer);
 
