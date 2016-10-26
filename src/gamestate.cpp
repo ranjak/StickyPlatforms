@@ -3,6 +3,9 @@
 #include "test/test.h"
 #include "world/level.h"
 #include "log.h"
+#include "healthbar.h"
+#include "entity.h"
+#include "healthcomponent.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -22,25 +25,26 @@ GameState::GameState(Display &display, InputHandler &input, int camW, int camH, 
   mLevel(),
   mNextLevel(),
   mCamera(0.f, 0.f, static_cast<float>(camW), static_cast<float>(camH)),
+  mUI(),
   mGameTime(0),
   mDisplay(display)
 {
   display.setCameraSize(camW, camH);
   currentGame = this;
 
+  mUI.addWidget<HealthBar>(Rect<float>(10.f, 10.f, 75.f, 15.f));
+
   if (initialLevel.empty())
     game::error("GameState: cannot start, because no level file was given.");
 
-  mLevel = Level::loadFromTmx(initialLevel, mDisplay);
-  mLevel->start();
+  loadLevel(initialLevel);
 }
 
 
 void GameState::update(uint32_t step)
 {
   if (!mNextLevel.empty()) {
-    mLevel = Level::loadFromTmx(mNextLevel, mDisplay);
-    mLevel->start();
+    loadLevel(mNextLevel);
     mNextLevel.clear();
   }
 
@@ -50,17 +54,21 @@ void GameState::update(uint32_t step)
 
   // Reload the level if the hero dies
   if (!mLevel->getHero())
-    loadLevel(mLevel->getFilename());
+    mNextLevel = mLevel->getFilename();
 }
 
 void GameState::draw(Display &target) const
 {
   mLevel->draw(target, *this);
+  mUI.draw(target);
 }
 
 void GameState::loadLevel(const std::string &levelFile)
 {
-  mNextLevel = levelFile;
+  mLevel = Level::loadFromTmx(levelFile, mDisplay);
+  mLevel->start();
+
+  mLevel->getHero()->getComponent<HealthComponent>()->setUI(static_cast<HealthBar *>(mUI.getByName("health")));
 }
 
 GameCommands &GameState::getCommands()

@@ -8,6 +8,7 @@ namespace game {
 
 class Entity;
 struct Message;
+class HealthBar;
 
 class HealthComponent : public Component
 {
@@ -16,10 +17,18 @@ public:
 
   void receiveMessage(Message &msg);
 
+  int getHealthPoints() const { return mHealthPoints; }
+
+  int getMaxHealthPoints() const { return mMaxHP; }
+
+  void setUI(HealthBar *ui);
+
 private:
   Entity &mEntity;
+  int mMaxHP;
   int mHealthPoints;
   std::uint32_t mInvincibilityEnd;
+  HealthBar *mUI;
 };
 
 } // namespace game

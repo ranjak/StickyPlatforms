@@ -35,6 +35,7 @@ set(SRC_LIST
     src/system/graphics/image.cpp
     src/system/graphics/graphics.cpp
     src/system/graphics/rectangle.cpp
+    src/system/graphics/frame.cpp
     src/gamestate.cpp
     src/gamecommands.cpp
     src/world/level.cpp
@@ -69,6 +70,9 @@ set(SRC_LIST
     src/entities/components/weaponcomponent.cpp
     src/entities/components/healthcomponent.cpp
     src/entities/components/damagecomponent.cpp
+    src/ui/uiwidget.cpp
+    src/ui/healthbar.cpp
+    src/ui/uipanel.cpp
 )
 
 set(HEADER_LIST
@@ -90,9 +94,10 @@ set(HEADER_LIST
   src/system/util_sdl.h
   src/system/resource.h
   src/system/mainloop.h
-  src/system/graphics/image.cpp
-  src/system/graphics/graphics.cpp
-  src/system/graphics/rectangle.cpp
+  src/system/graphics/image.h
+  src/system/graphics/graphics.h
+  src/system/graphics/rectangle.h
+  src/system/graphics/frame.h
   src/gamestate.h
   src/gamecommands.h
   src/world/level.h
@@ -127,6 +132,9 @@ set(HEADER_LIST
   src/entities/components/weaponcomponent.h
   src/entities/components/healthcomponent.h
   src/entities/components/damagecomponent.h
+  src/ui/uiwidget.h
+  src/ui/healthbar.h
+  src/ui/uipanel.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)
@@ -139,6 +147,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system/graphics
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/states
     ${CMAKE_CURRENT_SOURCE_DIR}/src/entities/components

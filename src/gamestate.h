@@ -4,6 +4,7 @@
 #include "gamecommands.h"
 #include "camera.h"
 #include "world/level.h"
+#include "uipanel.h"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -69,6 +70,8 @@ private:
   std::string mNextLevel;
   // Camera that tracks the player
   Camera mCamera;
+  // Game UI
+  UIPanel mUI;
   // Simulated game time, advances every time update() is called
   std::uint32_t mGameTime;
 

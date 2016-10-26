@@ -3,13 +3,16 @@
 #include "collision.h"
 #include "damagecomponent.h"
 #include "gamestate.h"
+#include "healthbar.h"
 
 namespace game {
 
 HealthComponent::HealthComponent(Entity &owner, int hp) :
   mEntity(owner),
+  mMaxHP(hp),
   mHealthPoints(hp),
-  mInvincibilityEnd(0)
+  mInvincibilityEnd(0),
+  mUI(nullptr)
 {
 
 }
@@ -33,6 +36,10 @@ void HealthComponent::receiveMessage(Message &msg)
 
         mHealthPoints -= damage->points();
 
+        // TODO decouple if the UI gets richer
+        if (mUI)
+          mUI->setHealth(mHealthPoints, mMaxHP);
+
         if (mHealthPoints <= 0) {
           mEntity.kill();
           return;
@@ -49,6 +56,12 @@ void HealthComponent::receiveMessage(Message &msg)
       }
     }
   }
+}
+
+void HealthComponent::setUI(HealthBar *ui)
+{
+  mUI = ui;
+  ui->setHealth(mHealthPoints, mMaxHP);
 }
 
 } // namespace game
