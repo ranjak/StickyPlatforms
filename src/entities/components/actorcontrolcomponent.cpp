@@ -17,7 +17,7 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
   mPhysics(physics),
   mEntity(entity),
   mGroundState(*this, maxSpeed),
-  mAirState(*this, maxSpeed, maxAirSpeed, 1200.f),
+  mAirState(*this, maxSpeed, maxAirSpeed, 1600.f),
   mAirClingableState(*this, maxSpeed, maxAirSpeed, 200.f),
   mJumpState(*this, maxSpeed, maxAirSpeed, 200.f),
   mClingState(*this),

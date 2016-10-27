@@ -123,15 +123,15 @@ void AirState::updateWallHug(std::uint32_t step, GameState &game)
   }
 
   // Check whether the player wants to do a walljump
-  if (wallContact && mWalljumpTimeFrame >= 0 && mStateMachine.input().getDirection() == mWallHugNormal) {
+  if (wallContact && mWalljumpTimeFrame >= 0 && mStateMachine.input().isHit(Command::JUMP)) {
 
-    if (mStateMachine.input().isHit(Command::JUMP)) {
-      glog(Log::DBG, "Walljump!");
+    glog(Log::DBG, "Walljump!");
 
-      physics.velocity().x = mWallHugNormal * mStateMachine.getMaxSpeed();
-      mStateMachine.setState(ActorControlComponent::JUMP);
-    }
-
+    physics.velocity().x = mWallHugNormal * mStateMachine.getMaxSpeed();
+    mStateMachine.setState(ActorControlComponent::JUMP);
+  }
+  // The player can hold the direction opposite to the wall and still cling to it for a short amount of time
+  else if (wallContact && mWalljumpTimeFrame >= 0 && mStateMachine.input().getDirection() == mWallHugNormal) {
     mWalljumpTimeFrame -= step;
   }
   // If the player released the direction before the end of the timeframe without jumping, let go of the wall
@@ -141,7 +141,6 @@ void AirState::updateWallHug(std::uint32_t step, GameState &game)
     mWallHugNormal = 0;
     mWalljumpTimeFrame = WALLJUMP_TIME;
   }
-
 }
 
 }
