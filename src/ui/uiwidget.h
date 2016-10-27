@@ -11,7 +11,7 @@ class Display;
 class UIWidget
 {
 public:
-  UIWidget(const Vector<float> &pos={}, const std::string &name="");
+  UIWidget(const Vector<float> &pos={}, const std::string &name="", bool hidden=false);
 
   virtual void draw(Display &display) const = 0;
 

@@ -3,6 +3,7 @@
 
 #include "uiwidget.h"
 #include "make_unique.h"
+#include "gamevector.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -14,7 +15,7 @@ class Display;
 class UIPanel
 {
 public:
-  UIPanel();
+  UIPanel(const Vector<float> &size);
 
   void draw(Display &display) const;
 
@@ -26,8 +27,11 @@ public:
     mWidgets.push_back(std::make_unique<T>(std::forward<Args>(args)...));
   }
 
+  void setCentered(const std::string &widgetName);
+
 private:
   std::vector<std::unique_ptr<UIWidget>> mWidgets;
+  Vector<float> mSize;
 };
 
 } // namespace game

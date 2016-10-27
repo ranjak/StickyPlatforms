@@ -31,7 +31,7 @@ void Display::init(int winW, int winH)
 
   SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
 
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
       game::error(std::string("Failed to initialize SDL: ")+SDL_GetError());
       throw std::exception();
   }
@@ -42,10 +42,10 @@ void Display::init(int winW, int winH)
   }
 }
 
-void Display::setCameraSize(int w, int h)
+void Display::setLogicalSize(int w, int h)
 {
-  mCameraSize.x = w;
-  mCameraSize.y = h;
+  if (SDL_RenderSetLogicalSize(mRenderer, w, h) < 0)
+    throw std::runtime_error(SDL_GetError());
 }
 
 void Display::useWindowCoordinates()
@@ -56,8 +56,8 @@ void Display::useWindowCoordinates()
 
 void Display::render(const GameState &game)
 {
-  if (SDL_RenderSetLogicalSize(mRenderer, mCameraSize.x, mCameraSize.y) < 0)
-    throw std::runtime_error(SDL_GetError());
+//  if (SDL_RenderSetLogicalSize(mRenderer, mCameraSize.x, mCameraSize.y) < 0)
+//    throw std::runtime_error(SDL_GetError());
 
   SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
   SDL_RenderClear(mRenderer);

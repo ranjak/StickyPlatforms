@@ -28,15 +28,15 @@ GameState::GameState(Display &display, InputHandler &input, int camW, int camH, 
   mLevel(),
   mNextLevel(),
   mCamera(0.f, 0.f, static_cast<float>(camW), static_cast<float>(camH)),
-  mUI(),
+  mUI(display.getWindowSize()),
   mGameTime(0),
+  mState(State::PLAYING),
+  mLoadingState(*this, display),
   mDisplay(display)
 {
-  display.setCameraSize(camW, camH);
   currentGame = this;
 
   mUI.addWidget<HealthBar>(Rect<float>(20.f, 20.f, 150.f, 30.f));
-  mUI.addWidget<TextWidget>(display, "txt", "Welcome to game1!", 24, Vector<float>(100.f, 100.f));
 
   if (initialLevel.empty())
     game::error("GameState: cannot start, because no level file was given.");
@@ -52,19 +52,54 @@ void GameState::update(uint32_t step)
     mNextLevel.clear();
   }
 
-  mGameTime += step;
-  mLevel->update(*this, step);
-  mCamera.update(step, *this);
+  switch (mState) {
 
-  // Reload the level if the hero dies
-  if (!mLevel->getHero())
-    mNextLevel = mLevel->getFilename();
+  case State::PLAYING:
+
+    mGameTime += step;
+    mLevel->update(*this, step);
+    mCamera.update(step, *this);
+
+    // Reload the level if the hero dies
+    if (!mLevel->getHero())
+      setLoadingState(false);
+
+    break;
+
+  case State::LOADING:
+
+    mLoadingState.update(step);
+    break;
+
+  case State::VICTORY:
+    // TODO
+    break;
+  }
+
 }
 
 void GameState::draw(Display &target) const
 {
+  target.setLogicalSize(mCamera.getViewport().w, mCamera.getViewport().h);
+
   mLevel->draw(target, *this);
   mUI.draw(target);
+}
+
+void GameState::setPlayingState()
+{
+  mState = State::PLAYING;
+}
+
+void GameState::setLoadingState(bool victory, const std::string &nextLevel)
+{
+  mState = State::LOADING;
+  mLoadingState.enter(victory, (victory && !nextLevel.empty()) ? nextLevel : mLevel->getFilename());
+}
+
+void GameState::changeLevel(const std::string &levelFile)
+{
+  mNextLevel = levelFile;
 }
 
 void GameState::loadLevel(const std::string &levelFile)
@@ -103,6 +138,11 @@ Camera &GameState::getCamera()
 const Camera &GameState::getCamera() const
 {
   return mCamera;
+}
+
+UIPanel &GameState::getUI()
+{
+  return mUI;
 }
 
 uint32_t GameState::now() const

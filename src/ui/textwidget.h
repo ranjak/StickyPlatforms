@@ -14,7 +14,7 @@ class Display;
 class TextWidget : public UIWidget
 {
 public:
-  TextWidget(Display &display, const std::string &name, const std::string &text, int size, const Vector<float> &pos, const Color &color=Color::WHITE, const std::string &font="assets/fonts/FreeMono.ttf");
+  TextWidget(Display &display, const std::string &name, const std::string &text, int size, const Vector<float> &pos={}, const Color &color=Color::WHITE, const std::string &font="assets/fonts/FreeMono.ttf");
 
   void draw(Display &display) const override;
 

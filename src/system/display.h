@@ -19,7 +19,7 @@ public:
   ~Display();
 
 
-  void setCameraSize(int w, int h);
+  void setLogicalSize(int w, int h);
 
   void useWindowCoordinates();
 

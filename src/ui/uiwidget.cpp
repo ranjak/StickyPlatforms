@@ -3,9 +3,9 @@
 
 namespace game {
 
-UIWidget::UIWidget(const Vector<float> &pos, const std::string &name) :
+UIWidget::UIWidget(const Vector<float> &pos, const std::string &name, bool hidden) :
   name(name),
-  mHidden(false),
+  mHidden(hidden),
   mPos(pos)
 {
 

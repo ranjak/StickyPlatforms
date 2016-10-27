@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "world/level.h"
 #include "uipanel.h"
+#include "loadlevelstate.h"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -24,6 +25,12 @@ class Display;
 class GameState
 {
 public:
+  enum class State {
+    PLAYING,
+    LOADING,
+    VICTORY
+  };
+
   /**
    * @brief current Get a read-only reference to the current game.
    */
@@ -39,10 +46,21 @@ public:
 
   void draw(Display& target) const;
 
+  void setPlayingState();
   /**
-   * @brief loadLevel Set a level file to be loaded at next update, replacing the current level.
+   * @brief setLoadingState Display an on-screen message and prepare to load the next level.
+   * Called when the player clears a level (or dies).
+   * @param victory Has the player cleared the level, or is he dead?
+   * @param nextLevel Level to load. If left empty, reload the current one.
+   */
+  void setLoadingState(bool victory, const std::string &nextLevel="");
+
+  /**
+   * @brief changeLevel Set a level file to be loaded at next update, replacing the current level.
    * @param levelFile Path to the level file (relative to the game's executable directory)
    */
+  void changeLevel(const std::string &levelFile);
+  // Load the given level right away, and spawn the player.
   void loadLevel(const std::string &levelFile);
 
   GameCommands &getCommands();
@@ -54,11 +72,14 @@ public:
   Camera &getCamera();
   const Camera &getCamera() const;
 
+  UIPanel &getUI();
+
   /**
    * @brief now Get the current simulated game time since the game started.
    * @return The game time in milliseconds.
    */
   std::uint32_t now() const;
+
 
 private:
   static GameState *currentGame;
@@ -74,6 +95,9 @@ private:
   UIPanel mUI;
   // Simulated game time, advances every time update() is called
   std::uint32_t mGameTime;
+  // State the game is currently in
+  State mState;
+  LoadLevelState mLoadingState;
 
   Display &mDisplay;
 };
