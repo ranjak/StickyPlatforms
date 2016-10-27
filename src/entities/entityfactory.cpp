@@ -89,7 +89,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     return wall->id;
   }
 
-  else if (type == "victoryTrigger") {
+  else if (type == "VictoryTrigger") {
 
     Entity *victory = manager.makeEntity(pos, name);
 

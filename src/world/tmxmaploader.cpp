@@ -89,7 +89,7 @@ void TMXMapLoader::loadObjects(TMX::Parser &map, Level &level)
 
   for (TMX::Object &obj : mapEntities->second.objects) {
 
-    EntityID entity = level.entities().makeEntity(obj.type, obj.name, Rect<float>(obj.x * mTileRatio.x, obj.y * mTileRatio.y, obj.width * mTileRatio.x, obj.height * mTileRatio.y));
+    EntityID entity = level.entities().makeEntity(obj.type, obj.name, Rect<float>(obj.x * mTileRatio.x, obj.y * mTileRatio.y, obj.width * mTileRatio.x, obj.height * mTileRatio.y), Entity::none, obj.property);
 
     if (entity != Entity::none && !hasPlayerStart)
       hasPlayerStart = (obj.name == "playerStart");

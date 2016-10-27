@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="15" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="24">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="50" height="15" tilewidth="128" tileheight="128" backgroundcolor="#729fcf" nextobjectid="25">
  <tileset firstgid="1" source="grass.tsx"/>
  <layer name="tiles" width="50" height="15">
   <data encoding="csv">
@@ -44,6 +44,11 @@
   <object id="21" name="badguy" type="Enemy" x="1856" y="1088" width="64" height="64"/>
   <object id="22" name="badguy" type="Enemy" x="3456" y="448" width="64" height="64"/>
   <object id="23" name="badguy" type="Enemy" x="2208" y="832" width="64" height="64"/>
+  <object id="24" type="VictoryTrigger" x="6304" y="1056" width="96" height="96">
+   <properties>
+    <property name="nextLevel" type="file" value="assets/maps/test.tmx"/>
+   </properties>
+  </object>
  </objectgroup>
  <imagelayer name="image"/>
 </map>
