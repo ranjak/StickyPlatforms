@@ -48,10 +48,14 @@ void BasicAiComponent::update(uint32_t step, GameState &game)
   // Turn around when we reach the edge of a platform or a wall
 
   const Rect<float> &ebox = mPhysics.entity().getGlobalBox();
-  bool turnAround = true;
+  // Avoid repeated turnaround when the entity is colliding while in the air
+  bool turnAround = mPhysics.isOnGround();
 
   if (isHeld(Command::RIGHT)) {
     for (const Collision &col : mPhysics.getCollisions()) {
+
+      if (!col.isObstacle)
+        continue;
 
       // Facing a wall ?
       if (col.normal.x < 0) {
@@ -70,6 +74,9 @@ void BasicAiComponent::update(uint32_t step, GameState &game)
 
   else if (isHeld(Command::LEFT)) {
     for (const Collision &col : mPhysics.getCollisions()) {
+
+      if (!col.isObstacle)
+        continue;
 
       if (col.normal.x > 0) {
         turnAround = true;

@@ -183,3 +183,11 @@ endif()
 if (NOT CMAKE_BUILD_TYPE MATCHES [Dd]ebug)
     add_definitions(-DNDEBUG)
 endif()
+
+# Installation
+
+# Binaries
+install(TARGETS game1 RUNTIME DESTINATION . CONFIGURATIONS Release)
+install(TARGETS game1 RUNTIME DESTINATION . CONFIGURATIONS Debug RENAME game1-debug)
+# Resources
+install(DIRECTORY assets/ DESTINATION assets)

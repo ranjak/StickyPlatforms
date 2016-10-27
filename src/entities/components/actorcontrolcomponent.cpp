@@ -78,6 +78,8 @@ void ActorControlComponent::setState(State newState)
     game::error("Entity "+mEntity.getName()+": unknown state: "+std::to_string(newState));
   }
 
+  glog(Log::DBG, "setState: " << mEntity << " switching to state " << newState);
+
   mCurrentState->enter();
 }
 
