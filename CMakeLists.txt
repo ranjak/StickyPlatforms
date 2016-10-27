@@ -74,6 +74,7 @@ set(SRC_LIST
     src/entities/components/weaponcomponent.cpp
     src/entities/components/healthcomponent.cpp
     src/entities/components/damagecomponent.cpp
+    src/entities/components/victorytrigger.cpp
     src/ui/uiwidget.cpp
     src/ui/healthbar.cpp
     src/ui/textwidget.cpp
@@ -140,6 +141,7 @@ set(HEADER_LIST
   src/entities/components/weaponcomponent.h
   src/entities/components/healthcomponent.h
   src/entities/components/damagecomponent.h
+  src/entities/components/victorytrigger.h
   src/ui/uiwidget.h
   src/ui/healthbar.h
   src/ui/textwidget.h

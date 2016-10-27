@@ -11,17 +11,19 @@
 #include "weaponcomponent.h"
 #include "damagecomponent.h"
 #include "healthcomponent.h"
+#include "victorytrigger.h"
 #include "log.h"
 #include "make_unique.h"
 #include "world/tile.h"
 #include "color.h"
 #include "entitymanager.h"
 #include "entitygroup.h"
+#include "tmxcommon.h"
 #include <string>
 
 namespace game {
 
-EntityID EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id, EntityID parent)
+EntityID EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id, EntityID parent, const std::map<std::string, TMX::Property> &properties)
 {
   if (type == "PlayerStart")
     return manager.makeEntity(pos, name)->id;
@@ -85,6 +87,23 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     wall->addComponent(std::make_unique<StaticPhysicsComponent>(*wall, true));
 
     return wall->id;
+  }
+
+  else if (type == "victoryTrigger") {
+
+    Entity *victory = manager.makeEntity(pos, name);
+
+    // Get the next level filename if any
+    std::string nextLevel = "";
+    auto nextLevelProp = properties.find("nextLevel");
+
+    if (nextLevelProp != properties.end() && nextLevelProp->second.type == TMX::Property::STRING)
+      nextLevel = nextLevelProp->second.strVal;
+
+    victory->addComponent(std::make_unique<StaticPhysicsComponent>(*victory, false));
+    victory->addComponent(std::make_unique<VictoryTrigger>(nextLevel));
+
+    return victory->id;
   }
 
   else {

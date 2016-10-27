@@ -3,6 +3,7 @@
 #include "gamestate.h"
 #include "rect.h"
 #include "log.h"
+#include "tmxcommon.h"
 #include <algorithm>
 
 namespace game {
@@ -18,9 +19,9 @@ EntityManager::EntityManager(Level &level) :
 
 }
 
-EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent)
+EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent, const std::map<std::string, TMX::Property> &properties)
 {
-  return EntityFactory::create(type, name, pos, *this, mNextId, parent);
+  return EntityFactory::create(type, name, pos, *this, mNextId, parent, properties);
 }
 
 Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &name, EntityGroup group, std::unique_ptr<Graphics> graphs, EntityID parent)

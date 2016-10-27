@@ -18,7 +18,7 @@ const std::uint32_t TIMESTEP = 10;
 
 GameState *GameState::currentGame = nullptr;
 
-const GameState &GameState::current()
+GameState &GameState::current()
 {
   return *currentGame;
 }

@@ -32,9 +32,9 @@ public:
   };
 
   /**
-   * @brief current Get a read-only reference to the current game.
+   * @brief current Get a reference to the current game.
    */
-  static const GameState &current();
+  static GameState &current();
 
   GameState(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel);
 

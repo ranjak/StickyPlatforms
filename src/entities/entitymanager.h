@@ -4,10 +4,12 @@
 #include "entity.h"
 #include "entitygroup.h"
 #include "physicsmanager.h"
+#include "tmxcommon.h"
 #include <map>
 #include <memory>
 #include <cstdint>
 #include <vector>
+#include <string>
 
 namespace game {
 
@@ -25,7 +27,7 @@ public:
 
   EntityManager(Level &level);
 
-  EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none);
+  EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none, const std::map<std::string, TMX::Property> &properties={});
   Entity *makeEntity(const Rect<float> &pos, const std::string &name="", EntityGroup group=EntityGroup::NONE, std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=Entity::none);
 
   Entity *getEntity(EntityID id) const;
