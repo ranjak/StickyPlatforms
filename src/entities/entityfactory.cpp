@@ -32,7 +32,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     Entity *enemy = manager.makeEntity(pos, name, EntityGroup::ENEMY, std::make_unique<Rectangle>(pos.w, pos.h, Color::RED), parent);
 
-    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*enemy);
+    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*enemy, false, true);
     std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>(*physics);
     std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*enemy, *physics, *input, 75.f, 75.f);
 
@@ -50,7 +50,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     Entity *hero = manager.makeEntity(pos, name, EntityGroup::ALLY, std::make_unique<Rectangle>(Tile::SIZE, Tile::SIZE, Color::GREEN), parent);
 
     std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
-    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero);
+    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
     std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
 
     hero->addComponent(std::move(input));

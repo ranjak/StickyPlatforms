@@ -6,8 +6,8 @@
 
 namespace game {
 
-AirClingableState::AirClingableState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed) :
-  AirState(stateMachine, maxSpeed, maxAirSpeed)
+AirClingableState::AirClingableState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float friction) :
+  AirState(stateMachine, maxSpeed, maxAirSpeed, friction)
 {
 
 }

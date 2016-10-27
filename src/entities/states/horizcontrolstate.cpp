@@ -11,9 +11,10 @@
 namespace game {
 
 
-HorizControlState::HorizControlState(ActorControlComponent &stateMachine, float acceleration, float maxSpeed) :
+HorizControlState::HorizControlState(ActorControlComponent &stateMachine, float acceleration, float friction, float maxSpeed) :
   ActorState(stateMachine),
   mAcceleration(acceleration),
+  mFriction(friction),
   mMaxSpeed(maxSpeed)
 {
 
@@ -31,15 +32,22 @@ void HorizControlState::update(std::uint32_t step, GameState &game)
 
   Vector<float>& velocity = mStateMachine.physics().velocity();
 
-  float targetSpeed = mMaxSpeed * inputDirection;
+  switch (inputDirection) {
 
-  float accelAmount = mAcceleration * step / 1000.f;
+  case -1:
+    velocity.x = std::max(-mMaxSpeed, velocity.x - mAcceleration * step / 1000.f);
+    break;
 
-  if (targetSpeed - velocity.x > 0) {
-    velocity.x += std::min(accelAmount, targetSpeed-velocity.x);
-  }
-  else if (targetSpeed - velocity.x < 0) {
-    velocity.x += std::max(-accelAmount, targetSpeed-velocity.x);
+  case 1:
+    velocity.x = std::min(mMaxSpeed, velocity.x + mAcceleration * step / 1000.f);
+    break;
+
+  case 0:
+    if (velocity.x < 0)
+      velocity.x = std::min(0.f, velocity.x + mFriction * step / 1000.f);
+    else
+      velocity.x = std::max(0.f, velocity.x - mFriction * step / 1000.f);
+    break;
   }
 
   if (inputDirection != 0)

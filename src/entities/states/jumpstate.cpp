@@ -9,8 +9,8 @@
 
 namespace game {
 
-JumpState::JumpState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float maxJumpHeight, float impulseTimeFrame) :
-  AirClingableState(stateMachine, maxSpeed, maxAirSpeed),
+JumpState::JumpState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float friction, float maxJumpHeight, float impulseTimeFrame) :
+  AirClingableState(stateMachine, maxSpeed, maxAirSpeed, friction),
   mMaxJumpHeight(maxJumpHeight),
   mImpulseTimeFrame(impulseTimeFrame),
   mInitialSpeed(computeInitialSpeed())

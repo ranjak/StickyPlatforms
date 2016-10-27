@@ -12,7 +12,7 @@
 namespace game {
 
 ClingState::ClingState(ActorControlComponent &stateMachine) :
-  HorizControlState(stateMachine, 2500.f, 200.f),
+  HorizControlState(stateMachine, 2500.f, 3500.f, 200.f),
   mClingTimeout(0)
 {
 

@@ -19,6 +19,9 @@ public:
 
   bool ignoresInvincibility() const { return mIgnoreInvincibility; }
 
+public:
+  // Direction of the attack, if this Damage instance is bound to an attack (sword...)
+  int direction;
 private:
   int mDamagePoints;
   EntityGroup mTarget;

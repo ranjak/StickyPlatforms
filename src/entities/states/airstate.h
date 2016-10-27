@@ -10,7 +10,7 @@ struct Message;
 class AirState : public HorizControlState
 {
 public:
-  AirState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed);
+  AirState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float friction);
 
   void enter() override;
 

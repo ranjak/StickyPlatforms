@@ -48,7 +48,7 @@ void HealthComponent::receiveMessage(Message &msg)
         // Make the entity back off
         MovingPhysicsComponent *physics = mEntity.getComponent<MovingPhysicsComponent>();
         if (physics) {
-          physics->velocity().x = col.normal.x * 1000.f;
+          physics->velocity().x = ((damage->direction) ? damage->direction : col.normal.x) * 300.f;
           physics->velocity().y = -500.f;
         }
 

@@ -23,8 +23,8 @@ const float CLIMB_TOLERANCE = 5.f;
 const int WALLJUMP_TIME = 100;
 }
 
-AirState::AirState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed) :
-    HorizControlState(stateMachine, 1200.f, maxSpeed),
+AirState::AirState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float friction) :
+    HorizControlState(stateMachine, 1200.f, friction, maxSpeed),
     mMaxAirSpeed(maxAirSpeed),
     mWallHugNormal(0),
     mWalljumpTimeFrame(WALLJUMP_TIME)
@@ -36,6 +36,7 @@ void AirState::enter()
 {
   mWallHugNormal = 0;
   mWalljumpTimeFrame = WALLJUMP_TIME;
+  mMaxSpeed = std::abs(mStateMachine.physics().velocity().x);
 }
 
 void AirState::update(std::uint32_t step, GameState &game)

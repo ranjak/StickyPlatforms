@@ -8,7 +8,7 @@ namespace game {
 class JumpState : public AirClingableState
 {
 public:
-  JumpState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float maxJumpHeight=96.f, float impulseTimeFrame=0.15f);
+  JumpState(ActorControlComponent &stateMachine, float maxSpeed, float maxAirSpeed, float friction, float maxJumpHeight=96.f, float impulseTimeFrame=0.15f);
 
   void enter();
 

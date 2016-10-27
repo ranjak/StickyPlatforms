@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "rect.h"
 #include "gamevector.h"
+#include "damagecomponent.h"
 #include <cassert>
 
 namespace game {
@@ -40,6 +41,8 @@ void SwordComponent::swing(int direction)
     Entity &sword = mPhysics.entity();
     Entity *wielder = sword.getParent();
     assert(wielder);
+
+    sword.getComponent<DamageComponent>()->direction = direction;
 
     const Rect<float> &wBox = wielder->getLocalBox();
 
