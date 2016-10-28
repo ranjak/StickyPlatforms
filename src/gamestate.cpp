@@ -41,7 +41,7 @@ GameState::GameState(Display &display, InputHandler &input, int camW, int camH, 
   if (initialLevel.empty())
     game::error("GameState: cannot start, because no level file was given.");
 
-  loadLevel(initialLevel);
+  changeLevel(initialLevel);
 }
 
 
@@ -80,9 +80,12 @@ void GameState::update(uint32_t step)
 
 void GameState::draw(Display &target) const
 {
-  target.setLogicalSize(mCamera.getViewport().w, mCamera.getViewport().h);
+  if (mLevel) {
+    target.setLogicalSize(mCamera.getViewport().w, mCamera.getViewport().h);
 
-  mLevel->draw(target, *this);
+    mLevel->draw(target, *this);
+  }
+
   mUI.draw(target);
 }
 

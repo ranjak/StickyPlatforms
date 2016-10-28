@@ -17,6 +17,8 @@ public:
   MainLoop(const MainLoop &) = delete;
   MainLoop& operator=(const MainLoop &) = delete;
 
+  void setInitialLevel(const std::string &level);
+
   void run();
 
 private:

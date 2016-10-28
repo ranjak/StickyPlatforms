@@ -54,10 +54,8 @@ namespace TMX {
     mapInfo.tileHeight = std::atoi( root_node->first_attribute( "tileheight" )->value() );
     std::cout << "Tile Height: " << mapInfo.tileHeight << std::endl;
 
-    if( root_node->first_attribute( "backgroundcolor" )->value() != 0 ) {
-      mapInfo.backgroundColor = root_node->first_attribute( "backgroundcolor" )->value();
-      std::cout << "Background Color: " << mapInfo.backgroundColor << std::endl;
-    }
+    mapInfo.backgroundColor = presentOrDefault( root_node->first_attribute( "backgroundcolor" ), "0" );
+    std::cout << "Background Color: " << mapInfo.backgroundColor << std::endl;
 
     if( root_node->first_node( "properties" ) != 0 ) {
       mapInfo.property = parseProperties(root_node->first_node( "properties" ));

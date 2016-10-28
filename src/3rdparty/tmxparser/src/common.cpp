@@ -94,8 +94,8 @@ Object parseObject(rapidxml::xml_node<> *obj_node)
     }
   }
   else {
-    object.width = std::atoi(findOrFail(obj_node, "width"));
-    object.height = std::atoi(findOrFail(obj_node, "height"));
+    object.width = std::atoi(presentOrDefault(obj_node->first_attribute("width"), "0"));
+    object.height = std::atoi(presentOrDefault(obj_node->first_attribute("height"), "0"));
   }
 
   if (obj_node->first_node("properties"))

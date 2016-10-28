@@ -5,7 +5,6 @@
 #include "display.h"
 #include "SDL.h"
 #include <thread>
-#include <string>
 #include <algorithm>
 
 namespace game {
@@ -19,6 +18,11 @@ MainLoop::MainLoop(const std::string &initialLevel) :
   mAccuFrameTimes(0),
   mNumFrameTimes(0)
 {
+}
+
+void MainLoop::setInitialLevel(const std::string &level)
+{
+  mGame.changeLevel(level);
 }
 
 void MainLoop::run()
