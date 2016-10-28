@@ -29,7 +29,9 @@ std::unique_ptr<SDL_Surface, void (*)(SDL_Surface *)> makeText(const std::string
 
 } // namespace
 
-Text::Text(Display &renderer, const std::string &fontFile, int fontSize, const std::string &text, const Color &color) :
+const std::string Text::defaultFont("assets/fonts/FreeMono.ttf");
+
+Text::Text(Display &renderer, const std::string &text, int fontSize, const std::string &fontFile, const Color &color) :
   Texture(renderer, makeText(fontFile, fontSize, text, color).get())
 {
 }

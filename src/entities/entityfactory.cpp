@@ -18,7 +18,9 @@
 #include "color.h"
 #include "entitymanager.h"
 #include "entitygroup.h"
+#include "text.h"
 #include "tmxcommon.h"
+#include "gamestate.h"
 #include <string>
 
 namespace game {
@@ -106,8 +108,22 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     return victory->id;
   }
 
+  else if (type == "TextLine") {
+
+    auto content = properties.find("text");
+    std::string textContent = "";
+    if (content != properties.end() && content->second.type == TMX::Property::STRING)
+      textContent = content->second.strVal;
+    else
+      Log::getGlobal().get(Log::WARNING) << "EntityFactory: TextLine (id="<<id<<") has no \"text\" property"<<std::endl;
+
+    std::unique_ptr<Text> text = std::make_unique<Text>(GameState::current().getDisplay(), textContent, static_cast<int>(pos.h));
+
+    return manager.makeEntity(pos, name, EntityGroup::NONE, std::move(text))->id;
+  }
+
   else {
-    Log::getGlobal().get(Log::WARNING) << "Unknown entity type: "<<type<<" for entity "<<name<<std::endl;
+    Log::getGlobal().get(Log::WARNING) << "EntityFactory: Unknown entity type: "<<type<<" for entity "<<name<<std::endl;
     return Entity::none;
   }
 }

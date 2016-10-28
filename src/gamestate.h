@@ -74,6 +74,8 @@ public:
 
   UIPanel &getUI();
 
+  Display &getDisplay();
+
   /**
    * @brief now Get the current simulated game time since the game started.
    * @return The game time in milliseconds.

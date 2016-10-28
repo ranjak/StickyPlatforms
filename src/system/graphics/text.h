@@ -12,7 +12,10 @@ class Display;
 class Text : public Texture
 {
 public:
-  Text(Display &renderer, const std::string &fontFile, int fontSize, const std::string &text, const Color &color=Color::WHITE);
+  static const std::string defaultFont;
+
+  // TODO don't open the font if it's already used by another Text.
+  Text(Display &renderer, const std::string &text, int fontSize, const std::string &fontFile=defaultFont, const Color &color=Color::WHITE);
 };
 
 } // namespace game

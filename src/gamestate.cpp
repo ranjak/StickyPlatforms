@@ -145,6 +145,11 @@ UIPanel &GameState::getUI()
   return mUI;
 }
 
+Display &GameState::getDisplay()
+{
+  return mDisplay;
+}
+
 uint32_t GameState::now() const
 {
   return mGameTime;

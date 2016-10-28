@@ -5,7 +5,7 @@ namespace game {
 
 TextWidget::TextWidget(Display &display, const std::string &name, const std::string &text, int size, const Vector<float> &pos, const Color &color, const std::string &font) :
   UIWidget(pos, name),
-  mText(display, font, size, text, color)
+  mText(display, text, size, font, color)
 {
 
 }
