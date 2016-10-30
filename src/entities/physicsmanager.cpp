@@ -47,7 +47,7 @@ bool PhysicsManager::moveObject(MovingPhysicsComponent *object, const Vector<flo
   movementArea.w = std::max(box.w, (movementArea.x == box.x) ? (destFacingPoint.x - box.x) : (box.x + box.w - destFacingPoint.x));
   movementArea.h = std::max(box.h, (movementArea.y == box.y) ? (destFacingPoint.y - box.y) : (box.y + box.h - destFacingPoint.y));
 
-  std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(movementArea, *object);
+  std::vector<Rect<float>> obstacles = mLevel.getTileObstaclesInArea(movementArea, *object);
 
   std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) {
     if (p->isCollidable() && p->isObstacle() && !object->isIgnored(p->entity().id))
@@ -129,7 +129,7 @@ void PhysicsManager::checkCollisions(MovingPhysicsComponent *object)
 
 std::vector<Rect<float> > PhysicsManager::getObstaclesInArea(const Rect<float> &area, const MovingPhysicsComponent &object)
 {
-  std::vector<Rect<float>> obstacles = mLevel.getObstaclesInArea(area, object);
+  std::vector<Rect<float>> obstacles = mLevel.getTileObstaclesInArea(area, object);
 
   std::for_each(mStaticComps.begin(), mStaticComps.end(), [&](StaticPhysicsComponent *p) {
     if (p->isCollidable() && p->isObstacle() && area.intersects(p->entity().getGlobalBox()) && !object.isIgnored(p->entity().id))

@@ -107,7 +107,6 @@ void AirState::updateWallHug(std::uint32_t step, GameState &game)
         };
 
         // Climb if there aren't obstacles above
-        // TODO check entities
         if (distance(col.bbox.y, myBox.y) <= CLIMB_TOLERANCE &&
             level.entities().getPhysics().getObstaclesInArea(climbBox, physics).empty())
         {

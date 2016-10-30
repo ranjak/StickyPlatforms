@@ -49,7 +49,7 @@ public:
    * @param object Physics component of the entity relative to which the check is performed.
    * @return Bounding boxes of every tile in \p area.
    */
-  std::vector<Rect<float>> getObstaclesInArea(Rect<float> area, const MovingPhysicsComponent &object) const;
+  std::vector<Rect<float>> getTileObstaclesInArea(Rect<float> area, const MovingPhysicsComponent &object) const;
 
   Tile *getTileAt(const Vector<int> &tilePos);
   const Tile *getTileAt(const Vector<int> &tilePos) const;
