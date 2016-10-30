@@ -5,6 +5,7 @@
 #include "graphicscomponent.h"
 #include "gamestate.h"
 #include "healthbar.h"
+#include "damagemsg.h"
 
 namespace game {
 
@@ -58,6 +59,8 @@ void HealthComponent::receiveMessage(Message &msg)
           graphics->setBlinking(1.f);
 
         mInvincibilityEnd = GameState::current().now() + 1000;
+
+        mEntity.sendMessage(std::make_unique<DamageMsg>(damage->points(), col.entity));
       }
     }
   }

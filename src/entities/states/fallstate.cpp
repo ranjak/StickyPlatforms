@@ -12,7 +12,7 @@ FallState::FallState(ActorControlComponent &stateMachine) :
 
 void FallState::enter()
 {
-  mEndTimestamp = GameState::current().now() + 500;
+  mEndTimestamp = GameState::current().now() + 250;
 }
 
 void FallState::update(uint32_t step, GameState &game)

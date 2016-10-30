@@ -66,21 +66,28 @@ void ClimbingState::exit()
 
 void ClimbingState::receiveMessage(Message &msg)
 {
-  // Climb animation is interrupted when an obstacle is encountered
+  // Climb animation is interrupted when an obstacle is encountered...
   if (msg.type == Message::OnCollision) {
 
     Collision &col = static_cast<Collision &>(msg);
     const Rect<float> &box = mStateMachine.entity().getGlobalBox();
 
-    if ((col.normal.y > 0 && box.y+box.h > mEdge.y) ||  // Obstacle above
-        (col.normal.x == -mClimbDirection && col.bbox.y < mEdge.y && col.bbox.y+col.bbox.h > mEdge.y-box.h)) // Obstacle right atop the edge
+    if (col.isObstacle && (
+        (col.normal.y > 0 && box.y+box.h > mEdge.y) ||  // Obstacle above
+        (col.normal.x == -mClimbDirection && col.bbox.y < mEdge.y && col.bbox.y+col.bbox.h > mEdge.y-box.h))) // Obstacle right atop the edge
     {
+      msg.accept();
       mStateMachine.setState(ActorControlComponent::FALL);
     }
   }
-  else {
-    ActorState::receiveMessage(msg);
+  // ...or when the actor is hurt
+  else if (msg.type == Message::Damage) {
+    msg.accept();
+    mStateMachine.setState(ActorControlComponent::FALL);
   }
+
+  if (!msg.handled)
+    ActorState::receiveMessage(msg);
 }
 
 } // namespace game

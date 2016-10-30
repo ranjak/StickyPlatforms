@@ -14,23 +14,19 @@ AirClingableState::AirClingableState(ActorControlComponent &stateMachine, float 
 
 void AirClingableState::receiveMessage(Message &msg)
 {
-  AirState::receiveMessage(msg);
-
-  switch (msg.type) {
-  case Message::OnCollision:
-  {
+  if (msg.type == Message::OnCollision) {
     Collision &colmsg = static_cast<Collision &>(msg);
 
     // For now, cling to tiles only.
     // TODO: add a "clingable" property, that can be used with entities as well
     if (colmsg.entity == Entity::none && colmsg.isObstacle && mStateMachine.input().isHeld(Command::JUMP) && colmsg.normal.y > 0) {
       mStateMachine.setState(ActorControlComponent::CLING);
+      msg.accept();
     }
-    break;
   }
-  default:
-    break;
-  }
+
+  if (!msg.handled)
+    AirState::receiveMessage(msg);
 }
 
 } // namespace game

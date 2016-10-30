@@ -1,4 +1,6 @@
 #include "actorstate.h"
+#include "damagemsg.h"
+#include "actorcontrolcomponent.h"
 
 namespace game {
 
@@ -26,7 +28,10 @@ void ActorState::exit()
 
 void ActorState::receiveMessage(Message &msg)
 {
-
+  // Briefly remove control from the actor when hurt
+  if (msg.type == Message::Damage) {
+    mStateMachine.setState(ActorControlComponent::FALL);
+  }
 }
 
 }

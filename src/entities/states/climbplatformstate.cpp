@@ -92,13 +92,18 @@ void ClimbPlatformState::exit()
 
 void ClimbPlatformState::receiveMessage(Message &msg)
 {
-  if (msg.type == Message::OnCollision) {
+  // Fall through the platform when we hit an unexpected obstacle, or get hurt
+  if (msg.type == Message::Damage ||
+      (msg.type == Message::OnCollision && static_cast<Collision &>(msg).isObstacle))
+  {
     mFalling = true;
     mStateMachine.physics().setGravityEnabled(true);
+    mStateMachine.physics().velocity().y = 0.f;
+    msg.accept();
   }
-  else {
+
+  if (!msg.handled)
     ActorState::receiveMessage(msg);
-  }
 }
 
 } // namespace game

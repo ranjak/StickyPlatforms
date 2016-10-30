@@ -60,15 +60,19 @@ void AirState::update(std::uint32_t step, GameState &game)
 
 void AirState::receiveMessage(Message &msg)
 {
-  if (msg.type == Message::OnCollision) {
+  if (mWallHugNormal == 0 && msg.type == Message::OnCollision) {
 
     Collision &col = static_cast<Collision &>(msg);
 
     // Special behavior if we're hugging a wall
     if (col.isObstacle && col.normal.x != 0 && mStateMachine.input().getDirection() != col.normal.x) {
       mWallHugNormal = col.normal.x;
+      msg.accept();
     }
   }
+
+  if (!msg.handled)
+    HorizControlState::receiveMessage(msg);
 }
 
 void AirState::updateWallHug(std::uint32_t step, GameState &game)

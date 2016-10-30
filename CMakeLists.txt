@@ -91,6 +91,7 @@ set(HEADER_LIST
   src/entities/components/message/directionchangedmsg.h
   src/entities/components/message/collision.h
   src/entities/components/message/childremovedmsg.h
+  src/entities/components/message/damagemsg.h
   src/system/inputhandler.h
   src/system/log.h
   src/system/display.h

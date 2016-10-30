@@ -13,11 +13,16 @@ struct Message
     Damage
   };
 
-  Message(Type type) : type(type) {}
+  Message(Type type) : type(type), handled(false) {}
 
   virtual ~Message() = 0;
 
   Type type;
+  // Could be used by components that have hierarchies, like actor states,
+  // to indicate whether a message should be propagated
+  bool handled;
+
+  void accept() { handled = true; }
 };
 
 inline Message::~Message() {}
