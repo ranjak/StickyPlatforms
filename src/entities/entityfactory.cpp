@@ -25,7 +25,7 @@
 
 namespace game {
 
-EntityID EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID id, EntityID parent, const std::map<std::string, TMX::Property> &properties)
+EntityID EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID parent, const std::map<std::string, TMX::Property> &properties)
 {
   if (type == "PlayerStart")
     return manager.makeEntity(pos, name)->id;
@@ -67,7 +67,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
   else if (type == "sword") {
 
     if (parent == Entity::none) {
-      game::error("EntityFactory: couldn't create sword (id="+std::to_string(id)+",name="+name+"): no parent specified");
+      game::error("EntityFactory: couldn't create sword (name="+name+"): no parent specified");
       return Entity::none;
     }
     Entity *sword = manager.makeEntity(pos, name, EntityGroup::NONE, std::make_unique<Rectangle>(pos.w, pos.h, Color::BLUE), parent);
@@ -115,7 +115,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     if (content != properties.end() && content->second.type == TMX::Property::STRING)
       textContent = content->second.strVal;
     else
-      Log::getGlobal().get(Log::WARNING) << "EntityFactory: TextLine (id="<<id<<") has no \"text\" property"<<std::endl;
+      Log::getGlobal().get(Log::WARNING) << "EntityFactory: TextLine (name="<<name<<") has no \"text\" property"<<std::endl;
 
     std::unique_ptr<Text> text = std::make_unique<Text>(GameState::current().getDisplay(), textContent, static_cast<int>(pos.h));
 
@@ -123,7 +123,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
   }
 
   else {
-    Log::getGlobal().get(Log::WARNING) << "EntityFactory: Unknown entity type: "<<type<<" for entity "<<name<<std::endl;
+    Log::getGlobal().get(Log::WARNING) << "EntityFactory: Unknown entity type: \""<<type<<"\" for entity \""<<name<<"\""<<std::endl;
     return Entity::none;
   }
 }

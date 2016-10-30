@@ -21,7 +21,7 @@ EntityManager::EntityManager(Level &level) :
 
 EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent, const std::map<std::string, TMX::Property> &properties)
 {
-  return EntityFactory::create(type, name, pos, *this, mNextId, parent, properties);
+  return EntityFactory::create(type, name, pos, *this, parent, properties);
 }
 
 Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &name, EntityGroup group, std::unique_ptr<Graphics> graphs, EntityID parent)
