@@ -10,6 +10,11 @@
 
 namespace game {
 
+constexpr double PId = 3.141592653589793;
+constexpr float PIf = 3.1415927f;
+
+constexpr float toRad(float deg) { return deg * (2.f*PIf / 360.f); }
+
 template<typename T>
 T clamp(T min, T value, T max);
 
