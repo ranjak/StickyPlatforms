@@ -58,7 +58,6 @@ void GameState::update(uint32_t step)
 
     mGameTime += step;
     mLevel->update(*this, step);
-    mCamera.update(step, *this);
 
     // Reload the level if the hero dies
     if (!mLevel->getHero())

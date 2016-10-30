@@ -14,25 +14,12 @@ Camera::Camera(float x, float y, float w, float h) :
 
 }
 
-void Camera::update(uint32_t step, GameState &game)
+const Rect<float> &Camera::getViewport() const
 {
-  Level& level = game.getLevel();
-  Vector<float> size = level.getPixelSize();
-
-  // Track the hero, keep him in the middle.
-  Entity *hero = level.getHero();
-
-  if (hero) {
-    Rect<float> box = hero->getGlobalBox();
-    mViewport.setCenter(box.getCenter());
-
-    // Do not go beyond the level's boundaries (but handle cases where the camera is larger than the level)
-    mViewport.x = clamp(0.f, mViewport.x, std::max(size.x - mViewport.w, 0.f));
-    mViewport.y = clamp(0.f, mViewport.y, std::max(size.y - mViewport.h, 0.f));
-  }
+  return mViewport;
 }
 
-const Rect<float> &Camera::getViewport() const
+Rect<float> &Camera::viewport()
 {
   return mViewport;
 }

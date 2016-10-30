@@ -14,9 +14,8 @@ class Camera
 public:
   Camera(float x, float y, float w, float h);
 
-  void update(std::uint32_t step, GameState &game);
-
   const Rect<float> &getViewport() const;
+  Rect<float> &viewport();
 
   Vector<float> toCamCoords(const Vector<float>& levelCoords) const;
 

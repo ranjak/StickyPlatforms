@@ -76,6 +76,7 @@ set(SRC_LIST
     src/entities/components/damagecomponent.cpp
     src/entities/components/victorytrigger.cpp
     src/entities/components/graphicscomponent.cpp
+    src/entities/components/cameracomponent.cpp
     src/ui/uiwidget.cpp
     src/ui/healthbar.cpp
     src/ui/textwidget.cpp
@@ -145,6 +146,7 @@ set(HEADER_LIST
   src/entities/components/damagecomponent.h
   src/entities/components/victorytrigger.h
   src/entities/components/graphicscomponent.h
+  src/entities/components/cameracomponent.h
   src/ui/uiwidget.h
   src/ui/healthbar.h
   src/ui/textwidget.h
