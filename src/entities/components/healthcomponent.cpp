@@ -2,6 +2,7 @@
 #include "movingphysicscomponent.h"
 #include "collision.h"
 #include "damagecomponent.h"
+#include "graphicscomponent.h"
 #include "gamestate.h"
 #include "healthbar.h"
 
@@ -51,6 +52,10 @@ void HealthComponent::receiveMessage(Message &msg)
           physics->velocity().x = ((damage->direction) ? damage->direction : col.normal.x) * 300.f;
           physics->velocity().y = -500.f;
         }
+
+        GraphicsComponent *graphics = mEntity.getComponent<GraphicsComponent>();
+        if (graphics)
+          graphics->setBlinking(1.f);
 
         mInvincibilityEnd = GameState::current().now() + 1000;
       }
