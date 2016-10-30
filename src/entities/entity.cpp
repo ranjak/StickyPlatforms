@@ -12,13 +12,12 @@ namespace game {
 
 const EntityID Entity::none = -1;
 
-Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name, EntityGroup group, std::unique_ptr<Graphics> graphs, EntityID parent) :
+Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name, EntityGroup group, EntityID parent) :
   id(id),
   group(group),
   mIsEnabled(true),
   mIsDead(false),
   mBoundingBox(boundingBox),
-  mGraphics(std::move(graphs)),
   mParent(Entity::none),
   mChildren(),
   mName(name),
@@ -47,14 +46,6 @@ void Entity::update(uint32_t step, GameState &game)
 {
   for (std::unique_ptr<Component> &comp : mComponents)
     comp->update(step, game);
-}
-
-void Entity::draw(Display &target, const Camera &camera) const
-{
-  if (mGraphics) {
-    Vector<float> pos = camera.toCamCoords(getGlobalPos());
-    mGraphics->draw(target, pos.x, pos.y);
-  }
 }
 
 void Entity::sendMessage(std::unique_ptr<Message> message)

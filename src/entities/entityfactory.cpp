@@ -12,6 +12,7 @@
 #include "damagecomponent.h"
 #include "healthcomponent.h"
 #include "victorytrigger.h"
+#include "graphicscomponent.h"
 #include "log.h"
 #include "make_unique.h"
 #include "world/tile.h"
@@ -32,7 +33,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
   else if (type == "Enemy") {
 
-    Entity *enemy = manager.makeEntity(pos, name, EntityGroup::ENEMY, std::make_unique<Rectangle>(pos.w, pos.h, Color::RED), parent);
+    Entity *enemy = manager.makeEntity(pos, name, EntityGroup::ENEMY, parent);
 
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*enemy, false, true);
     std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>(*physics);
@@ -43,13 +44,14 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     enemy->addComponent(std::move(physics));
     enemy->addComponent(std::make_unique<HealthComponent>(*enemy, 3));
     enemy->addComponent(std::make_unique<DamageComponent>(1, EntityGroup::ALLY));
+    enemy->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Rectangle>(pos.w, pos.h, Color::RED)));
 
     return enemy->id;
   }
 
   else if (type == "Hero") {
 
-    Entity *hero = manager.makeEntity(pos, name, EntityGroup::ALLY, std::make_unique<Rectangle>(Tile::SIZE, Tile::SIZE, Color::GREEN), parent);
+    Entity *hero = manager.makeEntity(pos, name, EntityGroup::ALLY, parent);
 
     std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
@@ -60,6 +62,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     hero->addComponent(std::move(physics));
     hero->addComponent(std::make_unique<WeaponComponent>(*hero));
     hero->addComponent(std::make_unique<HealthComponent>(*hero, 5));
+    hero->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Rectangle>(pos.w, pos.h, Color::GREEN)));
 
     return hero->id;
   }
@@ -70,7 +73,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
       game::error("EntityFactory: couldn't create sword (name="+name+"): no parent specified");
       return Entity::none;
     }
-    Entity *sword = manager.makeEntity(pos, name, EntityGroup::NONE, std::make_unique<Rectangle>(pos.w, pos.h, Color::BLUE), parent);
+    Entity *sword = manager.makeEntity(pos, name, EntityGroup::NONE, parent);
 
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*sword, false, false);
     physics->setIgnoresObstacles(true);
@@ -78,6 +81,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     sword->addComponent(std::make_unique<SwordComponent>(*physics));
     sword->addComponent(std::move(physics));
     sword->addComponent(std::make_unique<DamageComponent>(1, EntityGroup::ENEMY));
+    sword->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Rectangle>(pos.w, pos.h, Color::BLUE)));
 
     return sword->id;
   }
@@ -117,9 +121,10 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     else
       Log::getGlobal().get(Log::WARNING) << "EntityFactory: TextLine (name="<<name<<") has no \"text\" property"<<std::endl;
 
-    std::unique_ptr<Text> text = std::make_unique<Text>(GameState::current().getDisplay(), textContent, static_cast<int>(pos.h));
+    Entity* line = manager.makeEntity(pos, name, EntityGroup::NONE, parent);
+    line->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Text>(GameState::current().getDisplay(), textContent, static_cast<int>(pos.h))));
 
-    return manager.makeEntity(pos, name, EntityGroup::NONE, std::move(text))->id;
+    return line->id;
   }
 
   else {

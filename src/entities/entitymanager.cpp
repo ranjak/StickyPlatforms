@@ -4,6 +4,7 @@
 #include "rect.h"
 #include "log.h"
 #include "tmxcommon.h"
+#include "graphicscomponent.h"
 #include <algorithm>
 
 namespace game {
@@ -24,9 +25,9 @@ EntityID EntityManager::makeEntity(const std::string &type, const std::string &n
   return EntityFactory::create(type, name, pos, *this, parent, properties);
 }
 
-Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &name, EntityGroup group, std::unique_ptr<Graphics> graphs, EntityID parent)
+Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &name, EntityGroup group, EntityID parent)
 {
-  std::unique_ptr<Entity> entity(new Entity(mNextId, *this, pos, name, group, std::move(graphs), parent));
+  std::unique_ptr<Entity> entity(new Entity(mNextId, *this, pos, name, group, parent));
 
   if (entity) {
     Entity *ret = entity.get();
@@ -74,12 +75,13 @@ void EntityManager::update(std::uint32_t step, GameState &game)
 
 void EntityManager::draw(Display &display, const GameState &game) const
 {
-  const Camera &cam = game.getCamera();
+  GraphicsComponent *graphics = nullptr;
+//  const Camera &cam = game.getCamera();
 //  const Rect<float> &viewport = cam.getViewport();
 
   for (const EntityPair &entity : mEntities) {
-    if (entity.second->isEnabled() /*&& entity.second->getGlobalBox().intersects(viewport)*/)
-      entity.second->draw(display, cam);
+    if (entity.second->isEnabled() && (graphics = entity.second->getComponent<GraphicsComponent>())/*&& entity.second->getGlobalBox().intersects(viewport)*/)
+      graphics->draw(display, entity.second->getGlobalPos());
   }
 }
 

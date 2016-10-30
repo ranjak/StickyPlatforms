@@ -39,12 +39,6 @@ public:
   virtual void update(std::uint32_t step, GameState& game);
 
   /**
-   * @brief draw Draw this entity on \p target, if applicable.
-   * @param target Render target on which the entity will be drawn.
-   */
-  virtual void draw(Display& target, const Camera& camera) const;
-
-  /**
    * @brief sendMessage Send a message to the components of this entity.
    * @param message
    */
@@ -95,18 +89,17 @@ public:
   }
 
 private:
-  Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name="", EntityGroup group=EntityGroup::NONE, std::unique_ptr<Graphics> graphs=nullptr, EntityID parent=none);
+  Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name="", EntityGroup group=EntityGroup::NONE, EntityID parent=none);
   friend class EntityManager;
 
 public:
   const EntityID id;
-  const EntityGroup group;
+  EntityGroup group;
 
 protected:
   bool mIsEnabled;
   bool mIsDead;
   Rect<float> mBoundingBox;
-  std::unique_ptr<Graphics> mGraphics;
   EntityID mParent;
   std::vector<EntityID> mChildren;
   std::string mName;
