@@ -127,4 +127,46 @@ Property &Property::operator=(Property &&p)
   return *this;
 }
 
+const Property* PropertyMap::find(const std::string &name, Property::valType type) const
+{
+  auto prop = properties.find(name);
+
+  if (prop == properties.end() || prop->second.type != type)
+    return nullptr;
+
+  return &prop->second;
+}
+
+bool PropertyMap::getBool(const std::string &name, bool &value, bool defaultVal) const
+{
+  const Property *p = find(name, Property::BOOL);
+
+  value = p ? p->boolVal : defaultVal;
+  return (p);
+}
+
+bool PropertyMap::getFloat(const std::string &name, float &value, float defaultVal) const
+{
+  const Property *p = find(name, Property::FLOAT);
+
+  value = p ? p->floatVal : defaultVal;
+  return (p);
+}
+
+bool PropertyMap::getInt(const std::string &name, int &value, int defaultVal) const
+{
+  const Property *p = find(name, Property::INT);
+
+  value = p ? p->intVal : defaultVal;
+  return (p);
+}
+
+bool PropertyMap::getString(const std::string &name, std::string &value, const std::string &defaultVal) const
+{
+  const Property *p = find(name, Property::STRING);
+
+  value = p ? p->strVal : defaultVal;
+  return (p);
+}
+
 }

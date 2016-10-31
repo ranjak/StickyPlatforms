@@ -44,9 +44,11 @@
   <object id="21" name="badguy" type="Enemy" x="1856" y="1088" width="64" height="64"/>
   <object id="22" name="badguy" type="Enemy" x="3456" y="448" width="64" height="64"/>
   <object id="23" name="badguy" type="Enemy" x="2208" y="832" width="64" height="64"/>
-  <object id="24" type="VictoryTrigger" x="6304" y="1056" width="96" height="96">
+  <object id="24" type="Trigger" x="6304" y="1056" width="96" height="96">
    <properties>
     <property name="nextLevel" type="file" value="assets/maps/test.tmx"/>
+    <property name="requireOnGround" type="bool" value="true"/>
+    <property name="type" value="victory"/>
    </properties>
   </object>
   <object id="25" type="TextLine" x="384" y="640" width="768" height="128">

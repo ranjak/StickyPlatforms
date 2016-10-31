@@ -11,6 +11,10 @@
 #include <vector>
 #include <string>
 
+namespace TMX {
+struct PropertyMap;
+}
+
 namespace game {
 
 template<typename T> class Rect;
@@ -27,7 +31,7 @@ public:
 
   EntityManager(Level &level);
 
-  EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none, const std::map<std::string, TMX::Property> &properties={});
+  EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none, const TMX::PropertyMap &properties={});
   Entity *makeEntity(const Rect<float> &pos, const std::string &name="", EntityGroup group=EntityGroup::NONE, EntityID parent=Entity::none);
 
   Entity *getEntity(EntityID id) const;

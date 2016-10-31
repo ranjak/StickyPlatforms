@@ -142,9 +142,9 @@ ObjectGroup parseObjectGroup(rapidxml::xml_node<> *group_node)
   return group;
 }
 
-std::map<std::string, Property> parseProperties(rapidxml::xml_node<> *propertiesNode)
+PropertyMap parseProperties(rapidxml::xml_node<> *propertiesNode)
 {
-  std::map<std::string, Property> props;
+  PropertyMap props;
 
   for(rapidxml::xml_node<>* pNode = propertiesNode->first_node("property"); pNode != nullptr; pNode = pNode->next_sibling()) {
     std::string name = findOrFail(pNode, "name");
@@ -162,7 +162,7 @@ std::map<std::string, Property> parseProperties(rapidxml::xml_node<> *properties
     else if (type == "bool")
       typev = Property::BOOL;
 
-    props.emplace(std::make_pair(name, Property(typev, value)));
+    props.properties.emplace(std::make_pair(name, Property(typev, value)));
   }
 
   return props;

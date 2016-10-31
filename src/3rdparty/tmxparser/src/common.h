@@ -28,7 +28,7 @@ ObjectGroup parseObjectGroup(rapidxml::xml_node<>* group_node);
 
 Object parseObject(rapidxml::xml_node<>* obj_node);
 
-std::map<std::string, Property> parseProperties(rapidxml::xml_node<>* propertiesNode);
+PropertyMap parseProperties(rapidxml::xml_node<>* propertiesNode);
 
 Point pointFromString(const std::string &point);
 

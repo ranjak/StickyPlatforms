@@ -35,6 +35,17 @@ struct Property {
   Property &operator=(Property &&p);
 };
 
+struct PropertyMap {
+  std::map<std::string, Property> properties;
+
+  const Property *find(const std::string &name, Property::valType type) const;
+
+  bool getBool(const std::string &name, bool &value, bool defaultVal=false) const;
+  bool getFloat(const std::string &name, float &value, float defaultVal=0.f) const;
+  bool getInt(const std::string &name, int &value, int defaultVal=0) const;
+  bool getString(const std::string &name, std::string &value, const std::string &defaultVal="") const;
+};
+
 struct Object {
   int id;
   std::string name;
@@ -52,7 +63,7 @@ struct Object {
   std::vector<Point> points;
 
   enum { TILE, BOX, ELLIPSE, POLYGON, POLYLINE } kind;
-  std::map<std::string, Property> property;
+  PropertyMap property;
 };
 
 struct ObjectGroup {
@@ -64,7 +75,7 @@ struct ObjectGroup {
   float offsety;
   std::string draworder;
   std::vector<Object> objects;
-  std::map<std::string, Property> property;
+  PropertyMap property;
 };
 
 struct Image {

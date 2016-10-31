@@ -31,7 +31,7 @@ namespace TMX
         unsigned int tileWidth;
         unsigned int tileHeight;
         std::string backgroundColor;
-        std::map<std::string, Property> property;
+        PropertyMap property;
       };
 
       struct Tileset {
@@ -50,7 +50,7 @@ namespace TMX
         bool visible;
         float opacity;
         Data data;
-        std::map<std::string, Property> property;
+        PropertyMap property;
       };
 
       struct ImageLayer {
@@ -59,7 +59,7 @@ namespace TMX
         bool visible;
         float offsetx;
         float offsety;
-        std::map<std::string, Property> property;
+        PropertyMap property;
         Image image;
       };
 

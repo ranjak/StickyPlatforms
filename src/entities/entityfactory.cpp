@@ -11,7 +11,8 @@
 #include "weaponcomponent.h"
 #include "damagecomponent.h"
 #include "healthcomponent.h"
-#include "victorytrigger.h"
+#include "triggercomponent.h"
+#include "triggertypes.h"
 #include "graphicscomponent.h"
 #include "cameracomponent.h"
 #include "log.h"
@@ -27,7 +28,7 @@
 
 namespace game {
 
-EntityID EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID parent, const std::map<std::string, TMX::Property> &properties)
+EntityID EntityFactory::create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID parent, const TMX::PropertyMap &properties)
 {
   if (type == "PlayerStart")
     return manager.makeEntity(pos, name)->id;
@@ -97,30 +98,30 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     return wall->id;
   }
 
-  else if (type == "VictoryTrigger") {
+  else if (type == "Trigger") {
 
-    Entity *victory = manager.makeEntity(pos, name);
+    Entity *trigger = manager.makeEntity(pos, name);
 
-    // Get the next level filename if any
-    std::string nextLevel = "";
-    auto nextLevelProp = properties.find("nextLevel");
+    trigger->addComponent(std::make_unique<StaticPhysicsComponent>(*trigger, false));
 
-    if (nextLevelProp != properties.end() && nextLevelProp->second.type == TMX::Property::STRING)
-      nextLevel = nextLevelProp->second.strVal;
+    std::string triggerType;
+    bool requireOnGround;
 
-    victory->addComponent(std::make_unique<StaticPhysicsComponent>(*victory, false));
-    victory->addComponent(std::make_unique<VictoryTrigger>(nextLevel));
+    (void) properties.getBool("requireOnGround", requireOnGround, false);
 
-    return victory->id;
+    if (properties.getString("type", triggerType))
+      trigger->addComponent(std::make_unique<TriggerComponent>(makeTrigger(triggerType, properties), requireOnGround));
+    else
+      Log::getGlobal().get(Log::WARNING) << "EntityFactory: Trigger "<<*trigger<<" has no \"type\" property"<<std::endl;
+
+    return trigger->id;
   }
 
   else if (type == "TextLine") {
 
-    auto content = properties.find("text");
     std::string textContent = "";
-    if (content != properties.end() && content->second.type == TMX::Property::STRING)
-      textContent = content->second.strVal;
-    else
+
+    if (!properties.getString("text", textContent))
       Log::getGlobal().get(Log::WARNING) << "EntityFactory: TextLine (name="<<name<<") has no \"text\" property"<<std::endl;
 
     Entity* line = manager.makeEntity(pos, name, EntityGroup::NONE, parent);

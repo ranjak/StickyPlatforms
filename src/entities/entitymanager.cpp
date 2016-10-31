@@ -3,7 +3,6 @@
 #include "gamestate.h"
 #include "rect.h"
 #include "log.h"
-#include "tmxcommon.h"
 #include "graphicscomponent.h"
 #include <algorithm>
 
@@ -20,7 +19,7 @@ EntityManager::EntityManager(Level &level) :
 
 }
 
-EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent, const std::map<std::string, TMX::Property> &properties)
+EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent, const TMX::PropertyMap &properties)
 {
   return EntityFactory::create(type, name, pos, *this, parent, properties);
 }

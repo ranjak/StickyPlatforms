@@ -53,6 +53,7 @@ set(SRC_LIST
     src/entities/entityfactory.cpp
     src/entities/entitymanager.cpp
     src/entities/physicsmanager.cpp
+    src/entities/triggertypes.cpp
     src/entities/states/actorstate.cpp
     src/entities/states/horizcontrolstate.cpp
     src/entities/states/groundstate.cpp
@@ -74,9 +75,9 @@ set(SRC_LIST
     src/entities/components/weaponcomponent.cpp
     src/entities/components/healthcomponent.cpp
     src/entities/components/damagecomponent.cpp
-    src/entities/components/victorytrigger.cpp
     src/entities/components/graphicscomponent.cpp
     src/entities/components/cameracomponent.cpp
+    src/entities/components/triggercomponent.cpp
     src/ui/uiwidget.cpp
     src/ui/healthbar.cpp
     src/ui/textwidget.cpp
@@ -123,6 +124,7 @@ set(HEADER_LIST
   src/entities/entityfactory.h
   src/entities/entitymanager.h
   src/entities/physicsmanager.h
+  src/entities/triggertypes.h
   src/entities/states/actorstate.h
   src/entities/states/horizcontrolstate.h
   src/entities/states/groundstate.h
@@ -144,9 +146,9 @@ set(HEADER_LIST
   src/entities/components/weaponcomponent.h
   src/entities/components/healthcomponent.h
   src/entities/components/damagecomponent.h
-  src/entities/components/victorytrigger.h
   src/entities/components/graphicscomponent.h
   src/entities/components/cameracomponent.h
+  src/entities/components/triggercomponent.h
   src/ui/uiwidget.h
   src/ui/healthbar.h
   src/ui/textwidget.h

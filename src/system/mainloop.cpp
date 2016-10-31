@@ -75,10 +75,7 @@ void MainLoop::logStats()
   float avgFrame = static_cast<float>(mAccuFrameTimes) / static_cast<float>(mNumFrameTimes);
   float fps = 1000.f / avgFrame;
 
-  glog(Log::INFO, "FPS: " << fps << ", Avg frame: " << avgFrame << " ms, Max frame: " << mMaxFrameTime);
-  glog(Log::INFO, "Renderer viewport: "<<mDisplay.getViewport());
-  glog(Log::INFO, "Renderer output size: "<<mDisplay.getOutputSize());
-  glog(Log::INFO, "Renderer scale: "<<mDisplay.getScale());
+  glog(Log::INFO, "FPS: " << fps << ", Avg frame: " << avgFrame << " ms, Max frame: " << mMaxFrameTime << " ms");
 
   mMaxFrameTime = 0;
   mAccuFrameTimes = 0;
