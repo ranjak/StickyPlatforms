@@ -116,4 +116,17 @@ O9/03/2016
 
   A little late, but done.
   Time to make actual levels. I'd like to have 3 of them in the game, 2 being a minimum.
-  
+
+10/31/2016
+
+  I have added/tweaked a few features over the weekend.
+  For 11/02:
+    * First level done. This level should introduce the player to the game's mechanics.
+      It should follow this structure:
+      1. Obvious level construct that can only be overcome using a specific gameplay feature
+      2. Now that the feature is "learned", put it into practice with more complicated constructs.
+      
+  Then I'll think about what I'll put in the second level. It might need a few more gameplay features
+  to make it interesting in comparison to the first level.
+  Ideally I'd like the game to be done by 11/11. As stated before, this includes current gameplay features,
+  and a least 2 levels.
