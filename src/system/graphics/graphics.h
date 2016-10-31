@@ -15,14 +15,14 @@ public:
   Graphics();
   virtual ~Graphics();
 
-  virtual void draw(Display &target, int x, int y) const = 0;
-  virtual void draw(Display &target, const Rect<int> &dest) const = 0;
-  void draw(Display &target, const Vector<int> &pos) const;
+  virtual void draw(Display &target, int x, int y) = 0;
+  virtual void draw(Display &target, const Rect<int> &dest) = 0;
+  void draw(Display &target, const Vector<int> &pos);
 
 
-  void draw(Display &target, float x, float y) const;
-  void draw(Display &target, const Vector<float> &pos) const;
-  void draw(Display &target, const Rect<float> &dest) const;
+  void draw(Display &target, float x, float y);
+  void draw(Display &target, const Vector<float> &pos);
+  void draw(Display &target, const Rect<float> &dest);
 };
 
 } //namespace game

@@ -77,7 +77,7 @@ void GameState::update(uint32_t step)
 
 }
 
-void GameState::draw(Display &target) const
+void GameState::draw(Display &target)
 {
   if (mLevel) {
     target.setLogicalSize(mCamera.getViewport().w, mCamera.getViewport().h);

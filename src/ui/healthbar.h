@@ -16,7 +16,7 @@ class HealthBar : public UIWidget
 public:
   HealthBar(const Rect<float> &bounds, const std::string &name="health", const Vector<float> &padding=Vector<float>(2.f, 2.f));
 
-  void draw(Display &display) const override;
+  void draw(Display &display) override;
 
   void setSize(float w, float h) override;
   Vector<float> getSize() const override;

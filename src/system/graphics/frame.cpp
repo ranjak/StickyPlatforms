@@ -14,12 +14,12 @@ Frame::Frame(int w, int h, const Color &color) :
 
 }
 
-void Frame::draw(Display &target, int x, int y) const
+void Frame::draw(Display &target, int x, int y)
 {
   draw(target, Rect<int>(x, y, w, h));
 }
 
-void Frame::draw(Display &target, const Rect<int> &dest) const
+void Frame::draw(Display &target, const Rect<int> &dest)
 {
   SDL_Rect renderRect = getSdlRect(dest);
 

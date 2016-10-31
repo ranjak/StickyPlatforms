@@ -8,31 +8,41 @@
 namespace game {
 
 
-Texture::Texture(Display &renderer, SDL_Surface *surface) :
+Texture::Texture(Display &renderer) :
   mTexture(nullptr, SDL_DestroyTexture),
   mSize(),
   mRenderer(renderer)
 {
-  mTexture.reset(SDL_CreateTextureFromSurface(renderer.getRenderer(), surface));
-
-  if (!mTexture) {
-    game::error(std::string("Couldn't create texture: ") + SDL_GetError());
-  }
-
-  if (SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mSize.x, &mSize.y) < 0) {
-    game::error(std::string("SDL Texture error: ") + SDL_GetError());
-  }
 }
 
-void Texture::draw(Display &target, int x, int y) const
+Texture::Texture(Display &renderer, SDL_Surface *surface) :
+  Texture(renderer)
+{
+  reset(surface);
+}
+
+void Texture::draw(Display &target, int x, int y)
 {
   // Draw the texture without resizing it
-  draw(target, Rect<int>(x, y, mSize.x, mSize.y));
+  draw(target, Rect<int>(x, y, mSize.x, mSize.y), Rect<int>(0, 0, mSize.x, mSize.y));
 }
 
-void Texture::draw(Display &target, const Rect<int> &dest) const
+void Texture::draw(Display &target, const Rect<int> &dest)
 {
   draw(target, dest, Rect<int>(0, 0, mSize.x, mSize.y));
+}
+
+void Texture::reset(SDL_Surface *surface)
+{
+  mTexture.reset(SDL_CreateTextureFromSurface(mRenderer.getRenderer(), surface));
+
+  if (!mTexture) {
+    Log::getGlobal().get(Log::WARNING) << "Texture: creation from SDL surface failed: "<<SDL_GetError()<<std::endl;
+  }
+
+  else if (SDL_QueryTexture(mTexture.get(), nullptr, nullptr, &mSize.x, &mSize.y) < 0) {
+    Log::getGlobal().get(Log::WARNING) << "SDL Texture error: "<<SDL_GetError()<<std::endl;
+  }
 }
 
 template<typename T>

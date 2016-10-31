@@ -32,7 +32,7 @@ public:
 
   void update(GameState &game, std::uint32_t step);
 
-  void draw(Display &target, const GameState &game) const;
+  void draw(Display &target, const GameState &game);
 
   TileID *tiles();
 

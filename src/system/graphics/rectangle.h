@@ -16,9 +16,9 @@ public:
 
   Rectangle(int w=0, int h=0, const Color &color=Color::WHITE);
 
-  void draw(Display& target, int x, int y) const override;
+  void draw(Display& target, int x, int y) override;
 
-  void draw(Display &target, const Rect<int> &dest) const override;
+  void draw(Display &target, const Rect<int> &dest) override;
 
   void setSize(int w, int h);
   void setColor(const Color& mColor);

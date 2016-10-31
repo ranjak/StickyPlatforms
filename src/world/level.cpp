@@ -38,7 +38,7 @@ void Level::update(GameState &game, uint32_t step)
   mEntities.update(step, game);
 }
 
-void Level::draw(Display &target, const GameState &game) const
+void Level::draw(Display &target, const GameState &game)
 {
   const Camera& cam = game.getCamera();
   Rect<float> viewport = cam.getViewport().getIntersection(Rect<float>(0.f, 0.f, mSize.x*Tile::SIZE, mSize.y*Tile::SIZE));

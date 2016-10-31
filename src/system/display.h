@@ -3,11 +3,11 @@
 
 #include "SDL.h"
 #include "gamevector.h"
+#include "rect.h"
 
 namespace game {
 
 class GameState;
-template<typename T> class Vector;
 
 class Display
 {
@@ -21,12 +21,16 @@ public:
 
   void setLogicalSize(int w, int h);
 
-  void useWindowCoordinates();
+  void setScale(float scaleFactor);
+
+  Rect<int> getViewport();
+  Vector<int> getOutputSize();
+  Vector<float> getScale();
 
   /**
    * @brief render one frame.
    */
-  void render(const GameState& game);
+  void render(GameState &game);
 
   SDL_Renderer* getRenderer();
 

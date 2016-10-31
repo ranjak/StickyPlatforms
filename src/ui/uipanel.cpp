@@ -11,7 +11,7 @@ UIPanel::UIPanel(const Vector<float> &size) :
 
 }
 
-void UIPanel::draw(Display &display) const
+void UIPanel::draw(Display &display)
 {
   display.setLogicalSize(static_cast<int>(mSize.x), static_cast<int>(mSize.y));
 

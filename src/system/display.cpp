@@ -1,6 +1,7 @@
 #include "display.h"
 #include "log.h"
 #include "gamestate.h"
+#include "util_sdl.h"
 #include "SDL.h"
 #include <stdexcept>
 
@@ -48,13 +49,36 @@ void Display::setLogicalSize(int w, int h)
     throw std::runtime_error(SDL_GetError());
 }
 
-void Display::useWindowCoordinates()
+void Display::setScale(float scaleFactor)
 {
-  if (SDL_RenderSetScale(mRenderer, 1.f, 1.f) < 0)
+  if (SDL_RenderSetScale(mRenderer, scaleFactor, scaleFactor) < 0)
     throw std::runtime_error(SDL_GetError());
 }
 
-void Display::render(const GameState &game)
+Rect<int> Display::getViewport()
+{
+  SDL_Rect viewport;
+  SDL_RenderGetViewport(mRenderer, &viewport);
+  return getRect<int>(viewport);
+}
+
+Vector<int> Display::getOutputSize()
+{
+  Vector<int> size;
+  SDL_GetRendererOutputSize(mRenderer, &size.x, &size.y);
+
+  return size;
+}
+
+Vector<float> Display::getScale()
+{
+  Vector<float> scale;
+  SDL_RenderGetScale(mRenderer, &scale.x, &scale.y);
+
+  return scale;
+}
+
+void Display::render(GameState &game)
 {
 //  if (SDL_RenderSetLogicalSize(mRenderer, mCameraSize.x, mCameraSize.y) < 0)
 //    throw std::runtime_error(SDL_GetError());

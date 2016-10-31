@@ -73,7 +73,7 @@ void EntityManager::update(std::uint32_t step, GameState &game)
   }
 }
 
-void EntityManager::draw(Display &display, const GameState &game) const
+void EntityManager::draw(Display &display, const GameState &game)
 {
   GraphicsComponent *graphics = nullptr;
 //  const Camera &cam = game.getCamera();

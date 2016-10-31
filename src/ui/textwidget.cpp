@@ -10,7 +10,7 @@ TextWidget::TextWidget(Display &display, const std::string &name, const std::str
 
 }
 
-void TextWidget::draw(Display &display) const
+void TextWidget::draw(Display &display)
 {
   mText.draw(display, mPos);
 }

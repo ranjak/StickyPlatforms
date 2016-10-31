@@ -17,7 +17,7 @@ class UIPanel
 public:
   UIPanel(const Vector<float> &size);
 
-  void draw(Display &display) const;
+  void draw(Display &display);
 
   UIWidget *getByName(const std::string &widgetName);
 

@@ -62,7 +62,7 @@ public:
    * @param y
    * @param cam Current camera.
    */
-  void draw(Display& display, int x, int y, const Camera &cam) const;
+  void draw(Display& display, int x, int y, const Camera &cam);
 
   /**
    * @brief onCollision Called by the level object when an entity collides with an instance of this tile.

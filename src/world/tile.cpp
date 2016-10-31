@@ -36,7 +36,7 @@ bool Tile::isObstacle() const
   return mIsObstacle;
 }
 
-void Tile::draw(Display& display, int x, int y, const Camera &cam) const
+void Tile::draw(Display& display, int x, int y, const Camera &cam)
 {
   if (mGraphics) {
     mGraphics->draw(display, cam.toCamCoords(Rect<int>(x*SIZE, y*SIZE, SIZE, SIZE)), mGraphicsPos);

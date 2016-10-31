@@ -17,16 +17,23 @@ class Texture : public Graphics
 public:
   using Graphics::draw;
 
+  Texture(Display &renderer);
   Texture(Display &renderer, SDL_Surface *surface);
 
-  void draw(Display &target, int x, int y) const override;
+  void draw(Display &target, int x, int y) override;
 
-  void draw(Display &target, const Rect<int> &dest) const override;
+  void draw(Display &target, const Rect<int> &dest) override;
 
   template<typename T>
   void draw(Display &target, const Rect<T> &dest, const Rect<T> &source) const;
 
   const Vector<int> &getSize() const { return mSize; }
+
+  /**
+   * @brief reset Delete the texture (if applicable) and create a new one using \p surface.
+   * @param surface Surface from which the texture will be re-created.
+   */
+  void reset(SDL_Surface *surface);
 
 private:
   std::unique_ptr<struct SDL_Texture, void(*)(struct SDL_Texture*)> mTexture;

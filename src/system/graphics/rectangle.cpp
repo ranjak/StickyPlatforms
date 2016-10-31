@@ -15,12 +15,12 @@ Rectangle::Rectangle(int w, int h, const Color &color) :
 {
 }
 
-void Rectangle::draw(Display &target, int x, int y) const
+void Rectangle::draw(Display &target, int x, int y)
 {
   draw(target, Rect<int>(x, y, w, h));
 }
 
-void Rectangle::draw(Display &target, const Rect<int> &dest) const
+void Rectangle::draw(Display &target, const Rect<int> &dest)
 {
   SDL_Rect renderRect = getSdlRect(dest);
 

@@ -16,7 +16,7 @@ HealthBar::HealthBar(const Rect<float> &bounds, const std::string &name, const V
 
 }
 
-void HealthBar::draw(Display &display) const
+void HealthBar::draw(Display &display)
 {
   mFrame.draw(display, mPos);
 

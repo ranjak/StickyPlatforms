@@ -35,7 +35,7 @@ public:
 
   void update(std::uint32_t step, GameState &game);
 
-  void draw(Display &display, const GameState &game) const;
+  void draw(Display &display, const GameState &game);
 
   Level &getLevel() { return mLevel; }
 

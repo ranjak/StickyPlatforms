@@ -44,7 +44,7 @@ public:
    */
   void update(std::uint32_t step);
 
-  void draw(Display& target) const;
+  void draw(Display& target);
 
   void setPlayingState();
   /**
