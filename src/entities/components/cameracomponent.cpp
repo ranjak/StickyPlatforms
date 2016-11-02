@@ -32,7 +32,7 @@ CameraComponent::~CameraComponent()
     activeInstance = nullptr;
 }
 
-void CameraComponent::update(std::uint32_t step, GameState &game)
+void CameraComponent::updateDelegate(std::uint32_t step, GameState &game)
 {
   if (this != activeInstance)
     return;
@@ -52,7 +52,7 @@ void CameraComponent::update(std::uint32_t step, GameState &game)
     updateShake();
 }
 
-void CameraComponent::receiveMessage(Message &msg)
+void CameraComponent::receiveMessageDelegate(Message &msg)
 {
   if (msg.type == Message::Damage) {
     shake(0.25f, 8.f);

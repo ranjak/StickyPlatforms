@@ -24,8 +24,6 @@ public:
 
   ~MovingPhysicsComponent();
 
-  void update(std::uint32_t step, GameState &game) override;
-
   Vector<float> &velocity() { return mVelocity; }
 
   /**
@@ -72,6 +70,8 @@ public:
   void collide(Tile &tile, const Vector<int> &location);
 
 private:
+  void updateDelegate(std::uint32_t step, GameState &game) override;
+
   void collisionResponse(const Vector<int> &normal);
 
 private:

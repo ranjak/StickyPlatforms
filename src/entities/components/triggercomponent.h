@@ -24,13 +24,15 @@ public:
 class TriggerComponent : public Component
 {
 public:
-  TriggerComponent(std::unique_ptr<TriggerBehavior> behavior, bool requiresOnGround=false);
+  TriggerComponent(std::unique_ptr<TriggerBehavior> behavior, bool requiresOnGround=false, bool singleShot=true);
 
-  void receiveMessage(Message &msg) override;
+private:
+  void receiveMessageDelegate(Message &msg) override;
 
 private:
   std::unique_ptr<TriggerBehavior> mBehavior;
   bool mRequiresOnGround;
+  bool mIsSignleShot;
 };
 
 

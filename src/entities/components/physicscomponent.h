@@ -13,8 +13,6 @@ class PhysicsComponent : public Component
 {
 public:
 
-  void update(uint32_t step, GameState &game);
-
   bool isObstacle() { return mIsObstacle; }
 
   bool isCollidable() { return mEntity.isEnabled() && mIsCollidable; }
@@ -29,6 +27,8 @@ public:
 
 protected:
   PhysicsComponent(Entity &owner, bool isObstacle=true);
+
+  void updateDelegate(uint32_t step, GameState &game);
 
 protected:
   bool mIsCollidable;

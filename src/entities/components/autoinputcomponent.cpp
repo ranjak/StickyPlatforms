@@ -6,7 +6,7 @@
 namespace game {
 
 
-void AutoInputComponent::update(uint32_t /*step*/, GameState &/*game*/)
+void AutoInputComponent::updateDelegate(uint32_t /*step*/, GameState &/*game*/)
 {
   mReleasedCommands.clear();
   mReleasedCommands.swap(mHitCommands);

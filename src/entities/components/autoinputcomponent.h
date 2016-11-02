@@ -11,9 +11,6 @@ enum Command;
 class AutoInputComponent : public InputComponent
 {
 public:
-
-  void update(std::uint32_t, GameState &) override;
-
   bool isHit(Command cmd) const override;
   bool isHeld(Command cmd) const override;
   bool isReleased(Command cmd) const override;
@@ -22,6 +19,8 @@ protected:
   void hit(Command cmd);
   void hold(Command cmd);
   void release(Command cmd);
+
+  void updateDelegate(std::uint32_t, GameState &) override;
 
 private:
   std::vector<Command> mHitCommands;

@@ -16,7 +16,7 @@ BasicAiComponent::BasicAiComponent(MovingPhysicsComponent &physics) :
   hold(Command::LEFT);
 }
 
-void BasicAiComponent::receiveMessage(Message &message)
+void BasicAiComponent::receiveMessageDelegate(Message &message)
 {
   //switch (message.type) {
   //default:
@@ -39,9 +39,9 @@ void BasicAiComponent::processMessages()
   }
 }
 
-void BasicAiComponent::update(uint32_t step, GameState &game)
+void BasicAiComponent::updateDelegate(uint32_t step, GameState &game)
 {
-  AutoInputComponent::update(step, game);
+  AutoInputComponent::updateDelegate(step, game);
 
   //processMessages();
 

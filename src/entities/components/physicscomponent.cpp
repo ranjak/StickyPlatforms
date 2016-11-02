@@ -15,7 +15,7 @@ PhysicsComponent::PhysicsComponent(Entity &owner, bool isObstacle) :
 
 }
 
-void PhysicsComponent::update(uint32_t step, GameState &game)
+void PhysicsComponent::updateDelegate(uint32_t step, GameState &game)
 {
   mCollisions.clear();
 }

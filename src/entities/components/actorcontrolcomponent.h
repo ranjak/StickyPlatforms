@@ -35,8 +35,6 @@ public:
 
   ActorControlComponent(Entity &entity, MovingPhysicsComponent &physics, InputComponent &input, float maxSpeed, float maxAirSpeed);
 
-  void update(uint32_t step, GameState &game) override;
-  void receiveMessage(Message &msg) override;
   void setState(State newState);
 
   MovingPhysicsComponent &physics() { return mPhysics; }
@@ -47,6 +45,10 @@ public:
 
   int getDirection() const;
   void setDirection(int direction);
+
+private:
+  void updateDelegate(uint32_t step, GameState &game) override;
+  void receiveMessageDelegate(Message &msg) override;
 
 private:
   float mMaxSpeed;

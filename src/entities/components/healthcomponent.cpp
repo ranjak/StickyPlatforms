@@ -19,7 +19,7 @@ HealthComponent::HealthComponent(Entity &owner, int hp) :
 
 }
 
-void HealthComponent::receiveMessage(Message &msg)
+void HealthComponent::receiveMessageDelegate(Message &msg)
 {
   if (msg.type == Message::OnCollision) {
 

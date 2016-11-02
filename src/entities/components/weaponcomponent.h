@@ -21,12 +21,10 @@ public:
 
   ~WeaponComponent();
 
-  void receiveMessage(Message &msg) override;
-
   void swing(int direction);
 
 private:
-  static SwordComponent &makeSword(Entity &owner);
+  void receiveMessageDelegate(Message &msg) override;
 
 private:
   EntityID mSword;

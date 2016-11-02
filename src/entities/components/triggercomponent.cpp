@@ -8,14 +8,15 @@
 namespace game {
 
 
-TriggerComponent::TriggerComponent(std::unique_ptr<TriggerBehavior> behavior, bool requiresOnGround) :
+TriggerComponent::TriggerComponent(std::unique_ptr<TriggerBehavior> behavior, bool requiresOnGround, bool singleShot) :
   mBehavior(std::move(behavior)),
-  mRequiresOnGround(requiresOnGround)
+  mRequiresOnGround(requiresOnGround),
+  mIsSignleShot(singleShot)
 {
 
 }
 
-void TriggerComponent::receiveMessage(Message &msg)
+void TriggerComponent::receiveMessageDelegate(Message &msg)
 {
   if (msg.type == Message::OnCollision) {
 
@@ -27,6 +28,9 @@ void TriggerComponent::receiveMessage(Message &msg)
 
       if (entity && entity->getName() == "Hero" && (!mRequiresOnGround || entity->getComponent<MovingPhysicsComponent>()->isOnGround())) {
         mBehavior->execute(*entity);
+
+        if (mIsSignleShot)
+          setEnabled(false);
       }
     }
   }

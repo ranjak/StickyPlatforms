@@ -12,6 +12,10 @@ struct PropertyMap;
 
 namespace game {
 
+/**
+ * @brief Trigger the player's victory, ending the curent level,
+ * and possibly loading a new one.
+ */
 class VictoryTrigger : public TriggerBehavior
 {
 public:
@@ -21,6 +25,21 @@ public:
 
 private:
   std::string mNextLevel;
+};
+
+/**
+ * @brief Set another object's state (enabled/disabled).
+ */
+class EnableTrigger : public TriggerBehavior
+{
+public:
+  EnableTrigger(const std::string &entityName, bool enabled) : mEntity(entityName), mEntityState(enabled) {}
+
+  void execute(Entity &entity) override;
+
+private:
+  std::string mEntity;
+  bool mEntityState;
 };
 
 

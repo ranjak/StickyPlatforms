@@ -28,7 +28,7 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
 
 }
 
-void ActorControlComponent::update(uint32_t step, GameState &game)
+void ActorControlComponent::updateDelegate(uint32_t step, GameState &game)
 {
   // For initialization, and states that might need a delayed call to enter()
   if (mNextState != NONE) {
@@ -39,7 +39,7 @@ void ActorControlComponent::update(uint32_t step, GameState &game)
   mCurrentState->update(step, game);
 }
 
-void ActorControlComponent::receiveMessage(Message &msg)
+void ActorControlComponent::receiveMessageDelegate(Message &msg)
 {
   mCurrentState->receiveMessage(msg);
 }

@@ -12,11 +12,31 @@ struct Message;
 class Component
 {
 public:
+  Component() : mEnabled(true) {}
+
   virtual ~Component() = 0;
 
-  virtual void update(std::uint32_t step, GameState &game) {}
+  void setEnabled(bool enable) { mEnabled = enable; }
 
-  virtual void receiveMessage(Message &msg) {}
+  void update(std::uint32_t step, GameState &game)
+  {
+    if (mEnabled)
+      updateDelegate(step, game);
+  }
+
+  void receiveMessage(Message &msg)
+  {
+    if (mEnabled)
+      receiveMessageDelegate(msg);
+  }
+
+private:
+  virtual void updateDelegate(std::uint32_t step, GameState &game) {}
+
+  virtual void receiveMessageDelegate(Message &msg) {}
+
+private:
+  bool mEnabled;
 };
 
 inline Component::~Component() {}

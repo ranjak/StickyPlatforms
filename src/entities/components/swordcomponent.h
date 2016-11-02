@@ -12,11 +12,12 @@ class SwordComponent : public Component
 public:
   SwordComponent(MovingPhysicsComponent &physics);
 
-  void update(uint32_t step, GameState &game) override;
-
   void swing(int direction);
 
   Entity &getEntity();
+
+private:
+  void updateDelegate(uint32_t step, GameState &game) override;
 
 private:
   MovingPhysicsComponent &mPhysics;

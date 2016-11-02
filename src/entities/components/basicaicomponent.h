@@ -16,17 +16,18 @@ class BasicAiComponent : public AutoInputComponent
 public:
   BasicAiComponent(MovingPhysicsComponent &physics);
 
-  void update(uint32_t step, GameState &game) override;
+
+private:
+  void processMessages();
+
+  void updateDelegate(uint32_t step, GameState &game) override;
 
   /**
    * @brief receiveMessage Copies relevant messages onto a local queue for processing at the next update.
    * This isolates AI logic in the update phase.
    * @param message
    */
-  void receiveMessage(Message &message) override;
-
-private:
-  void processMessages();
+  void receiveMessageDelegate(Message &message) override;
 
 private:
   int mDirection;

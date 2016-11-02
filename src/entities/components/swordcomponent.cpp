@@ -17,7 +17,7 @@ SwordComponent::SwordComponent(MovingPhysicsComponent &physics) :
   physics.entity().setEnabled(false);
 }
 
-void SwordComponent::update(uint32_t step, GameState &game)
+void SwordComponent::updateDelegate(uint32_t step, GameState &game)
 {
   if (game.now() >= mSwingEnd)
     mPhysics.entity().setEnabled(false);

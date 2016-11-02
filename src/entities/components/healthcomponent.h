@@ -15,13 +15,14 @@ class HealthComponent : public Component
 public:
   HealthComponent(Entity &owner, int hp);
 
-  void receiveMessage(Message &msg);
-
   int getHealthPoints() const { return mHealthPoints; }
 
   int getMaxHealthPoints() const { return mMaxHP; }
 
   void setUI(HealthBar *ui);
+
+private:
+  void receiveMessageDelegate(Message &msg);
 
 private:
   Entity &mEntity;

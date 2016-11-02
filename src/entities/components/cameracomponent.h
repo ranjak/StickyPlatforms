@@ -16,10 +16,6 @@ public:
 
   ~CameraComponent();
 
-  void update(std::uint32_t step, GameState &game) override;
-
-  void receiveMessage(Message &msg) override;
-
   /**
    * @brief setActive Make this component the active camera controller.
    * The camera will then be attached to the entity that owns this component.
@@ -29,6 +25,11 @@ public:
   void shake(float duration, float radius=15.f);
 
   void updateShake();
+
+private:
+  void updateDelegate(std::uint32_t step, GameState &game) override;
+
+  void receiveMessageDelegate(Message &msg) override;
 
 private:
   // The camera can't track more than one entity at a time!

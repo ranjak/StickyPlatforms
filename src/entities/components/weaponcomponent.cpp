@@ -20,7 +20,7 @@ WeaponComponent::~WeaponComponent()
     mSwordComp->getEntity().kill();
 }
 
-void WeaponComponent::receiveMessage(Message &msg)
+void WeaponComponent::receiveMessageDelegate(Message &msg)
 {
   if (msg.type == Message::ChildRemoved && static_cast<ChildRemovedMsg &>(msg).id == mSword) {
     mSword = Entity::none;

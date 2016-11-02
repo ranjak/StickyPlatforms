@@ -16,7 +16,6 @@ class GraphicsComponent : public Component
 public:
   GraphicsComponent(std::unique_ptr<Graphics> graphics);
 
-  void update(std::uint32_t step, GameState &game);
 
   void draw(Display &display, const Vector<float> &pos) const;
 
@@ -28,6 +27,9 @@ public:
    * @param period How long should a blinking "state" (visible or invisible) last, in milliseconds.
    */
   void setBlinking(float duration, std::uint32_t period=10);
+
+private:
+  void updateDelegate(std::uint32_t step, GameState &game);
 
 private:
   std::unique_ptr<Graphics> mGraphics;

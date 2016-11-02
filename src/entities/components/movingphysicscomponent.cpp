@@ -37,9 +37,9 @@ MovingPhysicsComponent::~MovingPhysicsComponent()
   mEntity.manager().getPhysics().removeComponent(this);
 }
 
-void MovingPhysicsComponent::update(uint32_t step, GameState &game)
+void MovingPhysicsComponent::updateDelegate(uint32_t step, GameState &game)
 {
-  PhysicsComponent::update(step, game);
+  PhysicsComponent::updateDelegate(step, game);
 
   if (!mIsOnGround && mHasGravity)
     addAcceleration(gravityAccel);

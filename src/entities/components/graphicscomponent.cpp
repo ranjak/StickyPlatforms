@@ -14,7 +14,7 @@ GraphicsComponent::GraphicsComponent(std::unique_ptr<Graphics> graphics) :
 
 }
 
-void GraphicsComponent::update(uint32_t step, GameState &game)
+void GraphicsComponent::updateDelegate(uint32_t step, GameState &game)
 {
   if (mNumBlinkSwitches > 0 && mNextBlinkSwitch <= game.now()) {
     mVisible = !mVisible;
