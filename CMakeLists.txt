@@ -50,6 +50,7 @@ set(SRC_LIST
     src/test/test.cpp
     src/entities/entity.cpp
     src/entities/camera.cpp
+    src/entities/cameracontroller.cpp
     src/entities/entityfactory.cpp
     src/entities/entitymanager.cpp
     src/entities/physicsmanager.cpp
@@ -121,6 +122,7 @@ set(HEADER_LIST
   src/test/test.h
   src/entities/entity.h
   src/entities/camera.h
+  src/entities/cameracontroller.h
   src/entities/entityfactory.h
   src/entities/entitymanager.h
   src/entities/physicsmanager.h

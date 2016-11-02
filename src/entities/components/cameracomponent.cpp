@@ -14,10 +14,10 @@ namespace game {
 
 CameraComponent *CameraComponent::activeInstance = nullptr;
 
-CameraComponent::CameraComponent(Entity &entity) :
+CameraComponent::CameraComponent(Entity &entity, std::unique_ptr<CameraController> controller) :
   mEntity(entity),
   mCamera(GameState::current().getCamera()),
-  mVelocity(),
+  mController(std::move(controller)),
   mShakeRadius(0.f),
   mShakeAngle(0.f),
   mShakeEndTimestamp(0)
@@ -37,12 +37,10 @@ void CameraComponent::updateDelegate(std::uint32_t step, GameState &game)
   if (this != activeInstance)
     return;
 
-  Level& level = game.getLevel();
-  Vector<float> size = level.getPixelSize();
-  Rect<float> &viewport = mCamera.viewport();
+  mController->update(step, mEntity, mCamera);
 
-  Rect<float> box = mEntity.getGlobalBox();
-  viewport.setCenter(box.getCenter());
+  Vector<float> size = game.getLevel().getPixelSize();
+  Rect<float> &viewport = mCamera.viewport();
 
   // Do not go beyond the level's boundaries (but handle cases where the camera is larger than the level)
   viewport.x = clamp(0.f, viewport.x, std::max(size.x - viewport.w, 0.f));

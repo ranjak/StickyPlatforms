@@ -3,6 +3,9 @@
 
 #include "component.h"
 #include "gamevector.h"
+#include "cameracontroller.h"
+#include "make_unique.h"
+#include <memory>
 
 namespace game {
 
@@ -12,7 +15,7 @@ class Camera;
 class CameraComponent : public Component
 {
 public:
-  CameraComponent(Entity &entity);
+  CameraComponent(Entity &entity, std::unique_ptr<CameraController> controller=std::make_unique<CameraFollowSimple>());
 
   ~CameraComponent();
 
@@ -37,7 +40,8 @@ private:
 
   Entity &mEntity;
   Camera &mCamera;
-  Vector<float> mVelocity;
+  // Delegate object that implements custom logic to track the entity
+  std::unique_ptr<CameraController> mController;
 
   float mShakeRadius;
   float mShakeAngle;
