@@ -41,7 +41,8 @@ void CameraAnchoredY::update(uint32_t step, Entity &entity, Camera &camera)
   // pan just high enough for it to see where a jump would lead it
   if (mEntityCtrl && mPhysics.isOnGround()) {
 
-    float maxJump = box.y - mEntityCtrl->getMaxJumpHeight();
+    // The -5.f is for float inconsistencies
+    float maxJump = box.y - box.h - mEntityCtrl->getMaxJumpHeight() - 5.f;
     mPanTarget = std::min(mBaseY, maxJump);
     mPanInitialPos = viewport.y;
   }
