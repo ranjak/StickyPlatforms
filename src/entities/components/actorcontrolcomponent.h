@@ -46,6 +46,8 @@ public:
   int getDirection() const;
   void setDirection(int direction);
 
+  float getMaxJumpHeight() const;
+
 private:
   void updateDelegate(uint32_t step, GameState &game) override;
   void receiveMessageDelegate(Message &msg) override;

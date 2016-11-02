@@ -16,6 +16,8 @@ public:
 
   void exit() override;
 
+  float getMaxJumpHeight() const { return mMaxJumpHeight; }
+
 private:
   /** Calculate the impulse speed required in the given time frame to reach the given height */
   float computeInitialSpeed();

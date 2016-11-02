@@ -15,6 +15,7 @@
 #include "triggertypes.h"
 #include "graphicscomponent.h"
 #include "cameracomponent.h"
+#include "cameracontroller.h"
 #include "log.h"
 #include "make_unique.h"
 #include "world/tile.h"
@@ -65,7 +66,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     hero->addComponent(std::make_unique<WeaponComponent>(*hero));
     hero->addComponent(std::make_unique<HealthComponent>(*hero, 5));
     hero->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Rectangle>(pos.w, pos.h, Color::GREEN)));
-    hero->addComponent(std::make_unique<CameraComponent>(*hero));
+    hero->addComponent(std::make_unique<CameraComponent>(*hero, std::make_unique<CameraAnchoredY>(*hero)));
 
     return hero->id;
   }

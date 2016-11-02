@@ -99,5 +99,10 @@ void ActorControlComponent::setDirection(int direction)
   mDirection = direction;
 }
 
+float ActorControlComponent::getMaxJumpHeight() const
+{
+  return mJumpState.getMaxJumpHeight();
+}
+
 
 } // namespace game
