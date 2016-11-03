@@ -33,7 +33,9 @@ CameraAnchoredY::CameraAnchoredY(Entity &entity, float baseY) :
   mEntityCtrl(entity.getComponent<ActorControlComponent>()),
   mPhysics(*entity.getComponent<MovingPhysicsComponent>()),
   mCameraControlTrigger(Entity::none)
-{}
+{
+  GameState::current().getCamera().viewport().y = baseY;
+}
 
 void CameraAnchoredY::update(uint32_t step, Entity &entity, Camera &camera)
 {
@@ -43,8 +45,9 @@ void CameraAnchoredY::update(uint32_t step, Entity &entity, Camera &camera)
   // Always follow on X
   viewport.x = (box.x + box.w/2.f) - viewport.w/2.f;
 
+  mPanTarget = viewport.y;
   // If the hero is near the top of the viewport,
-  // pan just high enough for it to see where a jump would lead it
+  // pan just high enough for it to see where a jump would lead
   if (mEntityCtrl && mPhysics.isOnGround()) {
 
     // The -5.f is for float inconsistencies
@@ -53,20 +56,23 @@ void CameraAnchoredY::update(uint32_t step, Entity &entity, Camera &camera)
     mPanInitialPos = viewport.y;
   }
 
-  if (mPanTarget < viewport.y && mPanTarget < mPanInitialPos)
-    viewport.y = std::max(mPanTarget, viewport.y - 400.f*step/1000.f);
-  else if (mPanTarget > viewport.y && mPanTarget > mPanInitialPos)
-    viewport.y = std::min(mPanTarget, viewport.y + 400.f*step/1000.f);
-
   // Always keep the hero in sight, and apply a margin
-  if (box.y - mTopMargin < viewport.y) {
-    viewport.y = box.y - mTopMargin;
-    mPanTarget = viewport.y;
+  mPanTarget = std::min(mPanTarget, box.y - mTopMargin);
+  mPanTarget = std::max(mPanTarget, box.y + 2.f*box.h - viewport.h);
+
+  // Move the camera
+  float entityVelY = mPhysics.velocity().y;
+  if (mPanTarget < viewport.y /*&& mPanTarget < mPanInitialPos*/) {
+
+    float panVelocity = -400.f + ((entityVelY < 0.f) ? entityVelY : 0.f);
+    viewport.y = std::max(mPanTarget, viewport.y + (panVelocity * step/1000.f));
   }
-  else if (box.y + 2.f*box.h > viewport.y + viewport.h) {
-    viewport.y = box.y + 2.f*box.h - viewport.h;
-    mPanTarget = viewport.y;
+  else if (mPanTarget > viewport.y /*&& mPanTarget > mPanInitialPos*/) {
+
+    float panVelocity = 400.f + ((entityVelY > 0.f) ? entityVelY : 0.f);
+    viewport.y = std::min(mPanTarget, viewport.y + (panVelocity * step/1000.f));
   }
+
 }
 
 void CameraAnchoredY::receiveMessage(Message &msg)
