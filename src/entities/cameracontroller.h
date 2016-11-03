@@ -2,19 +2,22 @@
 #define CAMERACONTROLLER_H
 
 #include "gamevector.h"
+#include "entity.h"
 #include <cstdint>
 
 namespace game {
 
-class Entity;
 class Camera;
 class ActorControlComponent;
 class MovingPhysicsComponent;
+class Message;
 
 class CameraController
 {
 public:
   virtual void update(std::uint32_t step, Entity &entity, Camera &camera) = 0;
+
+  virtual void receiveMessage(Message &msg) {}
 };
 
 /**
@@ -41,17 +44,26 @@ public:
 
   void update(uint32_t step, Entity &entity, Camera &camera) override;
 
+  void receiveMessage(Message &msg) override;
+
+  void setBaseY(float base);
+  void setTopMargin(float tileMargin);
+
 private:
   // Y coordinate the camera is anchored to.
   float mBaseY;
-  // Y velocity when panning.
-  float mVelocity;
+  // Minimum number of pixels to keep between the hero and the top of the viewport.
+  float mTopMargin;
+  // These 2 values can be changed by a trigger. Keep the original ones so we can restore them.
+  float mOriginalBaseY, mOriginalTopMargin;
 
   float mPanTarget;
   float mPanInitialPos;
 
   ActorControlComponent *mEntityCtrl;
   MovingPhysicsComponent &mPhysics;
+  // This value is set when the entity is inside a camera control trigger
+  EntityID mCameraControlTrigger;
 };
 
 } // namespace game

@@ -103,18 +103,21 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     Entity *trigger = manager.makeEntity(pos, name);
 
-    trigger->addComponent(std::make_unique<StaticPhysicsComponent>(*trigger, false));
+    std::unique_ptr<PhysicsComponent> physics = std::make_unique<StaticPhysicsComponent>(*trigger, false);
 
     std::string triggerType;
     bool requireOnGround;
+    bool singleShot;
 
     (void) properties.getBool("requireOnGround", requireOnGround, false);
+    (void) properties.getBool("isSingleShot", singleShot, false);
 
     if (properties.getString("type", triggerType))
-      trigger->addComponent(std::make_unique<TriggerComponent>(makeTrigger(triggerType, properties), requireOnGround));
+      trigger->addComponent(std::make_unique<TriggerComponent>(makeTrigger(triggerType, properties, trigger->id), *physics, requireOnGround, singleShot));
     else
       Log::getGlobal().get(Log::WARNING) << "EntityFactory: Trigger "<<*trigger<<" has no \"type\" property"<<std::endl;
 
+    trigger->addComponent(std::move(physics));
     return trigger->id;
   }
 

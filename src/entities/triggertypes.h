@@ -21,7 +21,7 @@ class VictoryTrigger : public TriggerBehavior
 public:
   VictoryTrigger(const std::string &nextLevel="") : mNextLevel(nextLevel) {}
 
-  void execute(Entity &entity) override;
+  void onEnter(Entity &entity) override;
 
 private:
   std::string mNextLevel;
@@ -35,15 +35,30 @@ class EnableTrigger : public TriggerBehavior
 public:
   EnableTrigger(const std::string &entityName, bool enabled) : mEntity(entityName), mEntityState(enabled) {}
 
-  void execute(Entity &entity) override;
+  void onEnter(Entity &entity) override;
 
 private:
   std::string mEntity;
   bool mEntityState;
 };
 
+class CameraControlTrigger : public TriggerBehavior
+{
+public:
+  CameraControlTrigger(float baseY, float topMargin, EntityID trigger) : mBaseY(baseY), mTopMargin(topMargin), mTrigger(trigger) {}
 
-std::unique_ptr<TriggerBehavior> makeTrigger(const std::string &type, const TMX::PropertyMap &properties);
+  void onEnter(Entity &entity) override;
+
+  void onExit(Entity *entity) override;
+
+private:
+  float mBaseY;
+  float mTopMargin;
+  EntityID mTrigger;
+};
+
+
+std::unique_ptr<TriggerBehavior> makeTrigger(const std::string &type, const TMX::PropertyMap &properties, EntityID trigger);
 
 } // namespace game
 

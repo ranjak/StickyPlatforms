@@ -10,7 +10,10 @@ struct Message
     DirectionChanged,
     OnCollision,
     ChildRemoved,
-    Damage
+    Damage,
+    CameraControl,
+    TriggerEnter,
+    TriggerExit
   };
 
   Message(Type type) : type(type), handled(false) {}

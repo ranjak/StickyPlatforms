@@ -55,6 +55,9 @@ void CameraComponent::receiveMessageDelegate(Message &msg)
   if (msg.type == Message::Damage) {
     shake(0.25f, 8.f);
   }
+  else {
+    mController->receiveMessage(msg);
+  }
 }
 
 void CameraComponent::setActive()

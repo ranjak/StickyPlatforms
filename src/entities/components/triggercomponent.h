@@ -2,18 +2,31 @@
 #define TRIGGERCOMPONENT_H
 
 #include "component.h"
+#include "entity.h"
 #include <memory>
 
 namespace game {
 
-class Entity;
+class PhysicsComponent;
+
 
 class TriggerBehavior
 {
 public:
   virtual ~TriggerBehavior() {}
 
-  virtual void execute(Entity &entity) = 0;
+  /**
+   * @brief onEnter Called when \p entity first collides with the trigger.
+   * @param entity The entity that set off the trigger. Currently, this is always the hero.
+   */
+  virtual void onEnter(Entity &entity) {}
+
+  /**
+   * @brief onExit Called when the entity that set off the trigger cease to be in contact with it.
+   * @param entity The entity that was previously in the trigger. Could be null,
+   * as the reason for it leaving could be that it was destroyed.
+   */
+  virtual void onExit(Entity *entity) {}
 };
 
 
@@ -24,7 +37,9 @@ public:
 class TriggerComponent : public Component
 {
 public:
-  TriggerComponent(std::unique_ptr<TriggerBehavior> behavior, bool requiresOnGround=false, bool singleShot=true);
+  TriggerComponent(std::unique_ptr<TriggerBehavior> behavior, PhysicsComponent &physics, bool requiresOnGround=false, bool singleShot=false);
+
+  void updateDelegate(std::uint32_t step, GameState &game) override;
 
 private:
   void receiveMessageDelegate(Message &msg) override;
@@ -32,7 +47,10 @@ private:
 private:
   std::unique_ptr<TriggerBehavior> mBehavior;
   bool mRequiresOnGround;
-  bool mIsSignleShot;
+  bool mIsSingleShot;
+  PhysicsComponent &mPhysics;
+  // The entity that is currently inside this trigger. Should be the hero.
+  EntityID mTriggeringEntity;
 };
 
 
