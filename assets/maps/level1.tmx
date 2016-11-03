@@ -56,6 +56,7 @@
   <object id="17" type="Trigger" x="3968" y="0" width="1152" height="1408">
    <properties>
     <property name="triggerCamera_baseY" type="float" value="0"/>
+    <property name="triggerCamera_bottomMargin" type="float" value="2"/>
     <property name="triggerCamera_topMargin" type="float" value="4"/>
     <property name="type" value="cameraControl"/>
    </properties>

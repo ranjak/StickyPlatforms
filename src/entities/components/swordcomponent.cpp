@@ -35,7 +35,7 @@ void SwordComponent::swing(int direction)
   std::uint32_t now = GameState::current().now();
 
   // Start swinging only if we aren't currently performing a swing
-  if (now > mSwingEnd) {
+  if (now > mCooldownEnd) {
     mCooldownEnd = now + 250;
     mDamageEnd = now + 100;
     mSwingEnd = now + 80;

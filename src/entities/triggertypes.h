@@ -45,7 +45,7 @@ private:
 class CameraControlTrigger : public TriggerBehavior
 {
 public:
-  CameraControlTrigger(float baseY, float topMargin, EntityID trigger) : mBaseY(baseY), mTopMargin(topMargin), mTrigger(trigger) {}
+  CameraControlTrigger(float baseY, float topMargin, float bottomMargin, EntityID trigger) : mBaseY(baseY), mTopMargin(topMargin), mBottomMargin(bottomMargin), mTrigger(trigger) {}
 
   void onEnter(Entity &entity) override;
 
@@ -54,6 +54,7 @@ public:
 private:
   float mBaseY;
   float mTopMargin;
+  float mBottomMargin;
   EntityID mTrigger;
 };
 

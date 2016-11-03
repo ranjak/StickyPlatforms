@@ -26,8 +26,10 @@ CameraAnchoredY::CameraAnchoredY(Entity &entity) :
 CameraAnchoredY::CameraAnchoredY(Entity &entity, float baseY) :
   mBaseY(baseY),
   mTopMargin(entity.getGlobalBox().h),
-  mOriginalBaseY(baseY),
+  mBottomMargin(mTopMargin),
+  mOriginalBaseY(mBaseY),
   mOriginalTopMargin(mTopMargin),
+  mOriginalBottomMargin(mBottomMargin),
   mPanTarget(baseY),
   mPanInitialPos(baseY),
   mEntityCtrl(entity.getComponent<ActorControlComponent>()),
@@ -58,7 +60,7 @@ void CameraAnchoredY::update(uint32_t step, Entity &entity, Camera &camera)
 
   // Always keep the hero in sight, and apply a margin
   mPanTarget = std::min(mPanTarget, box.y - mTopMargin);
-  mPanTarget = std::max(mPanTarget, box.y + 2.f*box.h - viewport.h);
+  mPanTarget = std::max(mPanTarget, box.y + box.h + mBottomMargin - viewport.h);
 
   // Move the camera
   float entityVelY = mPhysics.velocity().y;
@@ -100,6 +102,10 @@ void CameraAnchoredY::receiveMessage(Message &msg)
     if (camMsg.topMargin >= 0.f) {
       mOriginalTopMargin = mTopMargin;
       mTopMargin = camMsg.topMargin * Tile::SIZE;
+    }
+    if (camMsg.bottomMargin >= 0.f) {
+      mOriginalBottomMargin = mBottomMargin;
+      mBottomMargin = camMsg.bottomMargin * Tile::SIZE;
     }
   }
 }

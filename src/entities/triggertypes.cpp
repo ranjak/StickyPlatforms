@@ -43,10 +43,13 @@ std::unique_ptr<TriggerBehavior> makeTrigger(const std::string &type, const TMX:
     float topMargin = -1.f;
     (void) properties.getFloat("triggerCamera_topMargin", topMargin, -1.f);
 
-    if (baseY < 0.f && topMargin < 0.f)
+    float bottomMargin = -1.f;
+    (void) properties.getFloat("triggerCamera_bottomMargin", bottomMargin, -1.f);
+
+    if (baseY < 0.f && topMargin < 0.f && bottomMargin < 0.f)
       Log::getGlobal().get(Log::WARNING) << "TriggerTypes: Camera Control trigger (id="<<trigger<<") doesn't set any parameter" << std::endl;
 
-    return std::make_unique<CameraControlTrigger>(baseY, topMargin, trigger);
+    return std::make_unique<CameraControlTrigger>(baseY, topMargin, bottomMargin, trigger);
   }
 
   else {
@@ -78,7 +81,7 @@ void EnableTrigger::onEnter(Entity &entity)
 
 void CameraControlTrigger::onEnter(Entity &entity)
 {
-  entity.sendMessage(std::make_unique<TriggerMsg>(TriggerMsg::Type::Enter, mTrigger, std::make_unique<CameraControlMsg>(mBaseY, mTopMargin)));
+  entity.sendMessage(std::make_unique<TriggerMsg>(TriggerMsg::Type::Enter, mTrigger, std::make_unique<CameraControlMsg>(mBaseY, mTopMargin, mBottomMargin)));
 }
 
 void CameraControlTrigger::onExit(Entity *entity)

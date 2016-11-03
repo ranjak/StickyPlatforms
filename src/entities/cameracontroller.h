@@ -52,10 +52,11 @@ public:
 private:
   // Y coordinate the camera is anchored to.
   float mBaseY;
-  // Minimum number of pixels to keep between the hero and the top of the viewport.
+  // Minimum number of pixels to keep between the hero and the top/bottom of the viewport.
   float mTopMargin;
+  float mBottomMargin;
   // These 2 values can be changed by a trigger. Keep the original ones so we can restore them.
-  float mOriginalBaseY, mOriginalTopMargin;
+  float mOriginalBaseY, mOriginalTopMargin, mOriginalBottomMargin;
 
   float mPanTarget;
   float mPanInitialPos;
