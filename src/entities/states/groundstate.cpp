@@ -10,7 +10,7 @@ namespace game {
 
 
 GroundState::GroundState(ActorControlComponent &stateMachine, float maxSpeed) :
-  HorizControlState(stateMachine, 3500.f, 5000.f, maxSpeed)
+  HorizControlState(stateMachine, 3000.f, 5000.f, maxSpeed)
 {
 
 }

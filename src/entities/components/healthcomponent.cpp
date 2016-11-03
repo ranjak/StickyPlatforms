@@ -50,8 +50,8 @@ void HealthComponent::receiveMessageDelegate(Message &msg)
         // Make the entity back off
         MovingPhysicsComponent *physics = mEntity.getComponent<MovingPhysicsComponent>();
         if (physics) {
-          physics->velocity().x = ((damage->direction) ? damage->direction : col.normal.x) * 300.f;
-          physics->velocity().y = -500.f;
+          physics->velocity().x = ((damage->direction) ? damage->direction : col.normal.x) * 300.f * damage->knockback;
+          physics->velocity().y = -500.f * damage->knockback;
         }
 
         GraphicsComponent *graphics = mEntity.getComponent<GraphicsComponent>();

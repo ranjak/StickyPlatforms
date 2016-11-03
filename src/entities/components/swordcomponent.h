@@ -23,6 +23,7 @@ private:
   MovingPhysicsComponent &mPhysics;
   std::uint32_t mDamageEnd;
   std::uint32_t mSwingEnd;
+  std::uint32_t mCooldownEnd;
 };
 
 } // namespace game

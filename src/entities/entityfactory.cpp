@@ -46,7 +46,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     enemy->addComponent(std::move(control));
     enemy->addComponent(std::move(physics));
     enemy->addComponent(std::make_unique<HealthComponent>(*enemy, 3));
-    enemy->addComponent(std::make_unique<DamageComponent>(1, EntityGroup::ALLY));
+    enemy->addComponent(std::make_unique<DamageComponent>(1, EntityGroup::ALLY, 0.5f));
     enemy->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Rectangle>(pos.w, pos.h, Color::RED)));
 
     return enemy->id;
@@ -84,7 +84,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     sword->addComponent(std::make_unique<SwordComponent>(*physics));
     sword->addComponent(std::move(physics));
-    sword->addComponent(std::make_unique<DamageComponent>(1, EntityGroup::ENEMY));
+    sword->addComponent(std::make_unique<DamageComponent>(1, EntityGroup::ENEMY, 1.f));
     sword->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Rectangle>(pos.w, pos.h, Color::BLUE)));
 
     return sword->id;

@@ -110,7 +110,7 @@ void TMXMapLoader::loadObjects(TMX::Parser &map, Level &level)
   level.entities().makeEntity("invisibleWall", "right", Rect<float>(size.x, 0.f, 10.f, size.y));
 
   // Make the bottom of the level deadly
-  level.entities().getEntity(bottom)->addComponent(std::make_unique<DamageComponent>(99, EntityGroup::ANY, true));
+  level.entities().getEntity(bottom)->addComponent(std::make_unique<DamageComponent>(99, EntityGroup::ANY, 0.f, true));
 }
 
 namespace {
