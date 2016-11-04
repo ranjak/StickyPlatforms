@@ -14,8 +14,8 @@ LoadLevelState::LoadLevelState(GameState &game, Display &display) :
   mTimeRemaining(0),
   mNextLevel()
 {
-  game.getUI().addWidget<TextWidget>(display, gameOverWidget, "TRY AGAIN", 24);
-  game.getUI().addWidget<TextWidget>(display, victoryWidget, "WELL DONE!", 24);
+  game.getUI().addWidget<TextWidget>(display, gameOverWidget, "TRY AGAIN", 64);
+  game.getUI().addWidget<TextWidget>(display, victoryWidget, "WELL DONE!", 64);
 
   game.getUI().setCentered(gameOverWidget);
   game.getUI().setCentered(victoryWidget);
