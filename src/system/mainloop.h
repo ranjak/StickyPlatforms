@@ -3,7 +3,7 @@
 
 #include "display.h"
 #include "inputhandler.h"
-#include "gamestate.h"
+#include "game.h"
 #include <cstdint>
 #include <string>
 
@@ -28,7 +28,7 @@ private:
 private:
   Display mDisplay;
   InputHandler mInput;
-  GameState mGame;
+  Game mGame;
 
   std::uint32_t mMaxFrameTime;
   std::uint32_t mAccuFrameTimes;

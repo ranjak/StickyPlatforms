@@ -1,7 +1,7 @@
 #include "mainloop.h"
 #include "log.h"
 #include "inputhandler.h"
-#include "gamestate.h"
+#include "game.h"
 #include "display.h"
 #include "SDL.h"
 #include <thread>

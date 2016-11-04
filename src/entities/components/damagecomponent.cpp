@@ -2,7 +2,7 @@
 #include "collision.h"
 #include "healthcomponent.h"
 #include "entity.h"
-#include "gamestate.h"
+#include "game.h"
 
 namespace game {
 

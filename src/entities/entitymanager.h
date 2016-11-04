@@ -18,7 +18,7 @@ struct PropertyMap;
 namespace game {
 
 template<typename T> class Rect;
-class GameState;
+class Game;
 class Display;
 class Level;
 class Graphics;
@@ -37,9 +37,9 @@ public:
   Entity *getEntity(EntityID id) const;
   Entity *getEntity(const std::string &name) const;
 
-  void update(std::uint32_t step, GameState &game);
+  void update(std::uint32_t step, Game &game);
 
-  void draw(Display &display, const GameState &game);
+  void draw(Display &display, const Game &game);
 
   Level &getLevel() { return mLevel; }
 

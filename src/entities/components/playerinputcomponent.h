@@ -5,7 +5,7 @@
 
 namespace game {
 
-class GameState;
+class Game;
 
 /**
  * @brief The PlayerInputComponent class simply passes user input through.

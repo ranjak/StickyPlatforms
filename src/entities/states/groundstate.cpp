@@ -15,7 +15,7 @@ GroundState::GroundState(ActorControlComponent &stateMachine, float maxSpeed) :
 
 }
 
-void GroundState::update(std::uint32_t step, GameState &game)
+void GroundState::update(std::uint32_t step, Game &game)
 {
   HorizControlState::update(step, game);
 

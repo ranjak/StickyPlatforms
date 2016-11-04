@@ -3,7 +3,7 @@
 #include "entity.h"
 #include "movingphysicscomponent.h"
 #include "inputcomponent.h"
-#include "gamestate.h"
+#include "game.h"
 #include "collision.h"
 
 namespace game {
@@ -26,7 +26,7 @@ void ClimbingState::enter()
   mClimbDirection = mStateMachine.getDirection();
   mInitialPosX = box.x;
 
-  const Level &level = GameState::current().getLevel();
+  const Level &level = Game::current().getLevel();
 
   mEdge.y = level.getPixelSize().y;
   for (const Collision &col : mStateMachine.physics().getCollisions()) {
@@ -39,7 +39,7 @@ void ClimbingState::enter()
   mStateMachine.physics().velocity().y = -400.f;
 }
 
-void ClimbingState::update(uint32_t step, GameState &game)
+void ClimbingState::update(uint32_t step, Game &game)
 {
   const Rect<float> &pos = mStateMachine.entity().getGlobalBox();
   Vector<float> &velocity = mStateMachine.physics().velocity();

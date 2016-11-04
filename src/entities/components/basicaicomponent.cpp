@@ -39,7 +39,7 @@ void BasicAiComponent::processMessages()
   }
 }
 
-void BasicAiComponent::updateDelegate(uint32_t step, GameState &game)
+void BasicAiComponent::updateDelegate(uint32_t step, Game &game)
 {
   AutoInputComponent::updateDelegate(step, game);
 

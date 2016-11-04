@@ -1,7 +1,7 @@
 #include "airstate.h"
 #include "gamevector.h"
 #include "groundstate.h"
-#include "gamestate.h"
+#include "game.h"
 #include "actorcontrolcomponent.h"
 #include "movingphysicscomponent.h"
 #include "make_unique.h"
@@ -39,7 +39,7 @@ void AirState::enter()
   mMaxSpeed = std::abs(mStateMachine.physics().velocity().x);
 }
 
-void AirState::update(std::uint32_t step, GameState &game)
+void AirState::update(std::uint32_t step, Game &game)
 {
   MovingPhysicsComponent &physics = mStateMachine.physics();
 
@@ -75,7 +75,7 @@ void AirState::receiveMessage(Message &msg)
     HorizControlState::receiveMessage(msg);
 }
 
-void AirState::updateWallHug(std::uint32_t step, GameState &game)
+void AirState::updateWallHug(std::uint32_t step, Game &game)
 {
   MovingPhysicsComponent &physics = mStateMachine.physics();
 

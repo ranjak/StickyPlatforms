@@ -39,7 +39,7 @@ class TriggerComponent : public Component
 public:
   TriggerComponent(std::unique_ptr<TriggerBehavior> behavior, PhysicsComponent &physics, bool requiresOnGround=false, bool singleShot=false);
 
-  void updateDelegate(std::uint32_t step, GameState &game) override;
+  void updateDelegate(std::uint32_t step, Game &game) override;
 
 private:
   void receiveMessageDelegate(Message &msg) override;

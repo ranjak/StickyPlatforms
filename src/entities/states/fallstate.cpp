@@ -1,5 +1,5 @@
 #include "fallstate.h"
-#include "gamestate.h"
+#include "game.h"
 #include "actorcontrolcomponent.h"
 
 namespace game {
@@ -12,10 +12,10 @@ FallState::FallState(ActorControlComponent &stateMachine) :
 
 void FallState::enter()
 {
-  mEndTimestamp = GameState::current().now() + 250;
+  mEndTimestamp = Game::current().now() + 250;
 }
 
-void FallState::update(uint32_t step, GameState &game)
+void FallState::update(uint32_t step, Game &game)
 {
   if (game.now() > mEndTimestamp)
     mStateMachine.setState(ActorControlComponent::AIR);

@@ -29,7 +29,7 @@ public:
   void setBlinking(float duration, std::uint32_t period=10);
 
 private:
-  void updateDelegate(std::uint32_t step, GameState &game);
+  void updateDelegate(std::uint32_t step, Game &game);
 
 private:
   std::unique_ptr<Graphics> mGraphics;

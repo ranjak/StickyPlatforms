@@ -6,7 +6,7 @@
 namespace game {
 
 class Entity;
-class GameState;
+class Game;
 struct Message;
 
 class Component
@@ -18,7 +18,7 @@ public:
 
   void setEnabled(bool enable) { mEnabled = enable; }
 
-  void update(std::uint32_t step, GameState &game)
+  void update(std::uint32_t step, Game &game)
   {
     if (mEnabled)
       updateDelegate(step, game);
@@ -31,7 +31,7 @@ public:
   }
 
 private:
-  virtual void updateDelegate(std::uint32_t step, GameState &game) {}
+  virtual void updateDelegate(std::uint32_t step, Game &game) {}
 
   virtual void receiveMessageDelegate(Message &msg) {}
 

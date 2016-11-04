@@ -12,7 +12,7 @@ public:
 
   void enter();
 
-  void update(uint32_t step, GameState &game) override;
+  void update(uint32_t step, Game &game) override;
 
   void exit() override;
 

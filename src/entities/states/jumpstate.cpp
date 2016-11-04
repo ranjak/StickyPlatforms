@@ -2,7 +2,7 @@
 #include "actorcontrolcomponent.h"
 #include "movingphysicscomponent.h"
 #include "inputcomponent.h"
-#include "gamestate.h"
+#include "game.h"
 #include "log.h"
 #include <cmath>
 #include <cassert>
@@ -22,13 +22,13 @@ void JumpState::enter()
 {
   AirClingableState::enter();
 
-  mImpulseEndTimestamp = GameState::current().now() + static_cast<std::uint32_t>(mImpulseTimeFrame * 1000.f);
+  mImpulseEndTimestamp = Game::current().now() + static_cast<std::uint32_t>(mImpulseTimeFrame * 1000.f);
 
   mStateMachine.physics().velocity().y = mInitialSpeed;
   mStateMachine.physics().setGravityEnabled(false);
 }
 
-void JumpState::update(uint32_t step, GameState &game)
+void JumpState::update(uint32_t step, Game &game)
 {
   AirClingableState::update(step, game);
 

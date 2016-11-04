@@ -11,7 +11,7 @@ ActorState::ActorState(ActorControlComponent& stateMachine) :
 
 }
 
-void ActorState::update(std::uint32_t step, GameState &game)
+void ActorState::update(std::uint32_t step, Game &game)
 {
 
 }

@@ -12,7 +12,7 @@ class HorizControlState : public ActorState
 public:
   HorizControlState(ActorControlComponent &stateMachine, float acceleration, float friction, float maxSpeed = 320.f);
 
-  virtual void update(std::uint32_t step, GameState &game) override;
+  virtual void update(std::uint32_t step, Game &game) override;
 
 protected:
   // Rate at which speed increases when holding a direction

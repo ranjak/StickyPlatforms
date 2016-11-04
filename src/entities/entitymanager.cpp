@@ -1,6 +1,6 @@
 #include "entitymanager.h"
 #include "entityfactory.h"
-#include "gamestate.h"
+#include "game.h"
 #include "rect.h"
 #include "log.h"
 #include "graphicscomponent.h"
@@ -56,7 +56,7 @@ Entity *EntityManager::getEntity(const std::string &name) const
   return nullptr;
 }
 
-void EntityManager::update(std::uint32_t step, GameState &game)
+void EntityManager::update(std::uint32_t step, Game &game)
 {
   for (EntityPair &entity : mEntities) {
     if (entity.second->isEnabled())
@@ -72,7 +72,7 @@ void EntityManager::update(std::uint32_t step, GameState &game)
   }
 }
 
-void EntityManager::draw(Display &display, const GameState &game)
+void EntityManager::draw(Display &display, const Game &game)
 {
   GraphicsComponent *graphics = nullptr;
 //  const Camera &cam = game.getCamera();

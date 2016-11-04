@@ -6,7 +6,7 @@
 namespace game {
 
 class ActorControlComponent;
-class GameState;
+class Game;
 struct Message;
 
 /**
@@ -21,7 +21,7 @@ public:
 
     virtual ~ActorState() = 0;
 
-    virtual void update(std::uint32_t step, GameState &game);
+    virtual void update(std::uint32_t step, Game &game);
 
     virtual void enter();
 

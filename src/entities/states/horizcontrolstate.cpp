@@ -20,7 +20,7 @@ HorizControlState::HorizControlState(ActorControlComponent &stateMachine, float 
 
 }
 
-void HorizControlState::update(std::uint32_t step, GameState &game)
+void HorizControlState::update(std::uint32_t step, Game &game)
 {
   int inputDirection = 0;
 

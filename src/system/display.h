@@ -4,10 +4,11 @@
 #include "SDL.h"
 #include "gamevector.h"
 #include "rect.h"
+#include <string>
 
 namespace game {
 
-class GameState;
+class Game;
 
 class Display
 {
@@ -15,7 +16,7 @@ public:
   /**
    * @brief Initialize the display components (window, renderer, etc.)
    */
-  Display(int winW, int winH);
+  Display(int winW, int winH, const std::string &windowTitle="Game1-Platforms");
   ~Display();
 
 
@@ -30,7 +31,7 @@ public:
   /**
    * @brief render one frame.
    */
-  void render(GameState &game);
+  void render(Game &game);
 
   SDL_Renderer* getRenderer();
 
@@ -44,6 +45,7 @@ private:
   SDL_Renderer* mRenderer;
   // Logical size, different from the window size.
   Vector<int> mCameraSize;
+  std::string mWindowTitle;
 };
 
 }

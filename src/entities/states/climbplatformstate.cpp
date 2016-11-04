@@ -2,7 +2,7 @@
 #include "movingphysicscomponent.h"
 #include "collision.h"
 #include "actorcontrolcomponent.h"
-#include "gamestate.h"
+#include "game.h"
 #include "world/level.h"
 #include "world/tile.h"
 
@@ -23,7 +23,7 @@ void ClimbPlatformState::enter()
 {
   mFalling = false;
   MovingPhysicsComponent &physics = mStateMachine.physics();
-  const Level &level = GameState::current().getLevel();
+  const Level &level = Game::current().getLevel();
 
   physics.setGravityEnabled(false);
 
@@ -57,7 +57,7 @@ void ClimbPlatformState::enter()
   physics.velocity().x = 0.f;
 }
 
-void ClimbPlatformState::update(uint32_t step, GameState &game)
+void ClimbPlatformState::update(uint32_t step, Game &game)
 {
   const Rect<float> &box = mStateMachine.entity().getGlobalBox();
 

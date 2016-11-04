@@ -1,7 +1,7 @@
 #include "movingphysicscomponent.h"
 #include "collision.h"
 #include "gamevector.h"
-#include "gamestate.h"
+#include "game.h"
 #include "world/level.h"
 #include "make_unique.h"
 #include "physicsmanager.h"
@@ -37,7 +37,7 @@ MovingPhysicsComponent::~MovingPhysicsComponent()
   mEntity.manager().getPhysics().removeComponent(this);
 }
 
-void MovingPhysicsComponent::updateDelegate(uint32_t step, GameState &game)
+void MovingPhysicsComponent::updateDelegate(uint32_t step, Game &game)
 {
   PhysicsComponent::updateDelegate(step, game);
 

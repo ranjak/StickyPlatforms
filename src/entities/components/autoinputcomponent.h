@@ -20,7 +20,7 @@ protected:
   void hold(Command cmd);
   void release(Command cmd);
 
-  void updateDelegate(std::uint32_t, GameState &) override;
+  void updateDelegate(std::uint32_t, Game &) override;
 
 private:
   std::vector<Command> mHitCommands;

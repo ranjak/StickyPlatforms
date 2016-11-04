@@ -39,7 +39,7 @@ set(SRC_LIST
     src/system/graphics/rectangle.cpp
     src/system/graphics/frame.cpp
     src/system/graphics/text.cpp
-    src/gamestate.cpp
+    src/game.cpp
     src/loadlevelstate.cpp
     src/gamecommands.cpp
     src/world/level.cpp
@@ -113,7 +113,7 @@ set(HEADER_LIST
   src/system/graphics/rectangle.h
   src/system/graphics/frame.h
   src/system/graphics/text.h
-  src/gamestate.h
+  src/game.h
   src/loadlevelstate.h
   src/gamecommands.h
   src/world/level.h

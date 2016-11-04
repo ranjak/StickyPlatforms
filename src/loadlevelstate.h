@@ -6,13 +6,13 @@
 
 namespace game {
 
-class GameState;
+class Game;
 class Display;
 
 class LoadLevelState
 {
 public:
-  LoadLevelState(GameState &game, Display &display);
+  LoadLevelState(Game &game, Display &display);
 
   void update(std::uint32_t step);
 
@@ -22,7 +22,7 @@ private:
   static const std::string gameOverWidget;
   static const std::string victoryWidget;
 
-  GameState &mGame;
+  Game &mGame;
   // Display failure or victory
   const std::string *mCurrentWidget;
   // How much time to stay in this state...

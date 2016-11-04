@@ -14,7 +14,7 @@
 
 namespace game {
 
-class GameState;
+class Game;
 class Display;
 class Camera;
 class Graphics;
@@ -36,7 +36,7 @@ public:
    * @param step Time in milliseconds to simulate.
    * @param game Currently running game.
    */
-  virtual void update(std::uint32_t step, GameState& game);
+  virtual void update(std::uint32_t step, Game& game);
 
   /**
    * @brief sendMessage Send a message to the components of this entity.

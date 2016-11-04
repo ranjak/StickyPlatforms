@@ -14,12 +14,12 @@ public:
 
   void enter() override;
 
-  void update(std::uint32_t step, GameState &game) override;
+  void update(std::uint32_t step, Game &game) override;
 
   void receiveMessage(Message &msg) override;
 
 private:
-  void updateWallHug(std::uint32_t step, GameState &game);
+  void updateWallHug(std::uint32_t step, Game &game);
 
 private:
   float mMaxAirSpeed;

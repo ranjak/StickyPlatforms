@@ -1,6 +1,6 @@
 #include "display.h"
 #include "log.h"
-#include "gamestate.h"
+#include "game.h"
 #include "util_sdl.h"
 #include "SDL.h"
 #include <stdexcept>
@@ -8,10 +8,11 @@
 namespace game {
 
 
-Display::Display(int winW, int winH) :
+Display::Display(int winW, int winH, const std::string &windowTitle) :
   mWindow(nullptr),
   mRenderer(nullptr),
-  mCameraSize(winW, winH)
+  mCameraSize(winW, winH),
+  mWindowTitle(windowTitle)
 {
   init(winW, winH);
 }
@@ -41,6 +42,8 @@ void Display::init(int winW, int winH)
       game::error(std::string("Couldn't create window and renderer: ") + SDL_GetError());
       throw std::exception();
   }
+
+  SDL_SetWindowTitle(mWindow, mWindowTitle.c_str());
 }
 
 void Display::setLogicalSize(int w, int h)
@@ -78,7 +81,7 @@ Vector<float> Display::getScale()
   return scale;
 }
 
-void Display::render(GameState &game)
+void Display::render(Game &game)
 {
 //  if (SDL_RenderSetLogicalSize(mRenderer, mCameraSize.x, mCameraSize.y) < 0)
 //    throw std::runtime_error(SDL_GetError());

@@ -3,7 +3,7 @@
 #include "log.h"
 #include "rect.h"
 #include "entity.h"
-#include "gamestate.h"
+#include "game.h"
 #include "camera.h"
 #include "TMXParser.h"
 #include "world/tmxmaploader.h"
@@ -33,12 +33,12 @@ std::unique_ptr<Level> Level::loadFromTmx(const std::string &file, Display &disp
   return level;
 }
 
-void Level::update(GameState &game, uint32_t step)
+void Level::update(Game &game, uint32_t step)
 {
   mEntities.update(step, game);
 }
 
-void Level::draw(Display &target, const GameState &game)
+void Level::draw(Display &target, const Game &game)
 {
   const Camera& cam = game.getCamera();
   Rect<float> viewport = cam.getViewport().getIntersection(Rect<float>(0.f, 0.f, mSize.x*Tile::SIZE, mSize.y*Tile::SIZE));

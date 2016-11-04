@@ -1,5 +1,5 @@
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
+#ifndef GAME_H
+#define GAME_H
 
 #include "gamecommands.h"
 #include "camera.h"
@@ -18,11 +18,11 @@ class InputHandler;
 class Display;
 
 /**
- * @brief The GameState class describes the state of the game at a given moment.
+ * @brief The Game class describes the state of the game at a given moment.
  * It holds all the data that makes up said state.
  * It is responsible for updating the state.
  */
-class GameState
+class Game
 {
 public:
   enum class State {
@@ -34,9 +34,9 @@ public:
   /**
    * @brief current Get a reference to the current game.
    */
-  static GameState &current();
+  static Game &current();
 
-  GameState(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel);
+  Game(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel);
 
   /**
    * @brief update Update this state by the given amount of time.
@@ -84,7 +84,7 @@ public:
 
 
 private:
-  static GameState *currentGame;
+  static Game *currentGame;
   // Game commands bindings and status
   GameCommands mCommands;
   // Current level
@@ -106,4 +106,4 @@ private:
 
 } //namespace game
 
-#endif // GAMESTATE_H
+#endif // GAME_H

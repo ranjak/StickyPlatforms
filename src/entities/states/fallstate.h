@@ -18,7 +18,7 @@ public:
 
   void enter() override;
 
-  void update(uint32_t step, GameState &game) override;
+  void update(uint32_t step, Game &game) override;
 
 private:
   std::uint32_t mEndTimestamp;

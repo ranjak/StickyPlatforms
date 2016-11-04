@@ -14,7 +14,7 @@ class GroundState : public HorizControlState
 public:
   GroundState(ActorControlComponent &stateMachine, float maxSpeed);
 
-  void update(std::uint32_t step, GameState &game) override;
+  void update(std::uint32_t step, Game &game) override;
 };
 
 }

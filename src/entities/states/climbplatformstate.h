@@ -9,7 +9,7 @@
 
 namespace game {
 
-class GameState;
+class Game;
 
 class ClimbPlatformState : public ActorState
 {
@@ -18,7 +18,7 @@ public:
 
   void enter() override;
 
-  void update(std::uint32_t step, GameState &game) override;
+  void update(std::uint32_t step, Game &game) override;
 
   void exit() override;
 

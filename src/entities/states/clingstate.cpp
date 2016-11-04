@@ -1,5 +1,5 @@
 #include "clingstate.h"
-#include "gamestate.h"
+#include "game.h"
 #include "actorcontrolcomponent.h"
 #include "inputcomponent.h"
 #include "movingphysicscomponent.h"
@@ -20,12 +20,12 @@ ClingState::ClingState(ActorControlComponent &stateMachine) :
 
 void ClingState::enter()
 {
-  mClingTimeout = GameState::current().now() + 2000;
+  mClingTimeout = Game::current().now() + 2000;
 
   mStateMachine.physics().setGravityEnabled(false);
 }
 
-void ClingState::update(uint32_t step, GameState &game)
+void ClingState::update(uint32_t step, Game &game)
 {
   HorizControlState::update(step, game);
 
@@ -66,7 +66,7 @@ void ClingState::exit()
   mStateMachine.physics().setGravityEnabled(true);
 }
 
-bool ClingState::canStillCling(GameState &game)
+bool ClingState::canStillCling(Game &game)
 {
   if (game.now() > mClingTimeout || mStateMachine.input().isReleased(Command::JUMP))
     return false;

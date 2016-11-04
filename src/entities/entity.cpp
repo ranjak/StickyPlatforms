@@ -2,7 +2,7 @@
 #include "camera.h"
 #include "graphics.h"
 #include "log.h"
-#include "gamestate.h"
+#include "game.h"
 #include "childremovedmsg.h"
 #include "make_unique.h"
 #include <algorithm>
@@ -42,7 +42,7 @@ Entity::~Entity()
     detach();
 }
 
-void Entity::update(uint32_t step, GameState &game)
+void Entity::update(uint32_t step, Game &game)
 {
   for (std::unique_ptr<Component> &comp : mComponents)
     comp->update(step, game);

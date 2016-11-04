@@ -17,7 +17,7 @@ public:
   Entity &getEntity();
 
 private:
-  void updateDelegate(uint32_t step, GameState &game) override;
+  void updateDelegate(uint32_t step, Game &game) override;
 
 private:
   MovingPhysicsComponent &mPhysics;

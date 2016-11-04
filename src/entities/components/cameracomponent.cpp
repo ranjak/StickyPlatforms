@@ -1,7 +1,7 @@
 #include "cameracomponent.h"
 #include "camera.h"
 #include "world/level.h"
-#include "gamestate.h"
+#include "game.h"
 #include "entity.h"
 #include "util.h"
 #include "rect.h"
@@ -16,7 +16,7 @@ CameraComponent *CameraComponent::activeInstance = nullptr;
 
 CameraComponent::CameraComponent(Entity &entity, std::unique_ptr<CameraController> controller) :
   mEntity(entity),
-  mCamera(GameState::current().getCamera()),
+  mCamera(Game::current().getCamera()),
   mController(std::move(controller)),
   mShakeRadius(0.f),
   mShakeAngle(0.f),
@@ -32,7 +32,7 @@ CameraComponent::~CameraComponent()
     activeInstance = nullptr;
 }
 
-void CameraComponent::updateDelegate(std::uint32_t step, GameState &game)
+void CameraComponent::updateDelegate(std::uint32_t step, Game &game)
 {
   if (this != activeInstance)
     return;
@@ -67,7 +67,7 @@ void CameraComponent::setActive()
 
 void CameraComponent::shake(float duration, float radius)
 {
-  mShakeEndTimestamp = GameState::current().now() + static_cast<std::uint32_t>(duration * 1000.f);
+  mShakeEndTimestamp = Game::current().now() + static_cast<std::uint32_t>(duration * 1000.f);
   mShakeRadius = radius;
 }
 

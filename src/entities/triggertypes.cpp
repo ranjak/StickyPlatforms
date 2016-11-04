@@ -1,6 +1,6 @@
 #include "triggertypes.h"
 #include "log.h"
-#include "gamestate.h"
+#include "game.h"
 #include "make_unique.h"
 #include "tmxcommon.h"
 #include "entitymanager.h"
@@ -63,7 +63,7 @@ std::unique_ptr<TriggerBehavior> makeTrigger(const std::string &type, const TMX:
 void VictoryTrigger::onEnter(Entity &entity)
 {
   glog(Log::INFO, "VictoryTrigger: setting level: \""<<mNextLevel<<"\"");
-  GameState::current().setLoadingState(true, mNextLevel);
+  Game::current().setLoadingState(true, mNextLevel);
 }
 
 void EnableTrigger::onEnter(Entity &entity)

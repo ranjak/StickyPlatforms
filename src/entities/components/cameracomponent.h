@@ -30,7 +30,7 @@ public:
   void updateShake();
 
 private:
-  void updateDelegate(std::uint32_t step, GameState &game) override;
+  void updateDelegate(std::uint32_t step, Game &game) override;
 
   void receiveMessageDelegate(Message &msg) override;
 

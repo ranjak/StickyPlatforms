@@ -12,7 +12,7 @@
 
 namespace game {
 
-class GameState;
+class Game;
 class Tile;
 class Display;
 template<typename T> class Rect;
@@ -30,9 +30,9 @@ public:
 
   static std::unique_ptr<Level> loadFromTmx(const std::string &file, Display &display);
 
-  void update(GameState &game, std::uint32_t step);
+  void update(Game &game, std::uint32_t step);
 
-  void draw(Display &target, const GameState &game);
+  void draw(Display &target, const Game &game);
 
   TileID *tiles();
 

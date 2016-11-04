@@ -3,7 +3,7 @@
 #include "collision.h"
 #include "damagecomponent.h"
 #include "graphicscomponent.h"
-#include "gamestate.h"
+#include "game.h"
 #include "healthbar.h"
 #include "damagemsg.h"
 
@@ -27,14 +27,14 @@ void HealthComponent::receiveMessageDelegate(Message &msg)
 
     if (col.entity != Entity::none) {
 
-      Entity *other = GameState::current().getLevel().entities().getEntity(col.entity);
+      Entity *other = Game::current().getLevel().entities().getEntity(col.entity);
 
       if (!other || other->isDead())
         return;
 
       DamageComponent *damage = other->getComponent<DamageComponent>();
 
-      if (damage && (damage->target() & mEntity.group) && (damage->ignoresInvincibility() || GameState::current().now() > mInvincibilityEnd)) {
+      if (damage && (damage->target() & mEntity.group) && (damage->ignoresInvincibility() || Game::current().now() > mInvincibilityEnd)) {
 
         mHealthPoints -= damage->points();
 
@@ -58,7 +58,7 @@ void HealthComponent::receiveMessageDelegate(Message &msg)
         if (graphics)
           graphics->setBlinking(1.f);
 
-        mInvincibilityEnd = GameState::current().now() + 1000;
+        mInvincibilityEnd = Game::current().now() + 1000;
 
         mEntity.sendMessage(std::make_unique<DamageMsg>(damage->points(), col.entity));
       }

@@ -10,7 +10,7 @@
 
 namespace game {
 
-class GameState;
+class Game;
 class Tile;
 template<typename T> class Rect;
 
@@ -70,7 +70,7 @@ public:
   void collide(Tile &tile, const Vector<int> &location);
 
 private:
-  void updateDelegate(std::uint32_t step, GameState &game) override;
+  void updateDelegate(std::uint32_t step, Game &game) override;
 
   void collisionResponse(const Vector<int> &normal);
 

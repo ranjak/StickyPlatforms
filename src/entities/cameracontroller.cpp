@@ -5,7 +5,7 @@
 #include "gamevector.h"
 #include "actorcontrolcomponent.h"
 #include "movingphysicscomponent.h"
-#include "gamestate.h"
+#include "game.h"
 #include "world/tile.h"
 #include "triggermsg.h"
 #include "cameracontrolmsg.h"
@@ -18,7 +18,7 @@ void CameraFollowSimple::update(uint32_t step, Entity &entity, Camera &camera)
 }
 
 CameraAnchoredY::CameraAnchoredY(Entity &entity) :
-  CameraAnchoredY(entity, entity.getGlobalPos().y - GameState::current().getCamera().getViewport().h/2.f)
+  CameraAnchoredY(entity, entity.getGlobalPos().y - Game::current().getCamera().getViewport().h/2.f)
 {
 
 }
@@ -36,7 +36,7 @@ CameraAnchoredY::CameraAnchoredY(Entity &entity, float baseY) :
   mPhysics(*entity.getComponent<MovingPhysicsComponent>()),
   mCameraControlTrigger(Entity::none)
 {
-  GameState::current().getCamera().viewport().y = baseY;
+  Game::current().getCamera().viewport().y = baseY;
 }
 
 void CameraAnchoredY::update(uint32_t step, Entity &entity, Camera &camera)

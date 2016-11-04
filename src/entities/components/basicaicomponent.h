@@ -20,7 +20,7 @@ public:
 private:
   void processMessages();
 
-  void updateDelegate(uint32_t step, GameState &game) override;
+  void updateDelegate(uint32_t step, Game &game) override;
 
   /**
    * @brief receiveMessage Copies relevant messages onto a local queue for processing at the next update.

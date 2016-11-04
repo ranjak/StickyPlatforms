@@ -28,7 +28,7 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
 
 }
 
-void ActorControlComponent::updateDelegate(uint32_t step, GameState &game)
+void ActorControlComponent::updateDelegate(uint32_t step, Game &game)
 {
   // For initialization, and states that might need a delayed call to enter()
   if (mNextState != NONE) {

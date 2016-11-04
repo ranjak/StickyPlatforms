@@ -28,7 +28,7 @@ public:
 protected:
   PhysicsComponent(Entity &owner, bool isObstacle=true);
 
-  void updateDelegate(uint32_t step, GameState &game);
+  void updateDelegate(uint32_t step, Game &game);
 
 protected:
   bool mIsCollidable;

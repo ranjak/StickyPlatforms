@@ -24,7 +24,7 @@
 #include "entitygroup.h"
 #include "text.h"
 #include "tmxcommon.h"
-#include "gamestate.h"
+#include "game.h"
 #include <string>
 
 namespace game {
@@ -129,7 +129,7 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
       Log::getGlobal().get(Log::WARNING) << "EntityFactory: TextLine (name="<<name<<") has no \"text\" property"<<std::endl;
 
     Entity* line = manager.makeEntity(pos, name, EntityGroup::NONE, parent);
-    line->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Text>(GameState::current().getDisplay(), textContent, static_cast<int>(pos.h))));
+    line->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Text>(Game::current().getDisplay(), textContent, static_cast<int>(pos.h))));
 
     return line->id;
   }

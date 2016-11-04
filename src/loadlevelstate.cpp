@@ -1,14 +1,14 @@
 #include "loadlevelstate.h"
 #include "uipanel.h"
 #include "textwidget.h"
-#include "gamestate.h"
+#include "game.h"
 
 namespace game {
 
 const std::string LoadLevelState::gameOverWidget("gameOver");
 const std::string LoadLevelState::victoryWidget("victory");
 
-LoadLevelState::LoadLevelState(GameState &game, Display &display) :
+LoadLevelState::LoadLevelState(Game &game, Display &display) :
   mGame(game),
   mCurrentWidget(nullptr),
   mTimeRemaining(0),

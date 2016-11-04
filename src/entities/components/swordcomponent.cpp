@@ -1,7 +1,7 @@
 #include "swordcomponent.h"
 #include "movingphysicscomponent.h"
 #include "entity.h"
-#include "gamestate.h"
+#include "game.h"
 #include "rect.h"
 #include "gamevector.h"
 #include "damagecomponent.h"
@@ -18,7 +18,7 @@ SwordComponent::SwordComponent(MovingPhysicsComponent &physics) :
   physics.entity().setEnabled(false);
 }
 
-void SwordComponent::updateDelegate(uint32_t step, GameState &game)
+void SwordComponent::updateDelegate(uint32_t step, Game &game)
 {
   if (game.now() > mCooldownEnd)
     mPhysics.entity().setEnabled(false);
@@ -32,7 +32,7 @@ void SwordComponent::updateDelegate(uint32_t step, GameState &game)
 
 void SwordComponent::swing(int direction)
 {
-  std::uint32_t now = GameState::current().now();
+  std::uint32_t now = Game::current().now();
 
   // Start swinging only if we aren't currently performing a swing
   if (now > mCooldownEnd) {

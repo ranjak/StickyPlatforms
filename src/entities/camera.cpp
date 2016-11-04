@@ -1,5 +1,5 @@
 #include "camera.h"
-#include "gamestate.h"
+#include "game.h"
 #include "entity.h"
 #include "world/level.h"
 #include "util.h"
