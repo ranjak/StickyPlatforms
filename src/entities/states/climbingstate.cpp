@@ -23,7 +23,7 @@ void ClimbingState::enter()
 
   const Rect<float> &box = mStateMachine.entity().getGlobalBox();
 
-  mClimbDirection = mStateMachine.input().getDirection();
+  mClimbDirection = mStateMachine.getDirection();
   mInitialPosX = box.x;
 
   const Level &level = GameState::current().getLevel();

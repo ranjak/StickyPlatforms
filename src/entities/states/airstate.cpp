@@ -98,8 +98,13 @@ void AirState::updateWallHug(std::uint32_t step, GameState &game)
       wallContact = true;
       canClimb = canClimb && col.normal.y <= 0;
 
-      // If we're trying to climb, make sure we can
-      if (canClimb && mStateMachine.input().getDirection() == -mWallHugNormal) {
+      const InputComponent &input = mStateMachine.input();
+      int wantedDirection = input.getDirection();
+
+      // Climbing is triggered by moving towards the wall,
+      // or holding Jump while not moving away from the wall.
+
+      if (canClimb && (wantedDirection == -mWallHugNormal || (input.isHeld(Command::JUMP) && wantedDirection != mWallHugNormal))) {
 
         const Rect<float> &myBox = mStateMachine.entity().getGlobalBox();
         // The total space the climbing animation will take
