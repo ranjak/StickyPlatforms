@@ -25,7 +25,7 @@ void InputHandler::handle()
     switch (mEvent.type) {
 
     case SDL_QUIT:
-      MainLoop::get().requestExit();
+      MainLoop::requestExit();
       break;
 
     case SDL_KEYDOWN:

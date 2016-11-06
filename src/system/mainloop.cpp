@@ -12,9 +12,9 @@ namespace game {
 
 MainLoop *MainLoop::instance = nullptr;
 
-MainLoop &MainLoop::get()
+void MainLoop::requestExit()
 {
-  return *instance;
+  instance->setExit();
 }
 
 MainLoop::MainLoop(const std::string &initialLevel) :
@@ -73,7 +73,7 @@ void MainLoop::run()
   }
 }
 
-void MainLoop::requestExit()
+void MainLoop::setExit()
 {
   mExitRequested = true;
 }

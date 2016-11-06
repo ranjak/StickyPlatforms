@@ -12,7 +12,7 @@ namespace game {
 class MainLoop
 {
 public:
-  static MainLoop &get();
+  static void requestExit();
 
   MainLoop(const std::string &initialLevel="assets/maps/level1.tmx");
 
@@ -23,7 +23,7 @@ public:
 
   void run();
 
-  void requestExit();
+  void setExit();
 
 private:
   void updateStats(std::uint32_t frameTime);

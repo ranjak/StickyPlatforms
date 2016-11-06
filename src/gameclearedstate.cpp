@@ -35,7 +35,7 @@ GameClearedState::GameClearedState(Game &game) :
 void GameClearedState::update(uint32_t step)
 {
   if (mGame.getCommands().isHeld(Command::PAUSE))
-    MainLoop::get().requestExit();
+    MainLoop::requestExit();
 
   else if (mGame.getCommands().isHeld(Command::RESET)) {
     mGame.loadLevel(mGame.getInitialLevel());
