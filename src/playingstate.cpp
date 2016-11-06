@@ -2,6 +2,8 @@
 #include "loadlevelstate.h"
 #include "world/level.h"
 #include "game.h"
+#include "gamecommands.h"
+#include "pausedstate.h"
 
 namespace game {
 
@@ -14,6 +16,11 @@ PlayingState::PlayingState(Game &game) :
 
 void PlayingState::update(uint32_t step)
 {
+  if (mGame.getCommands().isHit(Command::PAUSE)) {
+    mGame.setState<PausedState>();
+    return;
+  }
+
   mGameTime += step;
 
   mGame.getLevel().update(mGame, step);

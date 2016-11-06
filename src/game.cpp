@@ -13,6 +13,7 @@
 #include "playingstate.h"
 #include "loadlevelstate.h"
 #include "gameclearedstate.h"
+#include "pausedstate.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -38,7 +39,8 @@ Game::Game(Display &display, InputHandler &input, int camW, int camH, const std:
   mStates {
     std::make_unique<PlayingState>(*this),
     std::make_unique<LoadLevelState>(*this, display),
-    std::make_unique<GameClearedState>(*this)
+    std::make_unique<GameClearedState>(*this),
+    std::make_unique<PausedState>(*this),
   },
   mState(mStates[State::PLAYING].get())
 {

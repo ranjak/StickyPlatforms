@@ -31,6 +31,7 @@ public:
     PLAYING,
     LOADING,
     CLEARED,
+    PAUSED,
     NB_STATES
   };
 

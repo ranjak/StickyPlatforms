@@ -43,6 +43,7 @@ set(SRC_LIST
     src/loadlevelstate.cpp
     src/gameclearedstate.cpp
     src/playingstate.cpp
+    src/pausedstate.cpp
     src/gamecommands.cpp
     src/world/level.cpp
     src/world/tile.cpp
@@ -120,7 +121,8 @@ set(HEADER_LIST
   src/gamestate.h
   src/loadlevelstate.h
   src/gameclearedstate.h
-  src/playingstate.cpp
+  src/playingstate.h
+  src/pausedstate.h
   src/gamecommands.h
   src/world/level.h
   src/world/tile.h
