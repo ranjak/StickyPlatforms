@@ -10,14 +10,14 @@ namespace game {
 class Game;
 class Display;
 
-class LoadLevelState : public GameState<bool, const std::string &>
+class LoadLevelState : public GameState
 {
 public:
   LoadLevelState(Game &game, Display &display);
 
   void update(std::uint32_t step) override;
 
-  void enter(bool victory, const std::string &nextLevel) override;
+  void enter(bool victory, const std::string &nextLevel);
 
   void exit() override;
 

@@ -8,14 +8,14 @@ namespace game {
 
 class Game;
 
-class GameClearedState : GameState<>
+class GameClearedState : public GameState
 {
 public:
   GameClearedState(Game &game);
 
   void update(uint32_t step) override;
 
-  void enter() override;
+  void enter();
 
   void exit() override;
 

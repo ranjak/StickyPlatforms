@@ -37,7 +37,7 @@ Game::Game(Display &display, InputHandler &input, int camW, int camH, const std:
   mUI(display.getWindowSize()),
   mStates {
     std::make_unique<PlayingState>(*this),
-    std::make_unique<LoadLevelState>(*this),
+    std::make_unique<LoadLevelState>(*this, display),
     std::make_unique<GameClearedState>(*this)
   },
   mState(mStates[State::PLAYING].get())

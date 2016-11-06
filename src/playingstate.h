@@ -8,7 +8,7 @@ namespace game {
 
 class Game;
 
-class PlayingState : public GameState<>
+class PlayingState : public GameState
 {
 public:
   PlayingState(Game &game);

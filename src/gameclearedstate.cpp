@@ -29,7 +29,7 @@ GameClearedState::GameClearedState(Game &game) :
   panel.addWidget(std::move(prompt1));
   panel.addWidget(std::move(prompt2));
 
-  game.getUI().addWidget<PanelContainer>(std::move(panel), {0.f, 0.f}, mPanelName, true);
+  game.getUI().addWidget<PanelContainer>(std::move(panel), Vector<float>{0.f, 0.f}, mPanelName, true);
 }
 
 void GameClearedState::update(uint32_t step)

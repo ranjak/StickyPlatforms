@@ -7,6 +7,7 @@
 #include "triggermsg.h"
 #include "cameracontrolmsg.h"
 #include "loadlevelstate.h"
+#include "gameclearedstate.h"
 
 namespace game {
 
@@ -63,8 +64,14 @@ std::unique_ptr<TriggerBehavior> makeTrigger(const std::string &type, const TMX:
 
 void VictoryTrigger::onEnter(Entity &entity)
 {
-  glog(Log::INFO, "VictoryTrigger: setting level: \""<<mNextLevel<<"\"");
-  Game::current().setState<LoadLevelState>(true, mNextLevel);
+  if (!mNextLevel.empty()) {
+    glog(Log::INFO, "VictoryTrigger: setting level: \""<<mNextLevel<<"\"");
+    Game::current().setState<LoadLevelState>(true, mNextLevel);
+  }
+  else {
+    glog(Log::INFO, "VictoryTrigger: game cleared");
+    Game::current().setState<GameClearedState>();
+  }
 }
 
 void EnableTrigger::onEnter(Entity &entity)

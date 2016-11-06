@@ -27,7 +27,7 @@ class Display;
 class Game
 {
 public:
-  enum class State {
+  enum State {
     PLAYING,
     LOADING,
     CLEARED,
@@ -52,7 +52,7 @@ public:
   template<typename state_t, typename... Args>
   void setState(Args... args)
   {
-    static_assert(std::is_base_of<GameState, state_t>, "setState: state_t must be a subclass of GameState");
+    static_assert(std::is_base_of<GameState, state_t>::value, "setState: state_t must be a subclass of GameState");
 
     for (std::unique_ptr<GameState> &state : mStates) {
       state_t *castState = dynamic_cast<state_t *>(state.get());
@@ -62,8 +62,8 @@ public:
         if (mState)
           mState->exit();
 
+        castState->enter(args...);
         mState = castState;
-        mState->enter(args...);
 
         return;
       }

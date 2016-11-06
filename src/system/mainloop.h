@@ -14,7 +14,7 @@ class MainLoop
 public:
   static MainLoop &get();
 
-  MainLoop(const std::string &initialLevel="assets/maps/test.tmx");
+  MainLoop(const std::string &initialLevel="assets/maps/level1.tmx");
 
   MainLoop(const MainLoop &) = delete;
   MainLoop& operator=(const MainLoop &) = delete;
