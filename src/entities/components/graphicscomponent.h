@@ -10,14 +10,15 @@
 namespace game {
 
 class Display;
+class ActorControlComponent;
 
 class GraphicsComponent : public Component
 {
 public:
-  GraphicsComponent(std::unique_ptr<Graphics> graphics);
+  GraphicsComponent(std::unique_ptr<Graphics> graphics, ActorControlComponent *controller=nullptr);
 
 
-  void draw(Display &display, const Vector<float> &pos) const;
+  void draw(Display &display, const Vector<float> &pos);
 
   void setVisible(bool visible);
 
@@ -27,6 +28,8 @@ public:
    * @param period How long should a blinking "state" (visible or invisible) last, in milliseconds.
    */
   void setBlinking(float duration, std::uint32_t period=10);
+
+  void setDirection(int direction);
 
 private:
   void updateDelegate(std::uint32_t step, Game &game);
@@ -38,6 +41,8 @@ private:
   int mNumBlinkSwitches;
   std::uint32_t mBlinkPeriod;
   std::uint32_t mNextBlinkSwitch;
+
+  ActorControlComponent *mController;
 };
 
 } // namespace game

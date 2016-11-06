@@ -2,6 +2,7 @@
 #include "entity.h"
 #include "rect.h"
 #include "rectangle.h"
+#include "herosquare.h"
 #include "movingphysicscomponent.h"
 #include "staticphysicscomponent.h"
 #include "basicaicomponent.h"
@@ -58,14 +59,15 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
-    std::unique_ptr<Component> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
+    std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
+    std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(pos.w, pos.h, Color::GREEN), control.get());
 
     hero->addComponent(std::move(input));
     hero->addComponent(std::move(control));
     hero->addComponent(std::move(physics));
     hero->addComponent(std::make_unique<WeaponComponent>(*hero));
     hero->addComponent(std::make_unique<HealthComponent>(*hero, 5));
-    hero->addComponent(std::make_unique<GraphicsComponent>(std::make_unique<Rectangle>(pos.w, pos.h, Color::GREEN)));
+    hero->addComponent(std::move(graphics));
     hero->addComponent(std::make_unique<CameraComponent>(*hero, std::make_unique<CameraAnchoredY>(*hero)));
 
     return hero->id;
