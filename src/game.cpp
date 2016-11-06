@@ -9,6 +9,10 @@
 #include "healthcomponent.h"
 #include "gamevector.h"
 #include "color.h"
+#include "make_unique.h"
+#include "playingstate.h"
+#include "loadlevelstate.h"
+#include "gameclearedstate.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -25,14 +29,18 @@ Game &Game::current()
 
 Game::Game(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel) :
   mCommands(input),
+  mDisplay(display),
   mLevel(),
   mNextLevel(),
+  mInitialLevel(initialLevel),
   mCamera(0.f, 0.f, static_cast<float>(camW), static_cast<float>(camH)),
   mUI(display.getWindowSize()),
-  mGameTime(0),
-  mState(State::PLAYING),
-  mLoadingState(*this, display),
-  mDisplay(display)
+  mStates {
+    std::make_unique<PlayingState>(*this),
+    std::make_unique<LoadLevelState>(*this),
+    std::make_unique<GameClearedState>(*this)
+  },
+  mState(mStates[State::PLAYING].get())
 {
   currentGame = this;
 
@@ -52,29 +60,7 @@ void Game::update(uint32_t step)
     mNextLevel.clear();
   }
 
-  switch (mState) {
-
-  case State::PLAYING:
-
-    mGameTime += step;
-    mLevel->update(*this, step);
-
-    // Reload the level if the hero dies
-    if (!mLevel->getHero())
-      setLoadingState(false);
-
-    break;
-
-  case State::LOADING:
-
-    mLoadingState.update(step);
-    break;
-
-  case State::VICTORY:
-    // TODO
-    break;
-  }
-
+  mState->update(step);
 }
 
 void Game::draw(Display &target)
@@ -88,17 +74,6 @@ void Game::draw(Display &target)
   mUI.draw(target);
 }
 
-void Game::setPlayingState()
-{
-  mState = State::PLAYING;
-}
-
-void Game::setLoadingState(bool victory, const std::string &nextLevel)
-{
-  mState = State::LOADING;
-  mLoadingState.enter(victory, (victory && !nextLevel.empty()) ? nextLevel : mLevel->getFilename());
-}
-
 void Game::changeLevel(const std::string &levelFile)
 {
   mNextLevel = levelFile;
@@ -110,6 +85,11 @@ void Game::loadLevel(const std::string &levelFile)
   mLevel->start();
 
   mLevel->getHero()->getComponent<HealthComponent>()->setUI(static_cast<HealthBar *>(mUI.getByName("health")));
+}
+
+const std::string &Game::getInitialLevel() const
+{
+  return mInitialLevel;
 }
 
 GameCommands &Game::getCommands()
@@ -154,7 +134,7 @@ Display &Game::getDisplay()
 
 uint32_t Game::now() const
 {
-  return mGameTime;
+  return static_cast<PlayingState &>(*mStates[State::PLAYING]).now();
 }
 
 } //namespace game

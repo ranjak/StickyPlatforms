@@ -13,7 +13,7 @@ class UIWidget
 public:
   UIWidget(const Vector<float> &pos={}, const std::string &name="", bool hidden=false);
 
-  virtual void draw(Display &display) = 0;
+  virtual void draw(Display &display, const Vector<float> &offset={}) = 0;
 
   void setPosition(float x, float y);
   virtual void setSize(float w, float h);

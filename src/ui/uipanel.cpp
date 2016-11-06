@@ -11,13 +11,13 @@ UIPanel::UIPanel(const Vector<float> &size) :
 
 }
 
-void UIPanel::draw(Display &display)
+void UIPanel::draw(Display &display, const Vector<float> &offset)
 {
   display.setLogicalSize(static_cast<int>(mSize.x), static_cast<int>(mSize.y));
 
   for (const std::unique_ptr<UIWidget> &widget : mWidgets) {
     if (!widget->isHidden())
-      widget->draw(display);
+      widget->draw(display, offset);
   }
 }
 
@@ -31,6 +31,11 @@ UIWidget *UIPanel::getByName(const std::string &widgetName)
   return nullptr;
 }
 
+void UIPanel::addWidget(std::unique_ptr<UIWidget> widget)
+{
+  mWidgets.push_back(std::move(widget));
+}
+
 void UIPanel::setCentered(const std::string &widgetName)
 {
   UIWidget *widget = getByName(widgetName);
@@ -41,6 +46,11 @@ void UIPanel::setCentered(const std::string &widgetName)
   }
   else
     Log::getGlobal().get(Log::WARNING) << "UIPanel: widget \"" << widgetName << "\" not found" << std::endl;
+}
+
+const Vector<float> &UIPanel::getSize() const
+{
+  return mSize;
 }
 
 } // namespace game

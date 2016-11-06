@@ -41,6 +41,8 @@ set(SRC_LIST
     src/system/graphics/text.cpp
     src/game.cpp
     src/loadlevelstate.cpp
+    src/gameclearedstate.cpp
+    src/playingstate.cpp
     src/gamecommands.cpp
     src/world/level.cpp
     src/world/tile.cpp
@@ -83,6 +85,7 @@ set(SRC_LIST
     src/ui/healthbar.cpp
     src/ui/textwidget.cpp
     src/ui/uipanel.cpp
+    src/ui/panelcontainer.cpp
 )
 
 set(HEADER_LIST
@@ -114,7 +117,10 @@ set(HEADER_LIST
   src/system/graphics/frame.h
   src/system/graphics/text.h
   src/game.h
+  src/gamestate.h
   src/loadlevelstate.h
+  src/gameclearedstate.h
+  src/playingstate.cpp
   src/gamecommands.h
   src/world/level.h
   src/world/tile.h
@@ -157,6 +163,7 @@ set(HEADER_LIST
   src/ui/healthbar.h
   src/ui/textwidget.h
   src/ui/uipanel.h
+  src/ui/panelcontainer.h
 )
 
 add_subdirectory(src/3rdparty/tmxparser)

@@ -1,6 +1,7 @@
 #ifndef LOADLEVELSTATE_H
 #define LOADLEVELSTATE_H
 
+#include "gamestate.h"
 #include <cstdint>
 #include <string>
 
@@ -9,14 +10,16 @@ namespace game {
 class Game;
 class Display;
 
-class LoadLevelState
+class LoadLevelState : public GameState<bool, const std::string &>
 {
 public:
   LoadLevelState(Game &game, Display &display);
 
-  void update(std::uint32_t step);
+  void update(std::uint32_t step) override;
 
-  void enter(bool victory, const std::string &nextLevel);
+  void enter(bool victory, const std::string &nextLevel) override;
+
+  void exit() override;
 
 private:
   static const std::string gameOverWidget;

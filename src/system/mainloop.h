@@ -12,6 +12,8 @@ namespace game {
 class MainLoop
 {
 public:
+  static MainLoop &get();
+
   MainLoop(const std::string &initialLevel="assets/maps/test.tmx");
 
   MainLoop(const MainLoop &) = delete;
@@ -21,14 +23,20 @@ public:
 
   void run();
 
+  void requestExit();
+
 private:
   void updateStats(std::uint32_t frameTime);
   void logStats();
 
 private:
+  static MainLoop *instance;
+
   Display mDisplay;
   InputHandler mInput;
   Game mGame;
+
+  bool mExitRequested;
 
   std::uint32_t mMaxFrameTime;
   std::uint32_t mAccuFrameTimes;

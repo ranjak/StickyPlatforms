@@ -17,14 +17,12 @@ public:
    */
   void handle();
 
-  bool quitRequested() const;
   bool isKeyHit(std::uint32_t scancode) const;
   bool isKeyHeld(std::uint32_t scancode) const;
   bool isKeyReleased(std::uint32_t scancode) const;
 
 private:
   SDL_Event mEvent;
-  bool mQuitRequested;
 
   // Keys that were just pressed at the time handle() was called
   std::vector<std::uint32_t> mHitKeys;

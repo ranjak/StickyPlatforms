@@ -5,10 +5,12 @@
 #include "camera.h"
 #include "world/level.h"
 #include "uipanel.h"
-#include "loadlevelstate.h"
+#include "gamestate.h"
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <array>
+#include <type_traits>
 
 namespace game {
 
@@ -28,7 +30,8 @@ public:
   enum class State {
     PLAYING,
     LOADING,
-    VICTORY
+    CLEARED,
+    NB_STATES
   };
 
   /**
@@ -46,14 +49,26 @@ public:
 
   void draw(Display& target);
 
-  void setPlayingState();
-  /**
-   * @brief setLoadingState Display an on-screen message and prepare to load the next level.
-   * Called when the player clears a level (or dies).
-   * @param victory Has the player cleared the level, or is he dead?
-   * @param nextLevel Level to load. If left empty, reload the current one.
-   */
-  void setLoadingState(bool victory, const std::string &nextLevel="");
+  template<typename state_t, typename... Args>
+  void setState(Args... args)
+  {
+    static_assert(std::is_base_of<GameState, state_t>, "setState: state_t must be a subclass of GameState");
+
+    for (std::unique_ptr<GameState> &state : mStates) {
+      state_t *castState = dynamic_cast<state_t *>(state.get());
+
+      if (castState) {
+
+        if (mState)
+          mState->exit();
+
+        mState = castState;
+        mState->enter(args...);
+
+        return;
+      }
+    }
+  }
 
   /**
    * @brief changeLevel Set a level file to be loaded at next update, replacing the current level.
@@ -62,6 +77,8 @@ public:
   void changeLevel(const std::string &levelFile);
   // Load the given level right away, and spawn the player.
   void loadLevel(const std::string &levelFile);
+
+  const std::string &getInitialLevel() const;
 
   GameCommands &getCommands();
   const GameCommands &getCommands() const;
@@ -82,26 +99,27 @@ public:
    */
   std::uint32_t now() const;
 
-
 private:
   static Game *currentGame;
+
   // Game commands bindings and status
   GameCommands mCommands;
+  Display &mDisplay;
+
   // Current level
   std::unique_ptr<Level> mLevel;
   // Level to be loaded at next update
   std::string mNextLevel;
+  std::string mInitialLevel;
   // Camera that tracks the player
   Camera mCamera;
   // Game UI
   UIPanel mUI;
-  // Simulated game time, advances every time update() is called
-  std::uint32_t mGameTime;
+  // Possible game states
+  std::array<std::unique_ptr<GameState>, State::NB_STATES> mStates;
   // State the game is currently in
-  State mState;
-  LoadLevelState mLoadingState;
+  GameState *mState;
 
-  Display &mDisplay;
 };
 
 } //namespace game

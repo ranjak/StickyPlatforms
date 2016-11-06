@@ -17,7 +17,7 @@ class UIPanel
 public:
   UIPanel(const Vector<float> &size);
 
-  void draw(Display &display);
+  void draw(Display &display, const Vector<float> &offset={});
 
   UIWidget *getByName(const std::string &widgetName);
 
@@ -27,7 +27,11 @@ public:
     mWidgets.push_back(std::make_unique<T>(std::forward<Args>(args)...));
   }
 
+  void addWidget(std::unique_ptr<UIWidget> widget);
+
   void setCentered(const std::string &widgetName);
+
+  const Vector<float> &getSize() const;
 
 private:
   std::vector<std::unique_ptr<UIWidget>> mWidgets;

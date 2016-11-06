@@ -1,12 +1,14 @@
 #include "inputhandler.h"
+#include "mainloop.h"
 #include <algorithm>
 
 namespace game {
 
 InputHandler::InputHandler() :
   mEvent(),
-  mQuitRequested(false),
-  mHeldKeys()
+  mHitKeys(),
+  mHeldKeys(),
+  mReleasedKeys()
 {
 
 }
@@ -23,7 +25,7 @@ void InputHandler::handle()
     switch (mEvent.type) {
 
     case SDL_QUIT:
-      mQuitRequested = true;
+      MainLoop::get().requestExit();
       break;
 
     case SDL_KEYDOWN:
@@ -43,12 +45,6 @@ void InputHandler::handle()
       break;
     }
   }
-}
-
-
-bool InputHandler::quitRequested() const
-{
-  return mQuitRequested;
 }
 
 

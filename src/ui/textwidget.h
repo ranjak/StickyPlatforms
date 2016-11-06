@@ -16,7 +16,7 @@ class TextWidget : public UIWidget
 public:
   TextWidget(Display &display, const std::string &name, const std::string &text, int size, const Vector<float> &pos={}, const Color &color=Color::WHITE, const std::string &font=Text::defaultFont);
 
-  void draw(Display &display) override;
+  void draw(Display &display, const Vector<float> &offset={}) override;
 
   Vector<float> getSize() const override;
 

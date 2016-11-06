@@ -16,11 +16,11 @@ HealthBar::HealthBar(const Rect<float> &bounds, const std::string &name, const V
 
 }
 
-void HealthBar::draw(Display &display)
+void HealthBar::draw(Display &display, const Vector<float> &offset)
 {
-  mFrame.draw(display, mPos);
+  mFrame.draw(display, mPos + offset);
 
-  mHealthBar.draw(display, mPos.x+mPadding.x, mPos.y+mPadding.y);
+  mHealthBar.draw(display, offset.x + mPos.x+mPadding.x, offset.y + mPos.y+mPadding.y);
 }
 
 void HealthBar::setSize(float w, float h)

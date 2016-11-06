@@ -2,6 +2,7 @@
 #include "uipanel.h"
 #include "textwidget.h"
 #include "game.h"
+#include "playingstate.h"
 
 namespace game {
 
@@ -29,8 +30,7 @@ void LoadLevelState::update(uint32_t step)
 
   if (mTimeRemaining < 0) {
     mGame.loadLevel(mNextLevel);
-    mGame.getUI().getByName(*mCurrentWidget)->setHidden(true);
-    mGame.setPlayingState();
+    mGame.setState<PlayingState>();
   }
 }
 
@@ -41,6 +41,11 @@ void LoadLevelState::enter(bool victory, const std::string &nextLevel)
   mTimeRemaining = 1000;
 
   mGame.getUI().getByName(*mCurrentWidget)->setHidden(false);
+}
+
+void LoadLevelState::exit()
+{
+  mGame.getUI().getByName(*mCurrentWidget)->setHidden(true);
 }
 
 } // namespace game

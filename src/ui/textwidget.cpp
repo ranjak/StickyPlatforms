@@ -10,9 +10,9 @@ TextWidget::TextWidget(Display &display, const std::string &name, const std::str
 
 }
 
-void TextWidget::draw(Display &display)
+void TextWidget::draw(Display &display, const Vector<float> &offset)
 {
-  mText.draw(display, mPos);
+  mText.draw(display, mPos + offset);
 }
 
 Vector<float> TextWidget::getSize() const

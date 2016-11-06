@@ -14,6 +14,8 @@ enum Command {
   RIGHT,
   JUMP,
   SWORD,
+  RESET,
+  PAUSE,
   NB_CMD
 };
 
