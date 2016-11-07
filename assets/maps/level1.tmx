@@ -67,6 +67,7 @@
   <object id="21" name="avoidable_1" type="Enemy" x="1792" y="736" width="32" height="32"/>
   <object id="22" name="end" type="Trigger" x="0" y="256" width="256" height="128">
    <properties>
+    <property name="nextLevel" value="assets/maps/level2.tmx"/>
     <property name="requireOnGround" type="bool" value="true"/>
     <property name="type" value="victory"/>
    </properties>
