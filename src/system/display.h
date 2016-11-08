@@ -16,7 +16,7 @@ public:
   /**
    * @brief Initialize the display components (window, renderer, etc.)
    */
-  Display(int winW, int winH, const std::string &windowTitle="Game1-Platforms");
+  Display(int winW, int winH, const std::string &windowTitle="StickyPlatforms");
   ~Display();
 
 

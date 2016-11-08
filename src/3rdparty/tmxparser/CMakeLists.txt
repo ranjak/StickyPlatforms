@@ -1,4 +1,4 @@
-# TMXParser / TSXParser CMake file for game1
+# TMXParser / TSXParser CMake file for StickyPlatforms
 
 set(SRC_LIST
     src/TMXParser.cpp

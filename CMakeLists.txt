@@ -1,4 +1,4 @@
-project(game1)
+project(stickyplatforms)
 cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
@@ -172,7 +172,7 @@ set(HEADER_LIST
 
 add_subdirectory(src/3rdparty/tmxparser)
 
-add_executable(game1 WIN32 ${SRC_LIST} ${HEADER_LIST} $<TARGET_OBJECTS:tmxparser>)
+add_executable(stickyplatforms WIN32 ${SRC_LIST} ${HEADER_LIST} $<TARGET_OBJECTS:tmxparser>)
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
@@ -196,7 +196,7 @@ target_link_libraries(${PROJECT_NAME}
 
 # Build flags
 
-set_property(TARGET game1 PROPERTY CXX_STANDARD 11)
+set_property(TARGET stickyplatforms PROPERTY CXX_STANDARD 11)
 
 if (NOT MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter")
@@ -209,7 +209,7 @@ endif()
 # Installation
 
 # Binaries
-install(TARGETS game1 RUNTIME DESTINATION . CONFIGURATIONS Release)
-install(TARGETS game1 RUNTIME DESTINATION . CONFIGURATIONS Debug RENAME game1-debug)
+install(TARGETS stickyplatforms RUNTIME DESTINATION . CONFIGURATIONS Release)
+install(TARGETS stickyplatforms RUNTIME DESTINATION . CONFIGURATIONS Debug RENAME stickyplatforms-debug)
 # Resources
 install(DIRECTORY assets/ DESTINATION assets)

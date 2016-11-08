@@ -1,4 +1,4 @@
-# game1
+# StickyPlatforms
 
 A basic 2D platformer to get some experience with game development.
 
