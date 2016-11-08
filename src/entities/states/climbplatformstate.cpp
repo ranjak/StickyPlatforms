@@ -36,7 +36,7 @@ void ClimbPlatformState::enter()
   // Ignore collisions with obstacles we need to pass through in order to climb
   for (const Collision &col : collisions) {
 
-    if (col.isObstacle /*&& col.normal.y > 0*/) {
+    if (col.isObstacle && col.normal.y > 0) {
 
       if (col.entity != Entity::none) {
         physics.setIgnored(col.entity, true);
@@ -94,7 +94,7 @@ void ClimbPlatformState::receiveMessage(Message &msg)
 {
   // Fall through the platform when we hit an unexpected obstacle, or get hurt
   if (msg.type == Message::Damage ||
-      (msg.type == Message::OnCollision && static_cast<Collision &>(msg).isObstacle))
+      (msg.type == Message::OnCollision && static_cast<Collision &>(msg).isObstacle && static_cast<Collision &>(msg).normal.y > 0))
   {
     mFalling = true;
     mStateMachine.physics().setGravityEnabled(true);
