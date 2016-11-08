@@ -11,6 +11,7 @@
 #include "rect.h"
 #include "log.h"
 #include "util.h"
+#include "weaponcomponent.h"
 #include <algorithm>
 #include <cmath>
 
@@ -75,9 +76,25 @@ void AirState::receiveMessage(Message &msg)
     HorizControlState::receiveMessage(msg);
 }
 
+// TODO This belongs in a separate state class, but current state machine architecture
+// prevents it. Revise the architecture so that it can be done.
 void AirState::updateWallHug(std::uint32_t step, Game &game)
 {
   MovingPhysicsComponent &physics = mStateMachine.physics();
+
+  // TODO duplicated from HorizControlState
+  const InputComponent &input = mStateMachine.input();
+  int wantedDirection = input.getDirection();
+
+  if (wantedDirection != 0)
+    mStateMachine.setDirection(wantedDirection);
+
+  // TODO duplicated from HorizControlState
+  if (input.isHit(Command::SWORD)) {
+    WeaponComponent *weap = mStateMachine.entity().getComponent<WeaponComponent>();
+    if (weap)
+      weap->swing(mStateMachine.getDirection());
+  }
 
   // Friction against the wall
   if (physics.velocity().y > 0) {
@@ -93,18 +110,15 @@ void AirState::updateWallHug(std::uint32_t step, Game &game)
 
   for (const Collision &col : collisions) {
 
-    if (col.isObstacle && col.normal.x == mWallHugNormal) {
+    if (col.isObstacle && col.normal.x != 0) {
 
       wallContact = true;
       canClimb = canClimb && col.normal.y <= 0;
 
-      const InputComponent &input = mStateMachine.input();
-      int wantedDirection = input.getDirection();
-
       // Climbing is triggered by moving towards the wall,
       // or holding Jump while not moving away from the wall.
 
-      if (canClimb && (wantedDirection == -mWallHugNormal || (input.isHeld(Command::JUMP) && wantedDirection != mWallHugNormal))) {
+      if (canClimb && (wantedDirection == -col.normal.x || (input.isHeld(Command::JUMP) && wantedDirection != col.normal.x))) {
 
         const Rect<float> &myBox = mStateMachine.entity().getGlobalBox();
         // The total space the climbing animation will take
@@ -120,6 +134,8 @@ void AirState::updateWallHug(std::uint32_t step, Game &game)
             level.entities().getPhysics().getObstaclesInArea(climbBox, physics).empty())
         {
           glog(Log::DBG, "Climbing! FloorY="<<col.bbox.y<<",ActorY="<<myBox.y);
+
+          mStateMachine.setDirection(-col.normal.x);
           mStateMachine.setState(ActorControlComponent::CLIMB);
           return;
         }
@@ -136,6 +152,7 @@ void AirState::updateWallHug(std::uint32_t step, Game &game)
     glog(Log::DBG, "Walljump!");
 
     physics.velocity().x = mWallHugNormal * mStateMachine.getMaxSpeed();
+    mStateMachine.setDirection(mWallHugNormal);
     mStateMachine.setState(ActorControlComponent::JUMP);
   }
   // The player can hold the direction opposite to the wall and still cling to it for a short amount of time
