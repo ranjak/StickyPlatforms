@@ -3,6 +3,15 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
+# Configuration
+
+# Hack to get library search paths right with MSVC
+if (MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+  set(CMAKE_LIBRARY_ARCHITECTURE x64)
+else()
+  set(CMAKE_LIBRARY_ARCHITECTURE x86)
+endif()
+
 # Dependencies
 
 find_package(SDL2 REQUIRED)
