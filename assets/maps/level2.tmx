@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="30" tilewidth="128" tileheight="128" nextobjectid="22">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="150" height="30" tilewidth="128" tileheight="128" nextobjectid="23">
  <tileset firstgid="1" source="sand.tsx"/>
  <tileset firstgid="14" source="grass.tsx"/>
  <layer name="tiles" width="150" height="30">
@@ -60,6 +60,7 @@
   <object id="18" name="badguyNearEnd" type="Enemy" x="17120" y="2496" width="64" height="64"/>
   <object id="19" name="end" type="Trigger" x="18944" y="3328" width="128" height="128">
    <properties>
+    <property name="nextLevel" value="assets/maps/level3.tmx"/>
     <property name="requireOnGround" type="bool" value="true"/>
     <property name="type" value="victory"/>
    </properties>
