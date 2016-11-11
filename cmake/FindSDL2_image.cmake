@@ -58,8 +58,14 @@ else()
     set(VC_LIB_PATH_SUFFIX lib/x86)
 endif()
 
+IF(SDL2_STATIC)
+  SET(SDL2_IMAGE_NAME "libSDL2_image.a")
+ELSE()
+  SET(SDL2_IMAGE_NAME "SDL2_image")
+ENDIF()
+
 find_library(SDL2_IMAGE_LIBRARY
-        NAMES SDL2_image
+        NAMES ${SDL2_IMAGE_NAME}
         HINTS
         ENV SDL2IMAGEDIR
         ENV SDL2DIR

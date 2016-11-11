@@ -84,8 +84,14 @@ FIND_PATH(SDL2_INCLUDE_DIR SDL.h
 	PATHS ${SDL2_SEARCH_PATHS}
 )
 
+IF(SDL2_STATIC)
+  SET(SDL2_NAME "libSDL2.a")
+ELSE()
+  SET(SDL2_NAME "SDL2")
+ENDIF()
+
 FIND_LIBRARY(SDL2_LIBRARY_TEMP
-	NAMES SDL2
+	NAMES ${SDL2_NAME}
 	HINTS
 	$ENV{SDL2DIR}
 	PATH_SUFFIXES lib64 lib lib/x64 lib/x86
@@ -144,7 +150,8 @@ IF(SDL2_LIBRARY_TEMP)
 	# For threads, as mentioned Apple doesn't need this.
 	# In fact, there seems to be a problem if I used the Threads package
 	# and try using this line, so I'm just skipping it entirely for OS X.
-	IF(NOT APPLE)
+        # find_package returns a .so which we don't want when liking statically
+        IF(NOT APPLE AND NOT SDL2_STATIC)
 		SET(SDL2_LIBRARY_TEMP ${SDL2_LIBRARY_TEMP} ${CMAKE_THREAD_LIBS_INIT})
 	ENDIF(NOT APPLE)
 

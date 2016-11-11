@@ -12,6 +12,10 @@ A C++ compiler that supports C++11.
 
 ### Linux
 
+Make sure you have installed development libraries for SDL2, SDL2\_image and SDL2\_ttf.
+
+Then, for a standard in-source build, navigate to the source tree and run:
+
 ```
 mkdir build
 cd build

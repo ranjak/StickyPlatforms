@@ -12,7 +12,11 @@ else()
   set(CMAKE_LIBRARY_ARCHITECTURE x86)
 endif()
 
+set(STICKYPLATFORMS_STATIC OFF CACHE BOOL "Build StickyPlatforms statically")
+
 # Dependencies
+
+set(SDL2_STATIC ${STICKYPLATFORMS_STATIC})
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -213,6 +217,13 @@ endif()
 
 if (NOT CMAKE_BUILD_TYPE MATCHES [Dd]ebug)
     add_definitions(-DNDEBUG)
+endif()
+
+if (STICKYPLATFORMS_STATIC)
+  target_link_libraries(${PROJECT_NAME} -Wl,-Bstatic -lharfbuzz -lfreetype -lpng -lbz2 -lz -lglib-2.0 -lpcre)
+  # harfbuzz/freetype cyclic dependency
+  target_link_libraries(${PROJECT_NAME} -Wl,-Bstatic -lharfbuzz)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -v -static-libgcc -static-libstdc++ -pthread -ldl")
 endif()
 
 # Installation

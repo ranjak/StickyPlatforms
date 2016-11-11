@@ -58,8 +58,14 @@ else ()
     set(VC_LIB_PATH_SUFFIX lib/x86)
 endif ()
 
+IF(SDL2_STATIC)
+  SET(SDL2_TTF_NAME "libSDL2_ttf.a")
+ELSE()
+  SET(SDL2_TTF_NAME "SDL2_ttf")
+ENDIF()
+
 find_library(SDL2_TTF_LIBRARY
-        NAMES SDL2_ttf
+        NAMES ${SDL2_TTF_NAME}
         HINTS
         ENV SDL2TTFDIR
         ENV SDL2DIR
