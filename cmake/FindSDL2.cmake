@@ -153,7 +153,7 @@ IF(SDL2_LIBRARY_TEMP)
         # find_package returns a .so which we don't want when liking statically
         IF(NOT APPLE AND NOT SDL2_STATIC)
 		SET(SDL2_LIBRARY_TEMP ${SDL2_LIBRARY_TEMP} ${CMAKE_THREAD_LIBS_INIT})
-	ENDIF(NOT APPLE)
+        ENDIF(NOT APPLE AND NOT SDL2_STATIC)
 
 	# For MinGW library
 	IF(MINGW)
