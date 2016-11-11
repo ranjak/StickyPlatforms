@@ -223,7 +223,7 @@ if (STICKYPLATFORMS_STATIC)
   target_link_libraries(${PROJECT_NAME} -Wl,-Bstatic -lharfbuzz -lfreetype -lpng -lbz2 -lz -lglib-2.0 -lpcre)
   # harfbuzz/freetype cyclic dependency
   target_link_libraries(${PROJECT_NAME} -Wl,-Bstatic -lharfbuzz)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -v -static-libgcc -static-libstdc++ -pthread -ldl")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -pthread -ldl")
 endif()
 
 # Installation

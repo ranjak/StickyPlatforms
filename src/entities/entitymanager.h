@@ -11,9 +11,6 @@
 #include <vector>
 #include <string>
 
-namespace TMX {
-struct PropertyMap;
-}
 
 namespace game {
 

@@ -36,6 +36,8 @@ struct Property {
 };
 
 struct PropertyMap {
+  PropertyMap() {}
+
   std::map<std::string, Property> properties;
 
   const Property *find(const std::string &name, Property::valType type) const;
