@@ -62,7 +62,7 @@ void Display::setScale(float scaleFactor)
 
 void Display::toggleFullscreen()
 {
-  int result = SDL_SetWindowFullscreen(mWindow, mFullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+  int result = SDL_SetWindowFullscreen(mWindow, mFullscreen ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
 
   if (result < 0)
     game::error(std::string("Couldn't set fullscreen mode: ") + SDL_GetError());

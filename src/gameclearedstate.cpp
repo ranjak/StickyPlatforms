@@ -32,14 +32,17 @@ GameClearedState::GameClearedState(Game &game) :
   game.getUI().addWidget<PanelContainer>(std::move(panel), Vector<float>{0.f, 0.f}, mPanelName, true);
 }
 
-void GameClearedState::update(uint32_t step)
+void GameClearedState::handleInput(GameCommands &commands)
 {
-  if (mGame.getCommands().isHeld(Command::PAUSE))
+  if (commands.isHeld(Command::PAUSE)) {
     MainLoop::requestExit();
-
-  else if (mGame.getCommands().isHeld(Command::RESET)) {
+  }
+  else if (commands.isHeld(Command::RESET)) {
     mGame.loadLevel(mGame.getInitialLevel());
     mGame.setState<PlayingState>();
+  }
+  else {
+    GameState::handleInput(commands);
   }
 }
 

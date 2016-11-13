@@ -55,6 +55,7 @@ set(SRC_LIST
     src/system/graphics/text.cpp
     src/system/graphics/herosquare.cpp
     src/game.cpp
+    src/gamestate.cpp
     src/loadlevelstate.cpp
     src/gameclearedstate.cpp
     src/playingstate.cpp

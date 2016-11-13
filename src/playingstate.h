@@ -13,6 +13,8 @@ class PlayingState : public GameState
 public:
   PlayingState(Game &game);
 
+  void handleInput(GameCommands &commands) override;
+
   void update(uint32_t step) override;
 
   std::uint32_t now() const { return mGameTime; }

@@ -62,6 +62,7 @@ void Game::update(uint32_t step)
     mNextLevel.clear();
   }
 
+  mState->handleInput(mCommands);
   mState->update(step);
 }
 

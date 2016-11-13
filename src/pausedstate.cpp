@@ -15,10 +15,12 @@ PausedState::PausedState(Game &game) :
   game.getUI().getByName(mPauseWidget)->setHidden(true);
 }
 
-void PausedState::update(uint32_t step)
+void PausedState::handleInput(GameCommands &commands)
 {
-  if (Game::current().getCommands().isHit(Command::PAUSE))
+  if (commands.isHit(Command::PAUSE))
     Game::current().setState<PlayingState>();
+  else
+    GameState::handleInput(commands);
 }
 
 void PausedState::enter()

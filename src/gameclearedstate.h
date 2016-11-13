@@ -13,7 +13,7 @@ class GameClearedState : public GameState
 public:
   GameClearedState(Game &game);
 
-  void update(uint32_t step) override;
+  void handleInput(GameCommands &commands) override;
 
   void enter();
 

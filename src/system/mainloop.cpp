@@ -19,7 +19,7 @@ void MainLoop::requestExit()
 }
 
 MainLoop::MainLoop(const std::string &initialLevel) :
-  mDisplay(1280, 720),
+  mDisplay(640, 360),
   mInput(std::make_unique<SDLInputHandler>()),
   mGame(mDisplay, *mInput, 640, 360, initialLevel),
   mExitRequested(false),

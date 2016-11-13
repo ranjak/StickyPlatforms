@@ -13,7 +13,7 @@ class PausedState : public GameState
 public:
   PausedState(Game &game);
 
-  void update(uint32_t step) override;
+  void handleInput(GameCommands &commands) override;
 
   void enter();
 
