@@ -1,8 +1,9 @@
 #include "mainloop.h"
 #include "log.h"
-#include "inputhandler.h"
+#include "sdlinputhandler.h"
 #include "game.h"
 #include "display.h"
+#include "make_unique.h"
 #include "SDL.h"
 #include <thread>
 #include <algorithm>
@@ -19,8 +20,8 @@ void MainLoop::requestExit()
 
 MainLoop::MainLoop(const std::string &initialLevel) :
   mDisplay(1280, 720),
-  mInput(),
-  mGame(mDisplay, mInput, 640, 360, initialLevel),
+  mInput(std::make_unique<SDLInputHandler>()),
+  mGame(mDisplay, *mInput, 640, 360, initialLevel),
   mExitRequested(false),
   mMaxFrameTime(0),
   mAccuFrameTimes(0),
@@ -50,7 +51,7 @@ void MainLoop::run()
 
     while (realTimeElasped > gameTime && !mExitRequested) {
 
-      mInput.handle();
+      mInput->handle();
 
       if (mExitRequested)
         break;

@@ -1,10 +1,12 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include "SDL.h"
 #include "gamevector.h"
 #include "rect.h"
 #include <string>
+
+struct SDL_Window;
+struct SDL_Renderer;
 
 namespace game {
 
@@ -23,6 +25,8 @@ public:
   void setLogicalSize(int w, int h);
 
   void setScale(float scaleFactor);
+
+  void toggleFullscreen();
 
   Rect<int> getViewport();
   Vector<int> getOutputSize();
@@ -46,6 +50,7 @@ private:
   // Logical size, different from the window size.
   Vector<int> mCameraSize;
   std::string mWindowTitle;
+  bool mFullscreen;
 };
 
 }

@@ -6,6 +6,7 @@
 #include "game.h"
 #include <cstdint>
 #include <string>
+#include <memory>
 
 namespace game {
 
@@ -33,7 +34,7 @@ private:
   static MainLoop *instance;
 
   Display mDisplay;
-  InputHandler mInput;
+  std::unique_ptr<InputHandler> mInput;
   Game mGame;
 
   bool mExitRequested;

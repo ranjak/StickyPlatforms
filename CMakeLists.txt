@@ -37,6 +37,7 @@ configure_file(config/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
 set(SRC_LIST
     src/system/main.cpp
     src/system/inputhandler.cpp
+    src/system/sdlinputhandler.cpp
     src/system/log.cpp
     src/system/display.cpp
     src/system/gamevector.cpp
@@ -116,6 +117,7 @@ set(HEADER_LIST
   src/entities/components/message/triggermsg.h
   src/entities/components/message/cameracontrolmsg.h
   src/system/inputhandler.h
+  src/system/sdlinputhandler.h
   src/system/log.h
   src/system/display.h
   src/system/gamevector.h

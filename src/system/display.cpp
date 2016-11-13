@@ -12,7 +12,8 @@ Display::Display(int winW, int winH, const std::string &windowTitle) :
   mWindow(nullptr),
   mRenderer(nullptr),
   mCameraSize(winW, winH),
-  mWindowTitle(windowTitle)
+  mWindowTitle(windowTitle),
+  mFullscreen(false)
 {
   init(winW, winH);
 }
@@ -38,10 +39,11 @@ void Display::init(int winW, int winH)
       throw std::exception();
   }
 
-  if (SDL_CreateWindowAndRenderer(winW, winH, SDL_WINDOW_RESIZABLE, &mWindow, &mRenderer)) {
+  if (SDL_CreateWindowAndRenderer(winW, winH, SDL_WINDOW_RESIZABLE|SDL_WINDOW_FULLSCREEN_DESKTOP, &mWindow, &mRenderer)) {
       game::error(std::string("Couldn't create window and renderer: ") + SDL_GetError());
       throw std::exception();
   }
+  mFullscreen = true;
 
   SDL_SetWindowTitle(mWindow, mWindowTitle.c_str());
 }
@@ -56,6 +58,16 @@ void Display::setScale(float scaleFactor)
 {
   if (SDL_RenderSetScale(mRenderer, scaleFactor, scaleFactor) < 0)
     throw std::runtime_error(SDL_GetError());
+}
+
+void Display::toggleFullscreen()
+{
+  int result = SDL_SetWindowFullscreen(mWindow, mFullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+
+  if (result < 0)
+    game::error(std::string("Couldn't set fullscreen mode: ") + SDL_GetError());
+  else
+    mFullscreen = !mFullscreen;
 }
 
 Rect<int> Display::getViewport()
@@ -83,9 +95,6 @@ Vector<float> Display::getScale()
 
 void Display::render(Game &game)
 {
-//  if (SDL_RenderSetLogicalSize(mRenderer, mCameraSize.x, mCameraSize.y) < 0)
-//    throw std::runtime_error(SDL_GetError());
-
   SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
   SDL_RenderClear(mRenderer);
 

@@ -1,11 +1,18 @@
 #ifndef GAMECOMMANDS_H
 #define GAMECOMMANDS_H
 
+#include "inputhandler.h"
 #include <cstdint>
 
 namespace game {
 
-class InputHandler;
+struct KeyBinding
+{
+  KeyBinding(std::uint32_t scancode, const ModifierKey &modifier = ModifierKey::NONE) : keyScancode(scancode), modifier(modifier) {}
+
+  std::uint32_t keyScancode;
+  ModifierKey modifier;
+};
 
 enum Command {
   UP,
@@ -16,6 +23,7 @@ enum Command {
   SWORD,
   RESET,
   PAUSE,
+  TOGGLE_FULLSCREEN,
   NB_CMD
 };
 
@@ -24,16 +32,16 @@ class GameCommands
 public:
   GameCommands(InputHandler &input);
 
-  void setBinding(Command cmdToBind, std::uint32_t scancode);
+  void setBinding(Command cmdToBind, const KeyBinding &binding);
 
-  std::uint32_t getBinding(Command cmd) const;
+  const KeyBinding &getBinding(Command cmd) const;
 
   bool isHit(Command cmd) const;
   bool isHeld(Command cmd) const;
   bool isReleased(Command cmd) const;
 
 private:
-  std::uint32_t mBindings[NB_CMD];
+  KeyBinding mBindings[NB_CMD];
   InputHandler &mInput;
 };
 

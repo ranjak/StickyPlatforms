@@ -1,5 +1,4 @@
 #include "gamecommands.h"
-#include "inputhandler.h"
 #include "SDL.h"
 
 namespace game {
@@ -7,35 +6,41 @@ namespace game {
 
 GameCommands::GameCommands(InputHandler &input) :
   mBindings { SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_SPACE, SDL_SCANCODE_F,
-    SDL_SCANCODE_BACKSPACE, SDL_SCANCODE_ESCAPE },
+    SDL_SCANCODE_BACKSPACE, SDL_SCANCODE_ESCAPE, {SDL_SCANCODE_RETURN, ModifierKey::ALT} },
   mInput(input)
 {
 
 }
 
-void GameCommands::setBinding(Command cmdToBind, std::uint32_t scancode)
+void GameCommands::setBinding(Command cmdToBind, const KeyBinding &binding)
 {
-  mBindings[cmdToBind] = scancode;
+  mBindings[cmdToBind] = binding;
 }
 
-std::uint32_t GameCommands::getBinding(Command cmd) const
+const KeyBinding &GameCommands::getBinding(Command cmd) const
 {
   return mBindings[cmd];
 }
 
 bool GameCommands::isHit(Command cmd) const
 {
-  return mInput.isKeyHit(mBindings[cmd]);
+  if (mBindings[cmd].modifier != ModifierKey::NONE && (!mInput.isModifierPressed(mBindings[cmd].modifier)))
+    return false;
+
+  return mInput.isKeyHit(mBindings[cmd].keyScancode);
 }
 
 bool GameCommands::isHeld(Command cmd) const
 {
-  return mInput.isKeyHeld(mBindings[cmd]);
+  if (mBindings[cmd].modifier != ModifierKey::NONE && (!mInput.isModifierPressed(mBindings[cmd].modifier)))
+    return false;
+
+  return mInput.isKeyHeld(mBindings[cmd].keyScancode);
 }
 
 bool GameCommands::isReleased(Command cmd) const
 {
-  return mInput.isKeyReleased(mBindings[cmd]);
+  return mInput.isKeyReleased(mBindings[cmd].keyScancode);
 }
 
 } // namespace game
