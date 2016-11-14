@@ -46,6 +46,9 @@ When running the game, make sure your working directory is the source directory,
   * __Cling to decor__: Hold _Jump_ while in the air to cling to horizontal decor elements you come in contact with.
   * __Climb onto a platform__: While clinging to a platform, press the Up arrow key to climb on top of it.
   * __Wall Jump__: While in the air and in contact with a wall, hold the direction opposite to the wall and press _Jump_ to perform a wall jump.
+  
+  * __Pause__: Escape
+  * __Toggle fullscreen__: Alt + Return
 
 ## License
 
