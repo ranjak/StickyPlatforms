@@ -49,6 +49,7 @@ When running the game, make sure your working directory is the source directory,
   
   * __Pause__: Escape
   * __Toggle fullscreen__: Alt + Return
+  * __Quit__: Standard quit shortcut (Alt + F4 / Cmd + Q)
 
 ## License
 
