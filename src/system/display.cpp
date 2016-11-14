@@ -44,6 +44,7 @@ void Display::init(int winW, int winH)
       throw std::exception();
   }
   mFullscreen = true;
+  SDL_ShowCursor(SDL_FALSE);
 
   SDL_SetWindowTitle(mWindow, mWindowTitle.c_str());
 }
@@ -64,10 +65,13 @@ void Display::toggleFullscreen()
 {
   int result = SDL_SetWindowFullscreen(mWindow, mFullscreen ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP);
 
-  if (result < 0)
+  if (result < 0) {
     game::error(std::string("Couldn't set fullscreen mode: ") + SDL_GetError());
-  else
+  }
+  else {
     mFullscreen = !mFullscreen;
+    SDL_ShowCursor(mFullscreen ? SDL_FALSE : SDL_TRUE);
+  }
 }
 
 Rect<int> Display::getViewport()
