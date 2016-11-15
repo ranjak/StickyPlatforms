@@ -2,6 +2,7 @@
 #include "log.h"
 #include "util_sdl.h"
 #include "display.h"
+#include "resource.h"
 #include "SDL_ttf.h"
 #include "SDL.h"
 #include <memory>
@@ -16,7 +17,7 @@ Text::FontUptr openFont(const std::string &fontFile, int fontSize)
   if (!TTF_WasInit() && TTF_Init() < 0)
     game::error(std::string("Couldn't initialize SDL_ttf: ")+TTF_GetError());
 
-  Text::FontUptr font(TTF_OpenFont(fontFile.c_str(), fontSize), TTF_CloseFont);
+  Text::FontUptr font(TTF_OpenFont(Resource::getInstance().assetPath(fontFile).c_str(), fontSize), TTF_CloseFont);
 
   if (!font)
     game::error(std::string("Couldn't open font ")+fontFile+" : "+TTF_GetError());

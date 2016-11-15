@@ -9,6 +9,7 @@
 #include "damagecomponent.h"
 #include "make_unique.h"
 #include "entitygroup.h"
+#include "resource.h"
 #include <string>
 #include <memory>
 #include <cctype>
@@ -21,7 +22,7 @@ namespace game {
 std::unique_ptr<Level> TMXMapLoader::load(const std::string &file, Display &display)
 {
   try {
-    return TMXMapLoader().loadMap(file, display);
+    return TMXMapLoader().loadMap(Resource::getInstance().assetPath(file), display);
   }
   catch (std::exception &e) {
     game::error("Failed to load map file "+file+" ; reason: "+e.what());

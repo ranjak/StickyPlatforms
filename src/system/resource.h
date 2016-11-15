@@ -2,7 +2,7 @@
 #define RESOURCE_H
 
 #include <memory>
-#include <iostream>
+#include <string>
 
 namespace game {
 
@@ -20,7 +20,7 @@ private:
 private:
   static std::unique_ptr<Resource> instance;
 
-  std::string execPath;
+  std::string resourcePath;
   std::string userPath;
 };
 

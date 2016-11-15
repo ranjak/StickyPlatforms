@@ -5,6 +5,7 @@
 #include "TSXParser.h"
 #include "image.h"
 #include "rect.h"
+#include "resource.h"
 #include <string>
 #include <vector>
 #include <stdexcept>
@@ -20,7 +21,7 @@ Tileset TSXTilesetLoader::loadTileset(const std::string &file, Display &display)
 {
   TSX::Parser tsx;
 
-  if (!tsx.load(file.c_str())) {
+  if (!tsx.load(Resource::getInstance().assetPath(file).c_str())) {
     game::error("Failed to load tileset file "+file);
     throw std::runtime_error("Failed to load tileset file "+file);
   }

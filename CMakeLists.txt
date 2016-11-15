@@ -3,7 +3,13 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-# Configuration
+# User Configuration
+
+set(STICKYPLATFORMS_STATIC OFF CACHE BOOL "Build StickyPlatforms statically")
+
+set(STICKYPLATFORMS_RELATIVE_RESOURCES_PATH "" CACHE STRING "Path to the game's read-only resource folder relative to the executable")
+
+# Project setup
 
 # Hack to get library search paths right with MSVC
 if (MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
@@ -15,8 +21,6 @@ endif()
 include(utilities)
 use_cxx11()
 
-set(STICKYPLATFORMS_STATIC OFF CACHE BOOL "Build StickyPlatforms statically")
-
 # Dependencies
 
 set(SDL2_STATIC ${STICKYPLATFORMS_STATIC})
@@ -24,8 +28,6 @@ set(SDL2_STATIC ${STICKYPLATFORMS_STATIC})
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
-
-# Project setup
 
 # Check for make_unique
 
