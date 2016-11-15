@@ -9,4 +9,8 @@ set(SRC_LIST
 
 include_directories(include src)
 
-add_library(tmxparser OBJECT ${SRC_LIST})
+if (CMAKE_VERSION VERSION_LESS 3.1)
+  add_library(tmxparser STATIC ${SRC_LIST})
+else()
+  add_library(tmxparser OBJECT ${SRC_LIST})
+endif()

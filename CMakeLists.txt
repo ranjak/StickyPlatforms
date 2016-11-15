@@ -12,6 +12,9 @@ else()
   set(CMAKE_LIBRARY_ARCHITECTURE x86)
 endif()
 
+include(utilities)
+use_cxx11()
+
 set(STICKYPLATFORMS_STATIC OFF CACHE BOOL "Build StickyPlatforms statically")
 
 # Dependencies
@@ -188,7 +191,11 @@ set(HEADER_LIST
 
 add_subdirectory(src/3rdparty/tmxparser)
 
-add_executable(stickyplatforms WIN32 ${SRC_LIST} ${HEADER_LIST} $<TARGET_OBJECTS:tmxparser>)
+if (CMAKE_VERSION VERSION_LESS 3.1)
+  add_executable(stickyplatforms WIN32 ${SRC_LIST} ${HEADER_LIST})
+else()
+  add_executable(stickyplatforms WIN32 ${SRC_LIST} ${HEADER_LIST} $<TARGET_OBJECTS:tmxparser>)
+endif()
 
 include_directories(
     ${SDL2_INCLUDE_DIR}
@@ -204,6 +211,11 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tmxparser/include
     ${CMAKE_CURRENT_BINARY_DIR}/include
 )
+
+if (CMAKE_VERSION VERSION_LESS 3.1)
+  target_link_libraries(${PROJECT_NAME} tmxparser)
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     ${SDL2_LIBRARY}
     ${SDL2_IMAGE_LIBRARIES}
@@ -211,8 +223,6 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 # Build flags
-
-set_property(TARGET stickyplatforms PROPERTY CXX_STANDARD 11)
 
 if (NOT MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter")
