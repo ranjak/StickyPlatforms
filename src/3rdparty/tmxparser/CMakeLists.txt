@@ -9,6 +9,8 @@ set(SRC_LIST
 
 include_directories(include src)
 
+# CMake < 3.1 doesn't support object libraries
+
 if (CMAKE_VERSION VERSION_LESS 3.1)
   add_library(tmxparser STATIC ${SRC_LIST})
 else()

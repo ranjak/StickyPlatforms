@@ -7,7 +7,13 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 set(STICKYPLATFORMS_STATIC OFF CACHE BOOL "Build StickyPlatforms statically")
 
-set(STICKYPLATFORMS_RELATIVE_RESOURCES_PATH "" CACHE STRING "Path to the game's read-only resource folder relative to the executable")
+if (UNIX)
+  set(STICKYPLATFORMS_RELATIVE_RESOURCES_PATH "../share/stickyplatforms" CACHE STRING "Path to the game's read-only resource folder relative to the executable")
+  set(STICKYPLATFORMS_BIN_DIR "bin" CACHE STRING "Binaries install directory, relative to CMAKE_INSTALL_PREFIX")
+else ()
+  set(STICKYPLATFORMS_RELATIVE_RESOURCES_PATH "" CACHE STRING "Path to the game's read-only resource folder relative to the executable")
+  set(STICKYPLATFORMS_BIN_DIR "" CACHE STRING "Binaries install directory, relative to CMAKE_INSTALL_PREFIX")
+endif()
 
 # Project setup
 
@@ -36,6 +42,7 @@ include(CheckCXXSourceCompiles)
 
 file(READ config/make_unique_test.cpp MAKE_UNIQUE_TEST_SRC)
 check_cxx_source_compiles("${MAKE_UNIQUE_TEST_SRC}" HAVE_MAKE_UNIQUE)
+
 configure_file(config/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/config.h)
 
 
@@ -193,6 +200,7 @@ set(HEADER_LIST
 
 add_subdirectory(src/3rdparty/tmxparser)
 
+# CMake < 3.1 doesn't support object libraries
 if (CMAKE_VERSION VERSION_LESS 3.1)
   add_executable(stickyplatforms WIN32 ${SRC_LIST} ${HEADER_LIST})
 else()
@@ -244,7 +252,6 @@ endif()
 # Installation
 
 # Binaries
-install(TARGETS stickyplatforms RUNTIME DESTINATION . CONFIGURATIONS Release)
-install(TARGETS stickyplatforms RUNTIME DESTINATION . CONFIGURATIONS Debug RENAME stickyplatforms-debug)
+install(TARGETS stickyplatforms RUNTIME DESTINATION "${STICKYPLATFORMS_BIN_DIR}")
 # Resources
-install(DIRECTORY assets/ DESTINATION assets)
+install(DIRECTORY assets DESTINATION "${STICKYPLATFORMS_BIN_DIR}/${STICKYPLATFORMS_RELATIVE_RESOURCES_PATH}" USE_SOURCE_PERMISSIONS)
