@@ -7,6 +7,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 set(STICKYPLATFORMS_STATIC OFF CACHE BOOL "Build StickyPlatforms statically")
 
+option(STICKYPLATFORMS_STATIC_GLIBCXX "Bundle libstdc++ and libgcc statically" ${STICKYPLATFORMS_STATIC})
+
 if (UNIX)
   set(STICKYPLATFORMS_RELATIVE_RESOURCES_PATH "../share/stickyplatforms" CACHE STRING "Path to the game's read-only resource folder relative to the executable")
   set(STICKYPLATFORMS_BIN_DIR "bin" CACHE STRING "Binaries install directory, relative to CMAKE_INSTALL_PREFIX")
@@ -242,11 +244,15 @@ if (NOT CMAKE_BUILD_TYPE MATCHES [Dd]ebug)
     add_definitions(-DNDEBUG)
 endif()
 
+if (STICKYPLATFORMS_STATIC_GLIBCXX OR STICKYPLATFORMS_STATIC)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+endif()
+
 if (STICKYPLATFORMS_STATIC)
   target_link_libraries(${PROJECT_NAME} -Wl,-Bstatic -lharfbuzz -lfreetype -lpng -lbz2 -lz -lglib-2.0 -lpcre)
   # harfbuzz/freetype cyclic dependency
   target_link_libraries(${PROJECT_NAME} -Wl,-Bstatic -lharfbuzz)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -pthread -ldl")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread -ldl")
 endif()
 
 # Installation
