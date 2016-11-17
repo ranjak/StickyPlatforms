@@ -1,4 +1,5 @@
 #include "mainloop.h"
+#include "SDL.h"
 #include <string>
 
 

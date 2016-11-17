@@ -19,25 +19,28 @@ Then, for a standard in-source build, navigate to the source tree and run:
 ```
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_INSTALL_PREFIX=<path to a destination folder for the game> ..
 make
+make install
 ```
+
+You need to install the game so that it can load the resources it needs.
+Installation destination does not matter, you can set the install prefix to anywhere you want.
 
 ### Windows (MSVC)
 
-In CMake, before configuring the project, add a variable `SDL2_PATH` pointing to the root folder where SDL2, SDL2\_image  and SDL2\_ttf libraries are located
-(the folder should contain `lib` and `ìnclude` subfolders).
-You can then proceed to configure, generate and build the project in Visual Studio.
+In CMake, before configuring the project, add a variable `CMAKE_PREFIX_PATH` pointing to the root folder where SDL2, SDL2\_image  and SDL2\_ttf libraries are located
+(the folder should contain `lib` and `include` subfolders).
+
+Set `CMAKE_INSTALL_PREFIX` to the directory where you want the game to be installed.
+
+You can then proceed to configure, generate the project, and build the `INSTALL` target in Visual Studio.
 
 ### Other
 
 So far, the game has been tested on Linux and Windows only, but it should work at least on Mac as well.
 
-## Running
-
-When running the game, make sure your working directory is the source directory, where the `assets` folder is, otherwise the game won't find it.
-
-### How To Play
+## How To Play
 
   * __Run__: Left/Right arrow keys
   * __Jump__: Space key. How long you hold the key down will influence your jump height.
