@@ -14,6 +14,7 @@ class MainLoop
 {
 public:
   static void requestExit();
+  static void setBlocked(bool blocked);
 
   MainLoop(const std::string &initialLevel="assets/maps/level1.tmx");
 
@@ -25,6 +26,14 @@ public:
   void run();
 
   void setExit();
+
+  /**
+   * @brief block Call this function when the main loop is about to be blocked.
+   * Call \c unblock() when it resumes.
+   * This allows the loop to adjust its internal timer to account for the time when it was blocked.
+   */
+  void block();
+  void unblock();
 
 private:
   void updateStats(std::uint32_t frameTime);
@@ -38,6 +47,8 @@ private:
   Game mGame;
 
   bool mExitRequested;
+  std::uint32_t mStartTime;
+  std::uint32_t mBlockTimestamp;
 
   std::uint32_t mMaxFrameTime;
   std::uint32_t mAccuFrameTimes;

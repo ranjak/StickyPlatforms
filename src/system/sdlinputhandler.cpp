@@ -1,5 +1,6 @@
 #include "sdlinputhandler.h"
 #include "mainloop.h"
+#include "log.h"
 #include <algorithm>
 
 namespace game {
@@ -12,7 +13,8 @@ static std::uint16_t sdlKeymod[] = {
 
 SDLInputHandler::SDLInputHandler() :
   InputHandler(),
-  mEvent()
+  mEvent(),
+  mMinimized(false)
 {
 
 }
@@ -22,6 +24,20 @@ void SDLInputHandler::handle()
   // Hit and Release events last only one frame
   mHitKeys.clear();
   mReleasedKeys.clear();
+
+  // Pause the whole program when minimized
+  while (mMinimized) {
+
+    if (!SDL_WaitEvent(&mEvent))
+      game::error(std::string("SDLInputHandler: Event error: ") + SDL_GetError());
+
+    else if (mEvent.type == SDL_WINDOWEVENT &&
+             (mEvent.window.event == SDL_WINDOWEVENT_SHOWN || mEvent.window.event == SDL_WINDOWEVENT_EXPOSED))
+    {
+      mMinimized = false;
+      MainLoop::setBlocked(false);
+    }
+  }
 
   while (SDL_PollEvent(&mEvent)) {
 
@@ -46,6 +62,15 @@ void SDLInputHandler::handle()
         mHeldKeys.erase(keyPos);
       }
       break;
+
+    case SDL_WINDOWEVENT:
+      if ((mEvent.window.event == SDL_WINDOWEVENT_HIDDEN || mEvent.window.event == SDL_WINDOWEVENT_MINIMIZED) &&
+          !(SDL_GetWindowFlags(SDL_GetWindowFromID(mEvent.window.windowID)) & SDL_WINDOW_SHOWN))
+      {
+        mMinimized = true;
+        MainLoop::setBlocked(true);
+      }
+      break;
     }
   }
 }
@@ -53,6 +78,11 @@ void SDLInputHandler::handle()
 bool SDLInputHandler::isModifierPressed(ModifierKey modifier) const
 {
   return SDL_GetModState() & sdlKeymod[static_cast<int>(modifier)];
+}
+
+bool SDLInputHandler::applicationMinimized() const
+{
+  return mMinimized;
 }
 
 } // namespace game

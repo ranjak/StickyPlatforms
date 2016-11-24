@@ -40,6 +40,8 @@ public:
   bool isHeld(Command cmd) const;
   bool isReleased(Command cmd) const;
 
+  const InputHandler &getInput() const { return mInput; }
+
 private:
   KeyBinding mBindings[NB_CMD];
   InputHandler &mInput;

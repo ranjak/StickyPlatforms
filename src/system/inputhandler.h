@@ -29,7 +29,18 @@ public:
    */
   virtual void handle() = 0;
 
+  /**
+   * @brief isModifierPressed Get the current state of a modifier key (Alt, Ctrl...)
+   * @param modifier The modifier key to check.
+   * @return \c true if \p modifier is currently pressed.
+   */
   virtual bool isModifierPressed(ModifierKey modifier) const = 0;
+
+  /**
+   * @brief applicationMinimized Check whether the program is currently minimized.
+   * @return \c true if the application is in the background, \c false otherwise.
+   */
+  virtual bool applicationMinimized() const = 0;
 
   bool isKeyHit(std::uint32_t scancode) const;
   bool isKeyHeld(std::uint32_t scancode) const;

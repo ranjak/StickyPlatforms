@@ -16,7 +16,7 @@ PlayingState::PlayingState(Game &game) :
 
 void PlayingState::handleInput(GameCommands &commands)
 {
-  if (commands.isHit(Command::PAUSE))
+  if (commands.isHit(Command::PAUSE) || commands.getInput().applicationMinimized())
     mGame.setState<PausedState>();
   else
     GameState::handleInput(commands);
