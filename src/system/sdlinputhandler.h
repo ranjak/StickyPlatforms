@@ -19,11 +19,11 @@ public:
 
   bool isModifierPressed(ModifierKey modifier) const override;
 
-  bool applicationMinimized() const override;
+  bool applicationHasFocus() const override;
 
 private:
   SDL_Event mEvent;
-  bool mMinimized;
+  bool mHasFocus;
 };
 
 } // namespace game

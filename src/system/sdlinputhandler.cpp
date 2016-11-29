@@ -14,7 +14,7 @@ static std::uint16_t sdlKeymod[] = {
 SDLInputHandler::SDLInputHandler() :
   InputHandler(),
   mEvent(),
-  mMinimized(false)
+  mHasFocus(true)
 {
 
 }
@@ -26,15 +26,15 @@ void SDLInputHandler::handle()
   mReleasedKeys.clear();
 
   // Pause the whole program when minimized
-  while (mMinimized) {
+  while (!mHasFocus) {
 
     if (!SDL_WaitEvent(&mEvent))
       game::error(std::string("SDLInputHandler: Event error: ") + SDL_GetError());
 
     else if (mEvent.type == SDL_WINDOWEVENT &&
-             (mEvent.window.event == SDL_WINDOWEVENT_SHOWN || mEvent.window.event == SDL_WINDOWEVENT_EXPOSED))
+             mEvent.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
     {
-      mMinimized = false;
+      mHasFocus = true;
       MainLoop::setBlocked(false);
     }
   }
@@ -64,10 +64,10 @@ void SDLInputHandler::handle()
       break;
 
     case SDL_WINDOWEVENT:
-      if ((mEvent.window.event == SDL_WINDOWEVENT_HIDDEN || mEvent.window.event == SDL_WINDOWEVENT_MINIMIZED) &&
-          !(SDL_GetWindowFlags(SDL_GetWindowFromID(mEvent.window.windowID)) & SDL_WINDOW_SHOWN))
+      if (mEvent.window.event == SDL_WINDOWEVENT_FOCUS_LOST &&
+          !(SDL_GetWindowFlags(SDL_GetWindowFromID(mEvent.window.windowID)) & SDL_WINDOW_INPUT_FOCUS))
       {
-        mMinimized = true;
+        mHasFocus = false;
         MainLoop::setBlocked(true);
       }
       break;
@@ -80,9 +80,9 @@ bool SDLInputHandler::isModifierPressed(ModifierKey modifier) const
   return SDL_GetModState() & sdlKeymod[static_cast<int>(modifier)];
 }
 
-bool SDLInputHandler::applicationMinimized() const
+bool SDLInputHandler::applicationHasFocus() const
 {
-  return mMinimized;
+  return mHasFocus;
 }
 
 } // namespace game
