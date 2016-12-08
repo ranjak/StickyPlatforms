@@ -37,6 +37,11 @@ void SDLInputHandler::handle()
       mHasFocus = true;
       MainLoop::setBlocked(false);
     }
+    else if (mEvent.type == SDL_QUIT) {
+      MainLoop::setBlocked(false);
+      MainLoop::requestExit();
+      return;
+    }
   }
 
   while (SDL_PollEvent(&mEvent)) {
