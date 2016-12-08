@@ -58,7 +58,7 @@ else ()
     set(VC_LIB_PATH_SUFFIX lib/x86)
 endif ()
 
-IF(SDL2_STATIC)
+IF(SDL2_STATIC AND NOT MSVC)
   SET(SDL2_TTF_NAME "libSDL2_ttf.a")
 ELSE()
   SET(SDL2_TTF_NAME "SDL2_ttf")
