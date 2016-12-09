@@ -27,6 +27,12 @@ make install
 You need to install the game so that it can load the resources it needs.
 Installation destination does not matter, you can set the install prefix to anywhere you want.
 
+__AppImage Notes__: I have made a set of scripts to build an AppImage for the game, targeting Ubuntu 12.04.  
+The AppImage should be able to run on most distributions.  
+I have noticed a problem with the SDL2 bundled in the AppImage on Fedora running on an Asus Zenbook laptop,
+where key repeat events would be detected as regular key events. To fix this, SDL2 needs to be built with `ibus` support.
+For reference, the `ibus` version on Fedora 25 at the time of testing was 1.5.14.
+
 ### Windows (MSVC)
 
 In CMake, before configuring the project, add a variable `CMAKE_PREFIX_PATH` pointing to the root folder where SDL2, SDL2\_image  and SDL2\_ttf libraries are located
