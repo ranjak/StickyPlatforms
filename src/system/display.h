@@ -11,6 +11,7 @@ struct SDL_Renderer;
 namespace game {
 
 class Game;
+class Color;
 
 class Display
 {
@@ -36,6 +37,8 @@ public:
    * @brief render one frame.
    */
   void render(Game &game);
+
+  void clear(const Color& color);
 
   SDL_Renderer* getRenderer();
 

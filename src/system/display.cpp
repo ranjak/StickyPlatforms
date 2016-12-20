@@ -2,6 +2,7 @@
 #include "log.h"
 #include "game.h"
 #include "util_sdl.h"
+#include "color.h"
 #include "SDL.h"
 #include <stdexcept>
 
@@ -105,6 +106,12 @@ void Display::render(Game &game)
   game.draw(*this);
 
   SDL_RenderPresent(mRenderer);
+}
+
+void Display::clear(const Color& color)
+{
+  SDL_SetRenderDrawColor(mRenderer, color.r, color.g, color.b, color.a);
+  SDL_RenderClear(mRenderer);
 }
 
 SDL_Renderer *Display::getRenderer()

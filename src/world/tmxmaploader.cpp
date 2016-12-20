@@ -10,6 +10,7 @@
 #include "make_unique.h"
 #include "entitygroup.h"
 #include "resource.h"
+#include "color.h"
 #include <string>
 #include <memory>
 #include <cctype>
@@ -50,9 +51,11 @@ std::unique_ptr<Level> TMXMapLoader::loadMap(const std::string &file, Display &d
   mTileRatio.x = static_cast<float>(Tile::SIZE) / static_cast<float>(tmx.mapInfo.tileWidth);
   mTileRatio.y = static_cast<float>(Tile::SIZE) / static_cast<float>(tmx.mapInfo.tileHeight);
 
+  Color bgColor(tmx.mapInfo.backgroundColor);
+
   loadTiles(tmx, display);
 
-  std::unique_ptr<Level> level(new Level(mLevelSize.x, mLevelSize.y, std::move(mTilesets), std::move(mTilesArray)));
+  std::unique_ptr<Level> level(new Level(mLevelSize.x, mLevelSize.y, std::move(mTilesets), std::move(mTilesArray), bgColor));
 
   loadObjects(tmx, *level);
 

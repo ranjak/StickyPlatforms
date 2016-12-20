@@ -8,6 +8,7 @@
 #include "TMXParser.h"
 #include "world/tmxmaploader.h"
 #include "movingphysicscomponent.h"
+#include "display.h"
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
@@ -15,11 +16,12 @@
 namespace game {
 
 
-Level::Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles) :
+Level::Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles, const Color& bgColor) :
   mFilename(),
   mSize(width, height),
   mTilesets(std::move(tilesets)),
   mTiles(std::move(tiles)),
+  mBackgroundColor(bgColor),
   mEntities(*this),
   mHeroId(Entity::none)
 {
@@ -40,6 +42,8 @@ void Level::update(Game &game, uint32_t step)
 
 void Level::draw(Display &target, const Game &game)
 {
+  target.clear(mBackgroundColor);
+
   const Camera& cam = game.getCamera();
   Rect<float> viewport = cam.getViewport().getIntersection(Rect<float>(0.f, 0.f, mSize.x*Tile::SIZE, mSize.y*Tile::SIZE));
 

@@ -6,6 +6,7 @@
 #include "world/tileset.h"
 #include "entitymanager.h"
 #include "entity.h"
+#include "color.h"
 #include <vector>
 #include <memory>
 #include <string>
@@ -26,7 +27,7 @@ class Level
 {
 public:
 
-  Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles);
+  Level(int width, int height, TilesetList &&tilesets, std::unique_ptr<TileID[]> tiles, const Color& bgColor=Color::BLACK);
 
   static std::unique_ptr<Level> loadFromTmx(const std::string &file, Display &display);
 
@@ -80,6 +81,7 @@ private:
   TilesetList mTilesets;
   // Static tiles the world is made of
   std::unique_ptr<TileID[]> mTiles;
+  Color mBackgroundColor;
   // Dynamic entities
   EntityManager mEntities;
   EntityID mHeroId;
