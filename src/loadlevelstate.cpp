@@ -37,8 +37,15 @@ void LoadLevelState::update(uint32_t step)
 void LoadLevelState::enter(bool victory, const std::string &nextLevel)
 {
   mNextLevel = nextLevel;
-  mCurrentWidget = victory ? &victoryWidget : &gameOverWidget;
   mTimeRemaining = 1000;
+
+  if (victory) {
+    mGame.addLevelTime();
+    mCurrentWidget = &victoryWidget;
+  }
+  else {
+    mCurrentWidget = &gameOverWidget;
+  }
 
   mGame.getUI().getByName(*mCurrentWidget)->setHidden(false);
 }

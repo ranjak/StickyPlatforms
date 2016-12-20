@@ -38,8 +38,7 @@ void GameClearedState::handleInput(GameCommands &commands)
     MainLoop::requestExit();
   }
   else if (commands.isHeld(Command::RESET)) {
-    mGame.loadLevel(mGame.getInitialLevel());
-    mGame.setState<PlayingState>();
+    mGame.reset();
   }
   else {
     GameState::handleInput(commands);
@@ -48,6 +47,7 @@ void GameClearedState::handleInput(GameCommands &commands)
 
 void GameClearedState::enter()
 {
+  mGame.addLevelTime();
   mGame.getUI().getByName(mPanelName)->setHidden(false);
 }
 

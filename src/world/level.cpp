@@ -255,4 +255,4 @@ const std::string &Level::getFilename() const
   return mFilename;
 }
 
-}
+} // namespace game

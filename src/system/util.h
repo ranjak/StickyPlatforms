@@ -2,6 +2,7 @@
 #define UTIL_H
 
 #include <cmath>
+#include <string>
 
 /**
  * @file util.h
@@ -23,6 +24,8 @@ T distance(T val1, T val2)
 {
   return std::abs(val1 - val2);
 }
+
+std::string formatTime(std::uint32_t time, bool printDecimals=true);
 
 }
 

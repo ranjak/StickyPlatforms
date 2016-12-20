@@ -20,5 +20,10 @@ Vector<float> TextWidget::getSize() const
   return Vector<float>(mText.getSize());
 }
 
+void TextWidget::setText(const std::string &text)
+{
+  mText.setText(text);
+}
+
 
 } // namespace game

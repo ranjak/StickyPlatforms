@@ -11,6 +11,7 @@
 #include <string>
 #include <array>
 #include <type_traits>
+#include <vector>
 
 namespace game {
 
@@ -100,6 +101,13 @@ public:
    */
   std::uint32_t now() const;
 
+  /**
+   * @brief addLevelTime Saves the current game time as a new level time.
+   */
+  void addLevelTime();
+
+  void reset();
+
 private:
   static Game *currentGame;
 
@@ -120,7 +128,8 @@ private:
   std::array<std::unique_ptr<GameState>, State::NB_STATES> mStates;
   // State the game is currently in
   GameState *mState;
-
+  // Time score for each level
+  std::vector<std::uint32_t> mLevelTimes;
 };
 
 } //namespace game

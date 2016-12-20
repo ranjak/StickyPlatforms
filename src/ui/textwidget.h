@@ -20,6 +20,8 @@ public:
 
   Vector<float> getSize() const override;
 
+  void setText(const std::string &text);
+
 private:
   Text mText;
 };

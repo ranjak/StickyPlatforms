@@ -19,6 +19,8 @@ public:
 
   std::uint32_t now() const { return mGameTime; }
 
+  void reset();
+
 private:
   Game &mGame;
   std::uint32_t mGameTime;

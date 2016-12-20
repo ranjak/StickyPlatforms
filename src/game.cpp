@@ -14,6 +14,7 @@
 #include "loadlevelstate.h"
 #include "gameclearedstate.h"
 #include "pausedstate.h"
+#include "util.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -42,11 +43,19 @@ Game::Game(Display &display, InputHandler &input, int camW, int camH, const std:
     std::make_unique<GameClearedState>(*this),
     std::make_unique<PausedState>(*this),
   },
-  mState(mStates[State::PLAYING].get())
+  mState(mStates[State::PLAYING].get()),
+  mLevelTimes()
 {
   currentGame = this;
 
+  // UI setup: health bar and timer
   mUI.addWidget<HealthBar>(Rect<float>(20.f, 20.f, 150.f, 30.f));
+
+  std::string timer = formatTime(0, false);
+  mUI.addWidget<TextWidget>(display, "timer", timer, 48);
+
+  TextWidget &timerWidget = *static_cast<TextWidget *>(mUI.getByName("timer"));
+  timerWidget.setPosition(mUI.getSize().x - timerWidget.getSize().x - 20.f, 20.f);
 
   if (initialLevel.empty())
     game::error("GameState: cannot start, because no level file was given.");
@@ -64,6 +73,8 @@ void Game::update(uint32_t step)
 
   mState->handleInput(mCommands);
   mState->update(step);
+
+  static_cast<TextWidget *>(mUI.getByName("timer"))->setText(formatTime(now(), false));
 }
 
 void Game::draw(Display &target)
@@ -138,6 +149,21 @@ Display &Game::getDisplay()
 uint32_t Game::now() const
 {
   return static_cast<PlayingState &>(*mStates[State::PLAYING]).now();
+}
+
+void Game::addLevelTime()
+{
+  std::uint32_t previousTime = mLevelTimes.empty() ? 0 : mLevelTimes.back();
+
+  mLevelTimes.push_back(now() - previousTime);
+}
+
+void Game::reset()
+{
+  mLevelTimes.clear();
+  changeLevel(mInitialLevel);
+  static_cast<PlayingState &>(*mStates[State::PLAYING]).reset();
+  setState<PlayingState>();
 }
 
 } //namespace game
