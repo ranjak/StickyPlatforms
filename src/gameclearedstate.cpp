@@ -26,7 +26,7 @@ UIPanel makeLevelTimeBoard(Game &game, float width, float height)
 
   for (size_t i=0; i<times.size(); i++) {
     std::string widgetName = "time" + std::to_string(i);
-    std::string widgetText = "Level " + std::to_string(i) + ": " + formatTime(times[i+1] - initialTime);
+    std::string widgetText = "Level " + std::to_string(i+1) + ": " + formatTime(times[i] - initialTime);
 
     std::unique_ptr<TextWidget> levelTime(std::make_unique<TextWidget>(game.getDisplay(), widgetName, widgetText, fontHeight));
     levelTime->setPosition(width/2.f - levelTime->getSize().x/2.f, textPosY);
