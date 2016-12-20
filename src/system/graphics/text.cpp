@@ -32,8 +32,8 @@ const std::string Text::defaultFont("assets/fonts/FreeMono.ttf");
 Text::Text(Display &renderer, const std::string &text, int fontSize, const std::string &fontFile, const Color &color) :
   Texture(renderer),
   mSize(fontSize),
-  mRenderScale(renderer.getScale().x),
-  mFont(openFont(fontFile, static_cast<int>(std::round(fontSize*mRenderScale)))),
+  mRenderScale(1.0),
+  mFont(openFont(fontFile, fontSize)),
   mFontFile(fontFile),
   mText(text),
   mColor(color)
@@ -43,7 +43,7 @@ Text::Text(Display &renderer, const std::string &text, int fontSize, const std::
 
 void Text::setSize(int size)
 {
-  mFont = openFont(mFontFile, size*mRenderScale);
+  mFont = openFont(mFontFile, static_cast<int>(std::round(size*mRenderScale)));
   mSize = size;
   setText(mText, mColor);
 }
