@@ -74,7 +74,7 @@ void Game::update(uint32_t step)
   mState->handleInput(mCommands);
   mState->update(step);
 
-  static_cast<TextWidget *>(mUI.getByName("timer"))->setText(formatTime(now(), false));
+  static_cast<TextWidget *>(mUI.getByName("timer"))->setText(formatTime(currentLevelTime(), false));
 }
 
 void Game::draw(Display &target)
@@ -85,6 +85,7 @@ void Game::draw(Display &target)
     mLevel->draw(target, *this);
   }
 
+  target.setLogicalSize(mUI.getSize().x, mUI.getSize().y);
   mUI.draw(target);
 }
 
@@ -151,11 +152,20 @@ uint32_t Game::now() const
   return static_cast<PlayingState &>(*mStates[State::PLAYING]).now();
 }
 
-void Game::addLevelTime()
+uint32_t Game::currentLevelTime() const
 {
   std::uint32_t previousTime = mLevelTimes.empty() ? 0 : mLevelTimes.back();
+  return now() - previousTime;
+}
 
-  mLevelTimes.push_back(now() - previousTime);
+const std::vector<uint32_t> &Game::getLevelTimes() const
+{
+  return mLevelTimes;
+}
+
+void Game::addLevelTime()
+{
+  mLevelTimes.push_back(now());
 }
 
 void Game::reset()

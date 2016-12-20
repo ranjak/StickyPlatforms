@@ -13,8 +13,6 @@ UIPanel::UIPanel(const Vector<float> &size) :
 
 void UIPanel::draw(Display &display, const Vector<float> &offset)
 {
-  display.setLogicalSize(static_cast<int>(mSize.x), static_cast<int>(mSize.y));
-
   for (const std::unique_ptr<UIWidget> &widget : mWidgets) {
     if (!widget->isHidden())
       widget->draw(display, offset);
@@ -34,6 +32,18 @@ UIWidget *UIPanel::getByName(const std::string &widgetName)
 void UIPanel::addWidget(std::unique_ptr<UIWidget> widget)
 {
   mWidgets.push_back(std::move(widget));
+}
+
+void UIPanel::removeWidget(const std::string &widgetName)
+{
+  for (auto it=mWidgets.begin(); it != mWidgets.end(); it++) {
+    if ((*it)->name == widgetName) {
+      mWidgets.erase(it);
+      return;
+    }
+  }
+
+  Log::getGlobal().get(Log::WARNING) << "UIPanel: widget \"" << widgetName << "\" not found" << std::endl;
 }
 
 void UIPanel::setCentered(const std::string &widgetName)

@@ -102,6 +102,15 @@ public:
   std::uint32_t now() const;
 
   /**
+   * @brief currentLevelTime The time elapsed since the current level was started.
+   * Does not reset when the level is reloaded after player death.
+   * @return Time in milliseconds.
+   */
+  std::uint32_t currentLevelTime() const;
+
+  const std::vector<std::uint32_t> &getLevelTimes() const;
+
+  /**
    * @brief addLevelTime Saves the current game time as a new level time.
    */
   void addLevelTime();

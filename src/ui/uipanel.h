@@ -29,6 +29,8 @@ public:
 
   void addWidget(std::unique_ptr<UIWidget> widget);
 
+  void removeWidget(const std::string &widgetName);
+
   void setCentered(const std::string &widgetName);
 
   const Vector<float> &getSize() const;
