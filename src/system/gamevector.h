@@ -16,8 +16,8 @@ public:
   template<typename U>
   Vector(const Vector<U> &v) : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) {}
 
-  Vector<T> operator /(float scalar);
-  Vector<T> operator *(float scalar);
+  Vector<T> operator /(float scalar) const;
+  Vector<T> operator *(float scalar) const;
 
   Vector<T> &operator +=(const Vector<T> &right);
 

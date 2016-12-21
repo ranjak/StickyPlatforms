@@ -4,13 +4,13 @@ namespace game {
 
 
 template<typename T>
-Vector<T> Vector<T>::operator/(float scalar)
+Vector<T> Vector<T>::operator/(float scalar) const
 {
   return Vector<T>(static_cast<T>(x / scalar), static_cast<T>(y / scalar));
 }
 
 template<typename T>
-Vector<T> Vector<T>::operator*(float scalar)
+Vector<T> Vector<T>::operator*(float scalar) const
 {
   return Vector<T>(static_cast<T>(x * scalar), static_cast<T>(y * scalar));
 }

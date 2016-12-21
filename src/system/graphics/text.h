@@ -30,6 +30,11 @@ public:
 
   void setSize(int size);
 
+  /**
+   * @brief getSize Reports the constant, resolution-independent size of the text line.
+   */
+  Vector<int> getSize() const;
+
   void setText(const std::string &text, const Color &color=Color::WHITE);
 
   void draw(Display &target, int x, int y) override;
