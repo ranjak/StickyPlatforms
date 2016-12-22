@@ -59,6 +59,7 @@ So far, the game has been tested on Linux and Windows only, but it should work a
   * __Pause__: Escape
   * __Toggle fullscreen__: Alt + Return
   * __Quit__: Standard quit shortcut (Alt + F4 / Cmd + Q)
+  * __Reset__: Backspace
 
 ## License
 
