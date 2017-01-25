@@ -68,6 +68,7 @@ set(SRC_LIST
     src/system/graphics/frame.cpp
     src/system/graphics/text.cpp
     src/system/graphics/herosquare.cpp
+    src/system/stormancerconnection.cpp
     src/game.cpp
     src/gamestate.cpp
     src/loadlevelstate.cpp
@@ -149,6 +150,7 @@ set(HEADER_LIST
   src/system/graphics/frame.h
   src/system/graphics/text.h
   src/system/graphics/herosquare.h
+  src/system/stormancerconnection.h
   src/game.h
   src/gamestate.h
   src/loadlevelstate.h
@@ -233,6 +235,11 @@ target_link_libraries(${PROJECT_NAME}
     ${SDL2_IMAGE_LIBRARIES}
     ${SDL2_TTF_LIBRARIES}
 )
+
+# Use nuget to fetch Stormancer on Windows
+if (MSVC)
+  include(nuget)
+endif()
 
 # Build flags
 
