@@ -31,11 +31,31 @@ Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundin
   }
 }
 
+void Entity::prepareRemoveChild(EntityID child)
+{
+  Entity *childPtr = mContainer.getEntity(child);
+
+  if (childPtr) {
+
+    if (childPtr->mParent == id) {
+      childPtr->mParent = Entity::none;
+      sendMessage(std::make_unique<ChildRemovedMsg>(child));
+    }
+    else {
+      Log::getGlobal().get(Log::WARNING) << *this << "::removeChild: " << *childPtr << " doesn't have " << *this << " as parent, can't remove from children list" << std::endl;
+    }
+  }
+  else {
+    Log::getGlobal().get(Log::WARNING) << *this << "::removeChild: child " << child << " doesn't exist" << std::endl;
+  }
+}
+
 Entity::~Entity()
 {
   // Notify related entities
-  for (EntityID child : mChildren) {
-    removeChild(child);
+  for (auto it=mChildren.begin(); it != mChildren.end();) {
+    prepareRemoveChild(*it);
+    it = mChildren.erase(it);
   }
 
   if (mParent != Entity::none)
@@ -75,22 +95,7 @@ void Entity::addChild(Entity &child)
 
 void Entity::removeChild(EntityID child)
 {
-  Entity *childPtr = mContainer.getEntity(child);
-
-  if (childPtr) {
-
-    if (childPtr->mParent == id) {
-      childPtr->mParent = Entity::none;
-      sendMessage(std::make_unique<ChildRemovedMsg>(child));
-    }
-    else {
-      Log::getGlobal().get(Log::WARNING) <<*this<<"::removeChild: "<<*childPtr<<" doesn't have "<<*this<<" as parent, can't remove from children list"<<std::endl;
-    }
-  }
-  else {
-    Log::getGlobal().get(Log::WARNING) << *this << "::removeChild: child "<<child<<" doesn't exist"<<std::endl;
-  }
-
+  prepareRemoveChild(child);
   mChildren.erase(std::find(mChildren.begin(), mChildren.end(), child));
 }
 
