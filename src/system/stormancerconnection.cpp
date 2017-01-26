@@ -17,14 +17,18 @@ public:
   impl() :
     config(Stormancer::Configuration::create(endpoint, account, application)),
     client(Stormancer::Client::createClient(config), Stormancer::destroy),
-    scene(nullptr, Stormancer::destroy)
+    scene(nullptr, Stormancer::destroy),
+    mapFile()
     {}
 
 public:
   std::shared_ptr<Stormancer::Configuration> config;
   std::unique_ptr<Stormancer::Client, void(*)(Stormancer::Client*)> client;
   std::unique_ptr<Stormancer::Scene, void(*)(Stormancer::Scene*)> scene;
+  std::string mapFile;
 };
+
+
 
 StormancerConnection::StormancerConnection(const std::string & username, const std::string & sceneName) :
   pimpl(new impl)
@@ -39,6 +43,13 @@ StormancerConnection::StormancerConnection(const std::string & username, const s
 
   pimpl->scene.reset(taskResult.get());
   pimpl->scene->connect();
+}
+
+StormancerConnection::~StormancerConnection() = default;
+
+const std::string & StormancerConnection::getMapFile()
+{
+  return pimpl->mapFile;
 }
 
 } // namespace game

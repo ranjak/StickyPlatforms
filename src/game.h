@@ -6,6 +6,7 @@
 #include "world/level.h"
 #include "uipanel.h"
 #include "gamestate.h"
+#include "stormancerconnection.h"
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -41,7 +42,7 @@ public:
    */
   static Game &current();
 
-  Game(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel);
+  Game(Display &display, InputHandler &input, int camW, int camH, const std::string &username, const std::string &scene);
 
   /**
    * @brief update Update this state by the given amount of time.
@@ -123,6 +124,7 @@ private:
   // Game commands bindings and status
   GameCommands mCommands;
   Display &mDisplay;
+  StormancerConnection mStormancer;
 
   // Current level
   std::unique_ptr<Level> mLevel;

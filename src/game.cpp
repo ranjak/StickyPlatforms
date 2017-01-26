@@ -29,12 +29,13 @@ Game &Game::current()
   return *currentGame;
 }
 
-Game::Game(Display &display, InputHandler &input, int camW, int camH, const std::string &initialLevel) :
+game::Game::Game(Display & display, InputHandler & input, int camW, int camH, const std::string & username, const std::string & scene) :
   mCommands(input),
   mDisplay(display),
+  mStormancer(username, scene),
   mLevel(),
   mNextLevel(),
-  mInitialLevel(initialLevel),
+  mInitialLevel(),
   mCamera(0.f, 0.f, static_cast<float>(camW), static_cast<float>(camH)),
   mUI(display.getWindowSize()),
   mStates {
@@ -57,10 +58,9 @@ Game::Game(Display &display, InputHandler &input, int camW, int camH, const std:
   TextWidget &timerWidget = *static_cast<TextWidget *>(mUI.getByName("timer"));
   timerWidget.setPosition(mUI.getSize().x - timerWidget.getSize().x - 20.f, 20.f);
 
-  if (initialLevel.empty())
-    game::error("GameState: cannot start, because no level file was given.");
+  mInitialLevel = mStormancer.getMapFile();
 
-  changeLevel(initialLevel);
+  changeLevel(mInitialLevel);
 }
 
 

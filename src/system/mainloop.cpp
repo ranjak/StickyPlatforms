@@ -8,6 +8,7 @@
 #include <thread>
 #include <algorithm>
 
+
 namespace game {
 
 
@@ -26,10 +27,10 @@ void MainLoop::setBlocked(bool blocked)
     instance->unblock();
 }
 
-MainLoop::MainLoop(const std::string &initialLevel) :
+MainLoop::MainLoop(const std::string &username, const std::string &scene) :
   mDisplay(640, 360),
   mInput(std::make_unique<SDLInputHandler>()),
-  mGame(mDisplay, *mInput, 640, 360, initialLevel),
+  mGame(mDisplay, *mInput, 640, 360, username, scene),
   mExitRequested(false),
   mStartTime(0),
   mBlockTimestamp(0),

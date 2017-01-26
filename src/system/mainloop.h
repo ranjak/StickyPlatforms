@@ -4,6 +4,7 @@
 #include "display.h"
 #include "inputhandler.h"
 #include "game.h"
+#include "stormancerconnection.h"
 #include <cstdint>
 #include <string>
 #include <memory>
@@ -16,8 +17,7 @@ public:
   static void requestExit();
   static void setBlocked(bool blocked);
 
-  MainLoop(const std::string &initialLevel="assets/maps/level1.tmx");
-
+  MainLoop(const std::string & username, const std::string & scene);
   MainLoop(const MainLoop &) = delete;
   MainLoop& operator=(const MainLoop &) = delete;
 

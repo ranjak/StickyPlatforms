@@ -14,6 +14,9 @@ public:
    * @brief Establish the connection with the Stormancer server.
    */
   StormancerConnection(const std::string & username, const std::string & sceneName);
+  ~StormancerConnection();
+
+  const std::string &getMapFile();
 
 private:
   class impl;

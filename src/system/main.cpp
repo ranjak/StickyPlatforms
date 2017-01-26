@@ -2,15 +2,21 @@
 #include "SDL.h"
 #include <string>
 
+namespace
+{
+const std::string defaultScene = "publicGame";
+}
 
 int main(int argc, char *argv[])
 {
-  game::MainLoop loop;
-
-  // Get a map file from command line
-  if (argc == 2) {
-    loop.setInitialLevel(std::string(argv[1]));
+  // Get a username from command line
+  if (argc < 2) {
+    throw std::exception("Please provide a username as program argument.");
   }
+
+  std::string multiplayerScene = (argc == 3) ? std::string(argv[2]) : defaultScene;
+
+  game::MainLoop loop(std::string(argv[1]), multiplayerScene);
 
   loop.run();
 
