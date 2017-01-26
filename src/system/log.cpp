@@ -1,4 +1,5 @@
 #include "log.h"
+#include <stdexcept>
 
 namespace game {
 
@@ -83,6 +84,8 @@ std::ostream &Log::get(Log::Priority sev)
 void error(std::string msg)
 {
   Log::getGlobal().log(Log::Priority::ERROR, msg);
+
+  throw std::runtime_error(msg.c_str());
 }
 
 

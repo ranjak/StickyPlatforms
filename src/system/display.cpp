@@ -40,11 +40,11 @@ void Display::init(int winW, int winH)
       throw std::exception();
   }
 
-  if (SDL_CreateWindowAndRenderer(winW, winH, SDL_WINDOW_RESIZABLE|SDL_WINDOW_FULLSCREEN_DESKTOP, &mWindow, &mRenderer)) {
+  if (SDL_CreateWindowAndRenderer(winW, winH, SDL_WINDOW_RESIZABLE, &mWindow, &mRenderer)) {
       game::error(std::string("Couldn't create window and renderer: ") + SDL_GetError());
       throw std::exception();
   }
-  mFullscreen = true;
+  //mFullscreen = true;
   SDL_ShowCursor(SDL_FALSE);
 
   SDL_SetWindowTitle(mWindow, mWindowTitle.c_str());
