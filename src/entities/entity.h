@@ -91,6 +91,11 @@ public:
 private:
   Entity(EntityID id, EntityManager &container, const Rect<float> &boundingBox, const std::string &name="", EntityGroup group=EntityGroup::NONE, EntityID parent=none);
   friend class EntityManager;
+  /**
+   * @brief Find \p child and set its parent to \c none,
+   * but do not remove it from mChildren.
+   */
+  void prepareRemoveChild(EntityID child);
 
 public:
   const EntityID id;
