@@ -91,6 +91,9 @@ void Game::draw(Display &target)
 
 void Game::changeLevel(const std::string &levelFile)
 {
+  if (levelFile.empty()) {
+    game::error("No level was specified.");
+  }
   mNextLevel = levelFile;
 }
 
