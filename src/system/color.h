@@ -20,6 +20,8 @@ public:
   std::uint8_t r, g, b, a;
 };
 
+bool operator==(const Color &c1, const Color &c2);
+
 } // namepsace game
 
 #endif // COLOR_H
