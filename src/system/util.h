@@ -27,6 +27,8 @@ T distance(T val1, T val2)
 
 std::string formatTime(std::uint32_t time, bool printDecimals=true);
 
+int getRandom(int min, int max);
+
 }
 
 

@@ -9,15 +9,17 @@
 
 namespace game {
 
-HealthComponent::HealthComponent(Entity &owner, int hp) :
+HealthComponent::HealthComponent(Entity &owner, int hp, int maxHp) :
   mEntity(owner),
-  mMaxHP(hp),
+  mMaxHP(maxHp),
   mHealthPoints(hp),
   mInvincibilityEnd(0),
   mUI(nullptr)
-{
+{}
 
-}
+HealthComponent::HealthComponent(Entity &owner, int hp) :
+  HealthComponent(owner, hp, hp)
+{}
 
 void HealthComponent::receiveMessageDelegate(Message &msg)
 {
@@ -70,6 +72,14 @@ void HealthComponent::setUI(HealthBar *ui)
 {
   mUI = ui;
   ui->setHealth(mHealthPoints, mMaxHP);
+}
+
+void HealthComponent::setHealthPoints(int hp)
+{
+  mHealthPoints = hp;
+
+  if (mUI)
+    mUI->setHealth(hp, mMaxHP);
 }
 
 } // namespace game

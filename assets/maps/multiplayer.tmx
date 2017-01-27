@@ -21,6 +21,10 @@
 </data>
  </layer>
  <objectgroup name="entities">
-  <object id="2" name="playerStart" type="PlayerStart" x="384" y="1152" width="128" height="128"/>
+  <object id="2" name="playerStart" type="PlayerStart" x="384" y="1152" width="128" height="128">
+   <properties>
+    <property name="type" value="LocalHero"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

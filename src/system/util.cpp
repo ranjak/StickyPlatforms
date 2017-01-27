@@ -1,6 +1,7 @@
 #include "util.h"
 #include <iomanip>
 #include <sstream>
+#include <cstdlib>
 
 namespace game {
 
@@ -32,6 +33,11 @@ std::string formatTime(uint32_t time, bool printDecimals)
   }
 
   return out.str();
+}
+
+int getRandom(int min, int max)
+{
+  return min + (int)(std::rand() * ((max - min) / (float)RAND_MAX));
 }
 
 }

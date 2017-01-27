@@ -26,6 +26,8 @@
 #include "text.h"
 #include "tmxcommon.h"
 #include "game.h"
+#include "util.h"
+#include "stormancerconnection.h"
 #include <string>
 
 namespace game {
@@ -57,10 +59,12 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
     Entity *hero = manager.makeEntity(pos, name, EntityGroup::ALLY, parent);
 
+    Color color(getRandom(0, 255), getRandom(0, 255), getRandom(0, 255));
+
     std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
     std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
-    std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(pos.w, pos.h, Color::GREEN), control.get());
+    std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(pos.w, pos.h, color), control.get());
 
     hero->addComponent(std::move(input));
     hero->addComponent(std::move(control));
@@ -69,6 +73,8 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
     hero->addComponent(std::make_unique<HealthComponent>(*hero, 5));
     hero->addComponent(std::move(graphics));
     hero->addComponent(std::make_unique<CameraComponent>(*hero, std::make_unique<CameraAnchoredY>(*hero)));
+
+    Game::current().network().spawn(color, Vector<float>(pos.x, pos.y), 5);
 
     return hero->id;
   }
@@ -138,6 +144,33 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
 
   else {
     Log::getGlobal().get(Log::WARNING) << "EntityFactory: Unknown entity type: \""<<type<<"\" for entity \""<<name<<"\""<<std::endl;
+    return Entity::none;
+  }
+}
+
+EntityID EntityFactory::createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, EntityManager &manager, const Color &color, int hp)
+{
+  if (type == "RemoteHero") {
+
+    Entity *hero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
+
+    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
+    std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>(*physics);
+    std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
+    std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(32, 32, color), control.get());
+
+    hero->addComponent(std::move(input));
+    hero->addComponent(std::move(control));
+    hero->addComponent(std::move(physics));
+    hero->addComponent(std::make_unique<WeaponComponent>(*hero));
+    hero->addComponent(std::make_unique<HealthComponent>(*hero, hp, 5));
+    hero->addComponent(std::move(graphics));
+    hero->addComponent(std::make_unique<CameraComponent>(*hero, std::make_unique<CameraAnchoredY>(*hero)));
+
+    return hero->id;
+  }
+  else {
+    Log::getGlobal().get(Log::WARNING) << "EntityFactory: Unknown entity type: \"" << type << "\" for entity \"" << name << "\"" << std::endl;
     return Entity::none;
   }
 }

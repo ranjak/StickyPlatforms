@@ -7,6 +7,8 @@
 #include "SDL.h"
 #include <thread>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 
 namespace game {
@@ -42,6 +44,8 @@ MainLoop::MainLoop(const std::string &username, const std::string &scene) :
     game::error("MainLoop: Cannot create a new instance (there can be only one).");
   else
     instance = this;
+
+  std::srand(std::time(nullptr));
 }
 
 void MainLoop::setInitialLevel(const std::string &level)

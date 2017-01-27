@@ -19,6 +19,7 @@ class Game;
 class Display;
 class Level;
 class Graphics;
+class Color;
 
 class EntityManager
 {
@@ -30,6 +31,8 @@ public:
 
   EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none, const TMX::PropertyMap &properties={});
   Entity *makeEntity(const Rect<float> &pos, const std::string &name="", EntityGroup group=EntityGroup::NONE, EntityID parent=Entity::none);
+
+  EntityID createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, const Color &color, int hp);
 
   Entity *getEntity(EntityID id) const;
   Entity *getEntity(const std::string &name) const;

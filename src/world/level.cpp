@@ -88,7 +88,7 @@ void Level::checkTileCollisions(MovingPhysicsComponent &object)
   }
 }
 
-bool Level::start(const std::string &startingPoint)
+bool Level::start(const std::string & name, const std::string & startingPoint)
 {
   // Find the requested PlayerStart entity
   Entity *playerStart = mEntities.getEntity(startingPoint);
@@ -98,7 +98,7 @@ bool Level::start(const std::string &startingPoint)
     return false;
   }
 
-  mHeroId = mEntities.makeEntity("Hero", "Hero", playerStart->getGlobalBox());
+  mHeroId = mEntities.makeEntity("Hero", name, playerStart->getGlobalBox());
   assert(mHeroId != Entity::none);
   return true;
 }

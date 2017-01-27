@@ -14,6 +14,7 @@ namespace game {
 
 template<typename T> class Rect;
 class EntityManager;
+class Color;
 
 class EntityFactory
 {
@@ -21,6 +22,8 @@ class EntityFactory
 private:
 
   static EntityID create(const std::string &type, const std::string &name, const Rect<float> &pos, EntityManager &manager, EntityID parent, const TMX::PropertyMap &properties);
+  
+  static EntityID createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, EntityManager &manager, const Color &color, int hp);
 };
 
 } // namespace game

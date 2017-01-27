@@ -39,7 +39,7 @@ public:
 
   void checkTileCollisions(MovingPhysicsComponent &object);
 
-  bool start(const std::string &startingPoint="playerStart");
+  bool start(const std::string &name="Hero", const std::string &startingPoint="playerStart");
 
   EntityManager &entities();
   const EntityManager &entities() const;

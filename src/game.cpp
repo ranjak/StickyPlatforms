@@ -32,7 +32,7 @@ Game &Game::current()
 game::Game::Game(Display & display, InputHandler & input, int camW, int camH, const std::string & username, const std::string & scene) :
   mCommands(input),
   mDisplay(display),
-  mStormancer(username, scene),
+  mStormancer(username, scene, *this),
   mLevel(),
   mNextLevel(),
   mInitialLevel(),
@@ -69,8 +69,11 @@ void Game::update(uint32_t step)
   if (!mNextLevel.empty()) {
     loadLevel(mNextLevel);
     mNextLevel.clear();
+
+    mStormancer.initGame();
   }
 
+  mStormancer.update();
   mState->handleInput(mCommands);
   mState->update(step);
 
@@ -100,7 +103,7 @@ void Game::changeLevel(const std::string &levelFile)
 void Game::loadLevel(const std::string &levelFile)
 {
   mLevel = Level::loadFromTmx(levelFile, mDisplay);
-  mLevel->start();
+  mLevel->start(mStormancer.getUsername());
 
   mLevel->getHero()->getComponent<HealthComponent>()->setUI(static_cast<HealthBar *>(mUI.getByName("health")));
 }
@@ -148,6 +151,11 @@ UIPanel &Game::getUI()
 Display &Game::getDisplay()
 {
   return mDisplay;
+}
+
+StormancerConnection & Game::network()
+{
+  return mStormancer;
 }
 
 uint32_t Game::now() const

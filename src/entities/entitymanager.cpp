@@ -39,6 +39,11 @@ Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &nam
   }
 }
 
+EntityID EntityManager::createRemoteEntity(const std::string & type, const std::string & name, const Vector<float>& pos, const Color & color, int hp)
+{
+  return EntityFactory::createRemoteEntity(type, name, pos, *this, color, hp);
+}
+
 Entity *EntityManager::getEntity(EntityID id) const
 {
   ConstIterator it = mEntities.find(id);

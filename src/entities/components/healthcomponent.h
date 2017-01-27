@@ -13,6 +13,7 @@ class HealthBar;
 class HealthComponent : public Component
 {
 public:
+  HealthComponent(Entity &owner, int hp, int maxHp);
   HealthComponent(Entity &owner, int hp);
 
   int getHealthPoints() const { return mHealthPoints; }
@@ -20,6 +21,8 @@ public:
   int getMaxHealthPoints() const { return mMaxHP; }
 
   void setUI(HealthBar *ui);
+
+  void setHealthPoints(int hp);
 
 private:
   void receiveMessageDelegate(Message &msg);
