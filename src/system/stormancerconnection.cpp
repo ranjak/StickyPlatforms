@@ -64,6 +64,7 @@ public:
   {
     // All handlers will be run inside calls to StormancerConnection::update()
     config->actionDispatcher = std::make_shared<Stormancer::MainThreadActionDispatcher>();
+    config->actionDispatcher->start();
 
     // Connect to the scene, then retrieve the scene's map filename.
 

@@ -39,7 +39,6 @@ void Entity::prepareRemoveChild(EntityID child)
 
     if (childPtr->mParent == id) {
       childPtr->mParent = Entity::none;
-      sendMessage(std::make_unique<ChildRemovedMsg>(child));
     }
     else {
       Log::getGlobal().get(Log::WARNING) << *this << "::removeChild: " << *childPtr << " doesn't have " << *this << " as parent, can't remove from children list" << std::endl;
@@ -48,6 +47,9 @@ void Entity::prepareRemoveChild(EntityID child)
   else {
     Log::getGlobal().get(Log::WARNING) << *this << "::removeChild: child " << child << " doesn't exist" << std::endl;
   }
+  // The child entity might not be present in the entity manager anymore,
+  // notify my components to avoid dangling references
+  sendMessage(std::make_unique<ChildRemovedMsg>(child));
 }
 
 Entity::~Entity()
