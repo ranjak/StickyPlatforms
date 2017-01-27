@@ -41,6 +41,9 @@ public:
   void draw(Display &target, const Vector<float> &pos);
 
 private:
+  void render();
+
+private:
   int mSize;
   float mRenderScale;
   FontUptr mFont;

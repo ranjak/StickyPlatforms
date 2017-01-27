@@ -38,14 +38,14 @@ Text::Text(Display &renderer, const std::string &text, int fontSize, const std::
   mText(text),
   mColor(color)
 {
-  setText(text, color);
+  render();
 }
 
 void Text::setSize(int size)
 {
   mFont = openFont(mFontFile, static_cast<int>(std::round(size*mRenderScale)));
   mSize = size;
-  setText(mText, mColor);
+  render();
 }
 
 Vector<int> Text::getSize() const
@@ -55,16 +55,12 @@ Vector<int> Text::getSize() const
 
 void Text::setText(const std::string &text, const Color &color)
 {
-  SDL_Surface *newText = TTF_RenderUTF8_Blended(mFont.get(), text.c_str(), getSdlColor(color));
+  if (mText == text && mColor == color)
+    return;
+
   mText = text;
   mColor = color;
-
-  if (newText) {
-    reset(newText);
-    SDL_FreeSurface(newText);
-  }
-  else
-    Log::getGlobal().get(Log::WARNING) << "Text: failed to render text: \""<<text<<"\""<<std::endl;
+  render();
 }
 
 void Text::draw(Display &target, int x, int y)
@@ -86,6 +82,18 @@ void Text::draw(Display &target, int x, int y)
 void Text::draw(Display &target, const Vector<float> &pos)
 {
   draw(target, static_cast<int>(pos.x), static_cast<int>(pos.y));
+}
+
+void Text::render()
+{
+  SDL_Surface *newText = TTF_RenderUTF8_Blended(mFont.get(), mText.c_str(), getSdlColor(mColor));
+
+  if (newText) {
+    reset(newText);
+    SDL_FreeSurface(newText);
+  }
+  else
+    Log::getGlobal().get(Log::WARNING) << "Text: failed to render text: \"" << mText << "\"" << std::endl;
 }
 
 

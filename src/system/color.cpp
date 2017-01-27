@@ -46,4 +46,9 @@ const Color Color::RED(255, 0, 0);
 const Color Color::GREEN(0, 255, 0);
 const Color Color::BLUE(0, 0, 255);
 
+bool operator==(const Color & c1, const Color & c2)
+{
+  return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a;
+}
+
 } // namespace game
