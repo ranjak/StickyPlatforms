@@ -59,8 +59,10 @@ void Text::setText(const std::string &text, const Color &color)
   mText = text;
   mColor = color;
 
-  if (newText)
+  if (newText) {
     reset(newText);
+    SDL_FreeSurface(newText);
+  }
   else
     Log::getGlobal().get(Log::WARNING) << "Text: failed to render text: \""<<text<<"\""<<std::endl;
 }

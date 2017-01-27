@@ -63,8 +63,8 @@ public:
     game(game)
   {
     // All handlers will be run inside calls to StormancerConnection::update()
-    config->actionDispatcher = std::make_shared<Stormancer::MainThreadActionDispatcher>();
-    config->actionDispatcher->start();
+    //config->actionDispatcher = std::make_shared<Stormancer::MainThreadActionDispatcher>();
+    //config->actionDispatcher->start();
 
     // Connect to the scene, then retrieve the scene's map filename.
 
@@ -156,7 +156,7 @@ void StormancerConnection::spawn(const Color &color, const Vector<float> &pos, i
 
 void StormancerConnection::update()
 {
-  static_cast<Stormancer::MainThreadActionDispatcher &>(*pimpl->config->actionDispatcher).update(std::chrono::milliseconds(10));
+  //static_cast<Stormancer::MainThreadActionDispatcher &>(*pimpl->config->actionDispatcher).update(std::chrono::milliseconds(10));
 }
 
 } // namespace game
