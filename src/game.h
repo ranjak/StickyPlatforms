@@ -34,6 +34,7 @@ public:
     LOADING,
     CLEARED,
     PAUSED,
+    CONNECTING,
     NB_STATES
   };
 

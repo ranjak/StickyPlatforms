@@ -14,6 +14,7 @@
 #include "loadlevelstate.h"
 #include "gameclearedstate.h"
 #include "pausedstate.h"
+#include "connectingstate.h"
 #include "util.h"
 #include <algorithm>
 #include <stdexcept>
@@ -43,8 +44,9 @@ game::Game::Game(Display & display, InputHandler & input, int camW, int camH, co
     std::make_unique<LoadLevelState>(*this, display),
     std::make_unique<GameClearedState>(*this),
     std::make_unique<PausedState>(*this),
+    std::make_unique<ConnectingState>(*this)
   },
-  mState(mStates[State::PLAYING].get()),
+  mState(mStates[State::CONNECTING].get()),
   mLevelTimes()
 {
   currentGame = this;
@@ -57,10 +59,6 @@ game::Game::Game(Display & display, InputHandler & input, int camW, int camH, co
 
   TextWidget &timerWidget = *static_cast<TextWidget *>(mUI.getByName("timer"));
   timerWidget.setPosition(mUI.getSize().x - timerWidget.getSize().x - 20.f, 20.f);
-
-  mInitialLevel = mStormancer.getMapFile();
-
-  changeLevel(mInitialLevel);
 }
 
 

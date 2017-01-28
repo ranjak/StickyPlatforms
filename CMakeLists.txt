@@ -75,6 +75,7 @@ set(SRC_LIST
     src/gameclearedstate.cpp
     src/playingstate.cpp
     src/pausedstate.cpp
+    src/connectingstate.cpp
     src/gamecommands.cpp
     src/world/level.cpp
     src/world/tile.cpp
@@ -151,12 +152,14 @@ set(HEADER_LIST
   src/system/graphics/text.h
   src/system/graphics/herosquare.h
   src/system/stormancerconnection.h
+  src/system/msgpack_adaptors.h
   src/game.h
   src/gamestate.h
   src/loadlevelstate.h
   src/gameclearedstate.h
   src/playingstate.h
   src/pausedstate.h
+  src/connectingstate.h
   src/gamecommands.h
   src/world/level.h
   src/world/tile.h
