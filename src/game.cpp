@@ -65,10 +65,12 @@ game::Game::Game(Display & display, InputHandler & input, int camW, int camH, co
 void Game::update(uint32_t step)
 {
   if (!mNextLevel.empty()) {
-    loadLevel(mNextLevel);
+    mLevel = Level::loadFromTmx(mNextLevel, mDisplay);
     mNextLevel.clear();
 
+    spawnHero();
     mStormancer.initGame();
+    setState<PlayingState>();
   }
 
   mStormancer.update();
@@ -98,9 +100,8 @@ void Game::changeLevel(const std::string &levelFile)
   mNextLevel = levelFile;
 }
 
-void Game::loadLevel(const std::string &levelFile)
+void Game::spawnHero()
 {
-  mLevel = Level::loadFromTmx(levelFile, mDisplay);
   mLevel->start(mStormancer.getUsername());
 
   mLevel->getHero()->getComponent<HealthComponent>()->setUI(static_cast<HealthBar *>(mUI.getByName("health")));

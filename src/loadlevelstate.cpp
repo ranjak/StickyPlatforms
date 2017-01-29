@@ -36,7 +36,7 @@ void LoadLevelState::update(uint32_t step)
   mTimeRemaining -= step;
 
   if (mTimeRemaining < 0) {
-    mGame.loadLevel(mNextLevel);
+    mGame.changeLevel(mNextLevel);
     mGame.setState<PlayingState>();
   }
 }

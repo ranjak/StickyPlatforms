@@ -79,8 +79,8 @@ public:
    * @param levelFile Path to the level file (relative to the game's executable directory)
    */
   void changeLevel(const std::string &levelFile);
-  // Load the given level right away, and spawn the player.
-  void loadLevel(const std::string &levelFile);
+  // Spawn the local player.
+  void spawnHero();
 
   const std::string &getInitialLevel() const;
 

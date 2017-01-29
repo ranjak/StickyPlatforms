@@ -69,18 +69,25 @@ public:
     client.reset(Stormancer::Client::createClient(config));
     // Connect to the scene, then retrieve the scene's map filename.
 
-    auto sceneResult = client->getPublicScene(sceneName.c_str()).get();
-    scene.reset(unwrapResult(*sceneResult, "Couldn't obtain the scene: "));
+    client->getPublicScene(sceneName.c_str()).then([this](Stormancer::Result<Stormancer::Scene *> *sceneResult)
+    {
+      scene.reset(unwrapResult(*sceneResult, "Couldn't obtain the scene: "));
 
-    registerRoutes();
+      registerRoutes();
+      return scene->connect();
+    }
+    ).then([this](Stormancer::Result<void> *connectResult)
+    {
+      unwrapResult(*connectResult, "Couldn't connect to the scene: ");
 
-    auto connectResult = scene->connect().get();
-    unwrapResult(*connectResult, "Couldn't connect to the scene: ");
-
-    rpc = scene->dependencyResolver()->resolve<Stormancer::IRpcService>();
-
-    auto getMapResult = rpc->rpc<std::string, std::string>("joinGame", username).get();
-    mapFile = unwrapResult(*getMapResult, "Couldn't join the game: ");
+      rpc = scene->dependencyResolver()->resolve<Stormancer::IRpcService>();
+      return rpc->rpc<std::string, std::string>("joinGame", this->username);
+    }
+    ).then([this](std::shared_ptr<Stormancer::Result<std::string>> joinResult)
+    {
+      mapFile = unwrapResult(*joinResult, "Couldn't join the game: ");
+      this->game.changeLevel(mapFile);
+    });
   }
 
   impl(const impl &) = delete;
@@ -110,7 +117,7 @@ private:
         game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.color, player.hp);
     });
 
-    scene->addRoute("playerLeft", [this](auto packet)
+    scene->addRoute("playerLeft", [this](Stormancer::Packetisp_ptr packet)
     {
       Entity* player = game.getLevel().entities().getEntity(packet->readObject<std::string>());
 
