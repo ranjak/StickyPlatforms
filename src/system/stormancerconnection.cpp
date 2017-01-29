@@ -62,10 +62,6 @@ public:
     rpc(),
     game(game)
   {
-    // All handlers will be run inside calls to StormancerConnection::update()
-    config->actionDispatcher = std::make_shared<Stormancer::MainThreadActionDispatcher>();
-    //config->actionDispatcher->start();
-
     client.reset(Stormancer::Client::createClient(config));
     // Connect to the scene, then retrieve the scene's map filename.
 
@@ -86,7 +82,7 @@ public:
     ).then([this](std::shared_ptr<Stormancer::Result<std::string>> joinResult)
     {
       mapFile = unwrapResult(*joinResult, "Couldn't join the game: ");
-      this->game.changeLevel(mapFile);
+      this->game.pushEvent([this] { this->game.changeLevel(mapFile); });
     });
   }
 
@@ -97,12 +93,17 @@ public:
   {
     rpc->rpc<std::vector<Player>>("getPlayerList").then([this](auto task)
     {
-      const std::vector<Player> &players = unwrapResult(*task.get());
+      auto resultPtr = task.get();
 
-      for (const Player &player : players) {
-        if (player.name != username)
-          game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.color, player.hp);
-      }
+      game.pushEvent([resultPtr, this]
+      {
+        const std::vector<Player> &players = unwrapResult(*resultPtr);
+
+        for (const Player &player : players) {
+          if (player.name != username)
+            game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.color, player.hp);
+        }
+      });
     });
   }
 
@@ -113,16 +114,24 @@ private:
     {
       Player player = packet->readObject<Player>();
 
-      if (player.name != username)
-        game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.color, player.hp);
+      game.pushEvent([player, this]
+      {
+        if (player.name != username)
+          game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.color, player.hp);
+      });
     });
 
     scene->addRoute("playerLeft", [this](Stormancer::Packetisp_ptr packet)
     {
-      Entity* player = game.getLevel().entities().getEntity(packet->readObject<std::string>());
+      std::string playerName = packet->readObject<std::string>();
+      
+      game.pushEvent([playerName, this]
+      {
+        Entity* player = game.getLevel().entities().getEntity(playerName);
 
-      if (player)
-        player->kill();
+        if (player)
+          player->kill();
+      });
     });
   }
 

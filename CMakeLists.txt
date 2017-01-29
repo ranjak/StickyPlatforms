@@ -77,6 +77,7 @@ set(SRC_LIST
     src/pausedstate.cpp
     src/connectingstate.cpp
     src/gamecommands.cpp
+    src/eventqueue.cpp
     src/world/level.cpp
     src/world/tile.cpp
     src/world/tileset.cpp
@@ -161,6 +162,7 @@ set(HEADER_LIST
   src/pausedstate.h
   src/connectingstate.h
   src/gamecommands.h
+  src/eventqueue.h
   src/world/level.h
   src/world/tile.h
   src/world/tileset.h

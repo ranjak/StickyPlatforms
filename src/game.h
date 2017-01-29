@@ -7,12 +7,14 @@
 #include "uipanel.h"
 #include "gamestate.h"
 #include "stormancerconnection.h"
+#include "eventqueue.h"
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <array>
 #include <type_traits>
 #include <vector>
+#include <functional>
 
 namespace game {
 
@@ -121,12 +123,15 @@ public:
 
   void reset();
 
+  void pushEvent(std::function<void()> action);
+
 private:
   static Game *currentGame;
 
   // Game commands bindings and status
   GameCommands mCommands;
   Display &mDisplay;
+  EventQueue mEvents;
   StormancerConnection mStormancer;
 
   // Current level

@@ -33,6 +33,7 @@ Game &Game::current()
 game::Game::Game(Display & display, InputHandler & input, int camW, int camH, const std::string & username, const std::string & scene) :
   mCommands(input),
   mDisplay(display),
+  mEvents(),
   mStormancer(username, scene, *this),
   mLevel(),
   mNextLevel(),
@@ -46,7 +47,7 @@ game::Game::Game(Display & display, InputHandler & input, int camW, int camH, co
     std::make_unique<PausedState>(*this),
     std::make_unique<ConnectingState>(*this)
   },
-  mState(mStates[State::CONNECTING].get()),
+  mState(),
   mLevelTimes()
 {
   currentGame = this;
@@ -59,6 +60,8 @@ game::Game::Game(Display & display, InputHandler & input, int camW, int camH, co
 
   TextWidget &timerWidget = *static_cast<TextWidget *>(mUI.getByName("timer"));
   timerWidget.setPosition(mUI.getSize().x - timerWidget.getSize().x - 20.f, 20.f);
+
+  setState<ConnectingState>();
 }
 
 
@@ -73,7 +76,7 @@ void Game::update(uint32_t step)
     setState<PlayingState>();
   }
 
-  mStormancer.update();
+  mEvents.processEvents();
   mState->handleInput(mCommands);
   mState->update(step);
 
@@ -184,6 +187,11 @@ void Game::reset()
   changeLevel(mInitialLevel);
   static_cast<PlayingState &>(*mStates[State::PLAYING]).reset();
   setState<PlayingState>();
+}
+
+void Game::pushEvent(std::function<void()> action)
+{
+  mEvents.push(action);
 }
 
 } //namespace game
