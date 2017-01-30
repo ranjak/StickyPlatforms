@@ -7,6 +7,7 @@
 #include "physicsmanager.h"
 #include "entity.h"
 #include "log.h"
+#include "stormancerconnection.h"
 #include <cmath>
 #include <algorithm>
 
@@ -67,6 +68,9 @@ void MovingPhysicsComponent::updateDelegate(uint32_t step, Game &game)
 
   mAccelerationSum.x = 0.f;
   mAccelerationSum.y = 0.f;
+
+  if (mEntity.sendsNetworkMessages())
+    game.network().updatePhysics(mEntity.getGlobalPos(), mVelocity);
 }
 
 void MovingPhysicsComponent::addAcceleration(const Vector<float> &acceleration)

@@ -185,4 +185,15 @@ void StormancerConnection::updateHealth(int hp)
   });
 }
 
+void StormancerConnection::updatePhysics(Vector<float> pos, Vector<float> velocity)
+{
+  pimpl->scene->sendPacket("updatePhysics", [=](Stormancer::bytestream *writer)
+  {
+    msgpack::packer<Stormancer::bytestream>(writer)
+      .pack_array(2)
+      .pack(pos)
+      .pack(velocity);
+  }, PacketPriority::LOW_PRIORITY, PacketReliability::UNRELIABLE_SEQUENCED);
+}
+
 } // namespace game

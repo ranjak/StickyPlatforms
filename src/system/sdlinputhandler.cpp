@@ -68,14 +68,14 @@ void SDLInputHandler::handle()
       }
       break;
 
-    case SDL_WINDOWEVENT:
-      if (mEvent.window.event == SDL_WINDOWEVENT_FOCUS_LOST &&
-          !(SDL_GetWindowFlags(SDL_GetWindowFromID(mEvent.window.windowID)) & SDL_WINDOW_INPUT_FOCUS))
-      {
-        mHasFocus = false;
-        MainLoop::setBlocked(true);
-      }
-      break;
+    //case SDL_WINDOWEVENT:
+    //  if (mEvent.window.event == SDL_WINDOWEVENT_FOCUS_LOST &&
+    //      !(SDL_GetWindowFlags(SDL_GetWindowFromID(mEvent.window.windowID)) & SDL_WINDOW_INPUT_FOCUS))
+    //  {
+    //    mHasFocus = false;
+    //    MainLoop::setBlocked(true);
+    //  }
+    //  break;
     }
   }
 }

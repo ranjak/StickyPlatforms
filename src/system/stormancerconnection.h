@@ -35,6 +35,8 @@ public:
 
   void updateHealth(int hp);
 
+  void updatePhysics(Vector<float> pos, Vector<float> velocity);
+
 private:
   class impl;
   std::unique_ptr<impl> pimpl;
