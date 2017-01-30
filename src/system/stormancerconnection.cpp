@@ -177,9 +177,12 @@ void StormancerConnection::spawn(const Color &color, const Vector<float> &pos, i
   });
 }
 
-void StormancerConnection::update()
+void StormancerConnection::updateHealth(int hp)
 {
-  static_cast<Stormancer::MainThreadActionDispatcher &>(*pimpl->config->actionDispatcher).update(std::chrono::milliseconds(10));
+  pimpl->scene->sendPacket("updateHp", [=](Stormancer::bytestream *writer)
+  {
+    msgpack::pack(writer, hp);
+  });
 }
 
 } // namespace game

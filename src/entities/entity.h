@@ -29,14 +29,14 @@ class Entity
 public:
   static const EntityID none;
 
-  virtual ~Entity();
+  ~Entity();
 
   /**
    * @brief update Update this entity, making its simulation advance by \p step.
    * @param step Time in milliseconds to simulate.
    * @param game Currently running game.
    */
-  virtual void update(std::uint32_t step, Game& game);
+  void update(std::uint32_t step, Game& game);
 
   /**
    * @brief sendMessage Send a message to the components of this entity.
@@ -83,6 +83,14 @@ public:
 
   const std::string &getName() const { return mName; }
 
+  void setRemote(bool isRemote);
+
+  /**
+   * @brief Whether this entity should send status updates to the server.
+   * This is true only for entities that are local to a game instance.
+   */
+  bool sendsNetworkMessages();
+
   friend std::ostream &operator<<(std::ostream &os, const Entity &e)
   {
     return os << "Entity(id="<<e.id<<",name="<<e.mName<<")";
@@ -104,6 +112,8 @@ public:
 protected:
   bool mIsEnabled;
   bool mIsDead;
+  // true if this entity is controlled from the network
+  bool mIsRemote;
   Rect<float> mBoundingBox;
   EntityID mParent;
   std::vector<EntityID> mChildren;

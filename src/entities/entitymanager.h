@@ -33,6 +33,7 @@ public:
   Entity *makeEntity(const Rect<float> &pos, const std::string &name="", EntityGroup group=EntityGroup::NONE, EntityID parent=Entity::none);
 
   EntityID createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, const Color &color, int hp);
+  EntityID createLocalHero(const std::string &name, const Vector<float> &pos);
 
   Entity *getEntity(EntityID id) const;
   Entity *getEntity(const std::string &name) const;

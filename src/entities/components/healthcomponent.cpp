@@ -6,6 +6,8 @@
 #include "game.h"
 #include "healthbar.h"
 #include "damagemsg.h"
+#include "stormancerconnection.h"
+#include <algorithm>
 
 namespace game {
 
@@ -38,13 +40,16 @@ void HealthComponent::receiveMessageDelegate(Message &msg)
 
       if (damage && (damage->target() & mEntity.group) && (damage->ignoresInvincibility() || Game::current().now() > mInvincibilityEnd)) {
 
-        mHealthPoints -= damage->points();
+        mHealthPoints = std::max(mHealthPoints - damage->points(), 0);
 
         // TODO decouple if the UI gets richer
         if (mUI)
           mUI->setHealth(mHealthPoints, mMaxHP);
 
-        if (mHealthPoints <= 0) {
+        if (mEntity.sendsNetworkMessages())
+          Game::current().network().updateHealth(mHealthPoints);
+
+        if (mHealthPoints == 0) {
           mEntity.kill();
           return;
         }

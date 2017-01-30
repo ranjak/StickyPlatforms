@@ -26,16 +26,14 @@ public:
   const std::string &getUsername();
 
   /**
-   * @brief Call once the level has been loaded.
+   * @brief Call once the level has been loaded:
+   * retrieves the list of live players.
    */
   void initGame();
 
   void spawn(const Color &color, const Vector<float> &pos, int hp);
 
-  /**
-   * @brief Process pending actions (message handlers, etc.)
-   */
-  void update();
+  void updateHealth(int hp);
 
 private:
   class impl;

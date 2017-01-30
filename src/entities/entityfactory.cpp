@@ -152,27 +152,51 @@ EntityID EntityFactory::createRemoteEntity(const std::string &type, const std::s
 {
   if (type == "RemoteHero") {
 
-    Entity *hero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
+    Entity *remoteHero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
+    remoteHero->setRemote(true);
 
-    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
+    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*remoteHero, false, true);
     std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>(*physics);
-    std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
+    std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*remoteHero, *physics, *input, 300.f, 200.f);
     std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(32, 32, color), control.get());
 
-    hero->addComponent(std::move(input));
-    hero->addComponent(std::move(control));
-    hero->addComponent(std::move(physics));
-    hero->addComponent(std::make_unique<WeaponComponent>(*hero));
-    hero->addComponent(std::make_unique<HealthComponent>(*hero, hp, 5));
-    hero->addComponent(std::move(graphics));
-    hero->addComponent(std::make_unique<CameraComponent>(*hero, std::make_unique<CameraAnchoredY>(*hero)));
+    remoteHero->addComponent(std::move(input));
+    remoteHero->addComponent(std::move(control));
+    remoteHero->addComponent(std::move(physics));
+    remoteHero->addComponent(std::make_unique<WeaponComponent>(*remoteHero));
+    remoteHero->addComponent(std::make_unique<HealthComponent>(*remoteHero, hp, 5));
+    remoteHero->addComponent(std::move(graphics));
 
-    return hero->id;
+    return remoteHero->id;
   }
   else {
     Log::getGlobal().get(Log::WARNING) << "EntityFactory: Unknown entity type: \"" << type << "\" for entity \"" << name << "\"" << std::endl;
     return Entity::none;
   }
+}
+
+EntityID EntityFactory::createLocalHero(const std::string &name, const Vector<float> &pos, EntityManager &manager)
+{
+  static Color color(getRandom(0, 255), getRandom(0, 255), getRandom(0, 255));
+  
+  Entity *hero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
+
+  std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
+  std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
+  std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
+  std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(32, 32, color), control.get());
+
+  hero->addComponent(std::move(input));
+  hero->addComponent(std::move(control));
+  hero->addComponent(std::move(physics));
+  hero->addComponent(std::make_unique<WeaponComponent>(*hero));
+  hero->addComponent(std::make_unique<HealthComponent>(*hero, 5));
+  hero->addComponent(std::move(graphics));
+  hero->addComponent(std::make_unique<CameraComponent>(*hero, std::make_unique<CameraAnchoredY>(*hero)));
+
+  Game::current().network().spawn(color, Vector<float>(pos.x, pos.y), 5);
+
+  return hero->id;
 }
 
 

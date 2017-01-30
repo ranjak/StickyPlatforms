@@ -44,6 +44,11 @@ EntityID EntityManager::createRemoteEntity(const std::string & type, const std::
   return EntityFactory::createRemoteEntity(type, name, pos, *this, color, hp);
 }
 
+EntityID EntityManager::createLocalHero(const std::string & name, const Vector<float>& pos)
+{
+  return EntityFactory::createLocalHero(name, pos, *this);
+}
+
 Entity *EntityManager::getEntity(EntityID id) const
 {
   ConstIterator it = mEntities.find(id);

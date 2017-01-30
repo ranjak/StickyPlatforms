@@ -17,6 +17,7 @@ Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundin
   group(group),
   mIsEnabled(true),
   mIsDead(false),
+  mIsRemote(false),
   mBoundingBox(boundingBox),
   mParent(Entity::none),
   mChildren(),
@@ -50,6 +51,16 @@ void Entity::prepareRemoveChild(EntityID child)
   // The child entity might not be present in the entity manager anymore,
   // notify my components to avoid dangling references
   sendMessage(std::make_unique<ChildRemovedMsg>(child));
+}
+
+void Entity::setRemote(bool isRemote)
+{
+  mIsRemote = isRemote;
+}
+
+bool Entity::sendsNetworkMessages()
+{
+  return !mIsRemote;
 }
 
 Entity::~Entity()

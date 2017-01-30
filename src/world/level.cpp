@@ -98,7 +98,7 @@ bool Level::start(const std::string & name, const std::string & startingPoint)
     return false;
   }
 
-  mHeroId = mEntities.makeEntity("Hero", name, playerStart->getGlobalBox());
+  mHeroId = mEntities.createLocalHero(name, playerStart->getGlobalPos());
   assert(mHeroId != Entity::none);
   return true;
 }
