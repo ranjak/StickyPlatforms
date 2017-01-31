@@ -26,5 +26,6 @@ void game::InputSenderComponent::updateDelegate(std::uint32_t step, Game & game)
       releasedKeys.push_back(key);
   }
 
-  game.network().updateKeys(hitKeys, releasedKeys);
+  if (!hitKeys.empty() || !releasedKeys.empty())
+    game.network().updateKeys(hitKeys, releasedKeys);
 }
