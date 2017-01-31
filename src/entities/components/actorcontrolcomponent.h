@@ -58,7 +58,6 @@ private:
   int mDirection;
 
   ActorState *mCurrentState;
-  State mNextState;
   InputComponent &mInput;
   MovingPhysicsComponent &mPhysics;
   Entity &mEntity;

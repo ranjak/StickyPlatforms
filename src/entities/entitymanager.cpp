@@ -19,6 +19,18 @@ EntityManager::EntityManager(Level &level) :
 
 }
 
+EntityManager::~EntityManager()
+{
+  /* Entities might access the entity map in their destructor.
+   * This breaks if they try to access it while the map is being destroyed;
+   * as a workaround, destroy them before destroying the map.
+   * TODO entities shouldn't access the map in their dtor.
+   */
+  for (EntityPair &entity : mEntities) {
+    entity.second.reset();
+  }
+}
+
 EntityID EntityManager::makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent, const TMX::PropertyMap &properties)
 {
   return EntityFactory::create(type, name, pos, *this, parent, properties);
@@ -39,9 +51,9 @@ Entity *EntityManager::makeEntity(const Rect<float> &pos, const std::string &nam
   }
 }
 
-EntityID EntityManager::createRemoteEntity(const std::string & type, const std::string & name, const Vector<float>& pos, const Color & color, int hp)
+EntityID EntityManager::createRemoteEntity(const std::string & type, const std::string & name, const Vector<float>& pos, const Vector<float> &vel, const Color & color, int hp)
 {
-  return EntityFactory::createRemoteEntity(type, name, pos, *this, color, hp);
+  return EntityFactory::createRemoteEntity(type, name, pos, vel, *this, color, hp);
 }
 
 EntityID EntityManager::createLocalHero(const std::string & name, const Vector<float>& pos)

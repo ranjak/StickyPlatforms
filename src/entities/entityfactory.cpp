@@ -148,14 +148,14 @@ EntityID EntityFactory::create(const std::string &type, const std::string &name,
   }
 }
 
-EntityID EntityFactory::createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, EntityManager &manager, const Color &color, int hp)
+EntityID EntityFactory::createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, const Vector<float> &vel, EntityManager &manager, const Color &color, int hp)
 {
   if (type == "RemoteHero") {
 
     Entity *remoteHero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
     remoteHero->setRemote(true);
 
-    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*remoteHero, false, true);
+    std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*remoteHero, false, true, vel);
     std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>(*physics);
     std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*remoteHero, *physics, *input, 300.f, 200.f);
     std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(32, 32, color), control.get());

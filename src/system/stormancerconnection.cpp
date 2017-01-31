@@ -101,7 +101,7 @@ public:
 
         for (const Player &player : players) {
           if (player.name != username)
-            game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.color, player.hp);
+            game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.velocity, player.color, player.hp);
         }
       });
     });
@@ -117,7 +117,7 @@ private:
       game.pushEvent([player, this]
       {
         if (player.name != username)
-          game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.color, player.hp);
+          game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.velocity, player.color, player.hp);
       });
     });
 

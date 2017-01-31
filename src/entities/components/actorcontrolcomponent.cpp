@@ -12,7 +12,6 @@ namespace game {
 ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsComponent &physics, InputComponent &input, float maxSpeed, float maxAirSpeed) :
   mMaxSpeed(maxSpeed),
   mCurrentState(),
-  mNextState(AIR),
   mInput(input),
   mPhysics(physics),
   mEntity(entity),
@@ -25,17 +24,11 @@ ActorControlComponent::ActorControlComponent(Entity &entity, MovingPhysicsCompon
   mClimbPlatformState(*this),
   mFallState(*this)
 {
-
+  setState(AIR);
 }
 
 void ActorControlComponent::updateDelegate(uint32_t step, Game &game)
 {
-  // For initialization, and states that might need a delayed call to enter()
-  if (mNextState != NONE) {
-    setState(mNextState);
-    mNextState = NONE;
-  }
-
   mCurrentState->update(step, game);
 }
 

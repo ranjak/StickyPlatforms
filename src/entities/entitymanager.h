@@ -28,11 +28,12 @@ public:
   using ConstIterator = std::map<EntityID, std::unique_ptr<Entity>>::const_iterator;
 
   EntityManager(Level &level);
+  ~EntityManager();
 
   EntityID makeEntity(const std::string &type, const std::string &name, const Rect<float> &pos, EntityID parent=Entity::none, const TMX::PropertyMap &properties={});
   Entity *makeEntity(const Rect<float> &pos, const std::string &name="", EntityGroup group=EntityGroup::NONE, EntityID parent=Entity::none);
 
-  EntityID createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, const Color &color, int hp);
+  EntityID createRemoteEntity(const std::string &type, const std::string &name, const Vector<float> &pos, const Vector<float> &vel, const Color &color, int hp);
   EntityID createLocalHero(const std::string &name, const Vector<float> &pos);
 
   Entity *getEntity(EntityID id) const;

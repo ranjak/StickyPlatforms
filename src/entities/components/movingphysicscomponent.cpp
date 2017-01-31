@@ -19,9 +19,9 @@ const float MovingPhysicsComponent::FALL_SPEED = 1000.f;
 
 static const Vector<float> gravityAccel(0.f, MovingPhysicsComponent::GRAVITY);
 
-MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle, bool hasGravity) :
+MovingPhysicsComponent::MovingPhysicsComponent(Entity &owner, bool isObstacle, bool hasGravity, Vector<float> initialVelocity) :
   PhysicsComponent(owner, isObstacle),
-  mVelocity(0.f, 0.f),
+  mVelocity(initialVelocity),
   mRemainder(0.f, 0.f),
   mAccelerationSum(0.f, 0.f),
   mIsOnGround(false),

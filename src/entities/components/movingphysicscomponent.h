@@ -20,7 +20,7 @@ public:
   static const float GRAVITY;
   static const float FALL_SPEED;
 
-  MovingPhysicsComponent(Entity &owner, bool isObstacle=true, bool hasGravity=true);
+  MovingPhysicsComponent(Entity &owner, bool isObstacle=true, bool hasGravity=true, Vector<float> initialVelocity={});
 
   ~MovingPhysicsComponent();
 
