@@ -27,6 +27,8 @@ enum Command {
   NB_CMD
 };
 
+extern const int NbGameplayCommands;
+
 class GameCommands
 {
 public:

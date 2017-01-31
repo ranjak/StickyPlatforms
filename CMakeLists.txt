@@ -115,6 +115,8 @@ set(SRC_LIST
     src/entities/components/graphicscomponent.cpp
     src/entities/components/cameracomponent.cpp
     src/entities/components/triggercomponent.cpp
+    src/entities/components/inputsendercomponent.cpp
+    src/entities/components/remoteinputcomponent.cpp
     src/ui/uiwidget.cpp
     src/ui/healthbar.cpp
     src/ui/textwidget.cpp
@@ -200,6 +202,8 @@ set(HEADER_LIST
   src/entities/components/graphicscomponent.h
   src/entities/components/cameracomponent.h
   src/entities/components/triggercomponent.h
+  src/entities/components/inputsendercomponent.h
+  src/entities/components/remoteinputcomponent.h
   src/ui/uiwidget.h
   src/ui/healthbar.h
   src/ui/textwidget.h

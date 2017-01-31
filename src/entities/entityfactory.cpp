@@ -28,6 +28,8 @@
 #include "game.h"
 #include "util.h"
 #include "stormancerconnection.h"
+#include "inputsendercomponent.h"
+#include "remoteinputcomponent.h"
 #include <string>
 
 namespace game {
@@ -156,16 +158,17 @@ EntityID EntityFactory::createRemoteEntity(const std::string &type, const std::s
     remoteHero->setRemote(true);
 
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*remoteHero, false, true, vel);
-    std::unique_ptr<InputComponent> input = std::make_unique<BasicAiComponent>(*physics);
+    std::unique_ptr<InputComponent> input = std::make_unique<RemoteInputComponent>();
     std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*remoteHero, *physics, *input, 300.f, 200.f);
     std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(32, 32, color), control.get());
 
-    remoteHero->addComponent(std::move(input));
     remoteHero->addComponent(std::move(control));
     remoteHero->addComponent(std::move(physics));
     remoteHero->addComponent(std::make_unique<WeaponComponent>(*remoteHero));
     remoteHero->addComponent(std::make_unique<HealthComponent>(*remoteHero, hp, 5));
     remoteHero->addComponent(std::move(graphics));
+    // Input is received before update() is called, so we want hit/released status to be reset last, so other components can properly react to input
+    remoteHero->addComponent(std::move(input));
 
     return remoteHero->id;
   }
@@ -182,11 +185,13 @@ EntityID EntityFactory::createLocalHero(const std::string &name, const Vector<fl
   Entity *hero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
 
   std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
+  std::unique_ptr<InputSenderComponent> inputUpdater(new InputSenderComponent(*input));
   std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*hero, false, true);
   std::unique_ptr<ActorControlComponent> control = std::make_unique<ActorControlComponent>(*hero, *physics, *input, 300.f, 200.f);
   std::unique_ptr<GraphicsComponent> graphics = std::make_unique<GraphicsComponent>(std::make_unique<HeroSquare>(32, 32, color), control.get());
 
   hero->addComponent(std::move(input));
+  hero->addComponent(std::move(inputUpdater));
   hero->addComponent(std::move(control));
   hero->addComponent(std::move(physics));
   hero->addComponent(std::make_unique<WeaponComponent>(*hero));

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace game
 {
@@ -36,6 +37,8 @@ public:
   void updateHealth(int hp);
 
   void updatePhysics(Vector<float> pos, Vector<float> velocity);
+
+  void updateKeys(std::vector<int> pressed, std::vector<int> released);
 
 private:
   class impl;

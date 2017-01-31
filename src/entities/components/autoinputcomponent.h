@@ -22,7 +22,7 @@ protected:
 
   void updateDelegate(std::uint32_t, Game &) override;
 
-private:
+protected:
   std::vector<Command> mHitCommands;
   std::vector<Command> mHeldCommands;
   std::vector<Command> mReleasedCommands;

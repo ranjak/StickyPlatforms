@@ -3,6 +3,7 @@
 
 namespace game {
 
+const int NbGameplayCommands = Command::RESET;
 
 GameCommands::GameCommands(InputHandler &input) :
   mBindings { SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_SPACE, SDL_SCANCODE_F,

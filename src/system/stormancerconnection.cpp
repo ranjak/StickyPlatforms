@@ -2,7 +2,11 @@
 #include "game.h"
 #include "stormancer.h"
 #include "msgpack_adaptors.h"
+#include "gamecommands.h"
+#include "remoteinputcomponent.h"
 #include <vector>
+#include <array>
+#include <algorithm>
 
 
 namespace game
@@ -36,8 +40,9 @@ namespace
     Vector<float> position;
     Vector<float> velocity;
     int hp;
+    std::vector<bool> keyStatus;
 
-    MSGPACK_DEFINE(name, color, position, velocity, hp)
+    MSGPACK_DEFINE(name, color, position, velocity, hp, keyStatus)
   };
 
   struct SpawnMsg
@@ -47,6 +52,15 @@ namespace
     int hp;
 
     MSGPACK_DEFINE(color, pos, hp)
+  };
+
+  struct InputUpdate
+  {
+    std::string name;
+    std::vector<int> pressed;
+    std::vector<int> released;
+
+    MSGPACK_DEFINE(name, pressed, released)
   };
 }
 
@@ -100,8 +114,15 @@ public:
         const std::vector<Player> &players = unwrapResult(*resultPtr);
 
         for (const Player &player : players) {
-          if (player.name != username)
-            game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.velocity, player.color, player.hp);
+          if (player.name != username) {
+            EntityID entity = game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.velocity, player.color, player.hp);
+            
+            auto input = game.getLevel().entities().getEntity(entity)->getComponent<RemoteInputComponent>();
+            for (int i = 0; i < player.keyStatus.size(); i++) {
+              if (player.keyStatus[i])
+                input->hitCommand(i);
+            }
+          }
         }
       });
     });
@@ -113,11 +134,12 @@ private:
     scene->addRoute("newPlayer", [this](Stormancer::Packetisp_ptr packet)
     {
       Player player = packet->readObject<Player>();
+      if (player.name == username)
+        return;
 
       game.pushEvent([player, this]
       {
-        if (player.name != username)
-          game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.velocity, player.color, player.hp);
+        game.getLevel().entities().createRemoteEntity("RemoteHero", player.name, player.position, player.velocity, player.color, player.hp);
       });
     });
 
@@ -131,6 +153,25 @@ private:
 
         if (player)
           player->kill();
+      });
+    });
+
+    scene->addRoute("remoteInputUpdate", [this](Stormancer::Packetisp_ptr packet)
+    {
+      InputUpdate msg = packet->readObject<InputUpdate>();
+      if (msg.name == username)
+        return;
+
+      game.pushEvent([msg, this]
+      {
+        Entity* player = game.getLevel().entities().getEntity(msg.name);
+
+        if (!player)
+          return;
+
+        auto input = player->getComponent<RemoteInputComponent>();
+        std::for_each(msg.pressed.begin(), msg.pressed.end(), [input](int key){ input->hitCommand(key); });
+        std::for_each(msg.released.begin(), msg.released.end(), [input](int key) { input->releaseCommand(key); });
       });
     });
   }
@@ -194,6 +235,17 @@ void StormancerConnection::updatePhysics(Vector<float> pos, Vector<float> veloci
       .pack(pos)
       .pack(velocity);
   }, PacketPriority::LOW_PRIORITY, PacketReliability::UNRELIABLE_SEQUENCED);
+}
+
+void StormancerConnection::updateKeys(std::vector<int> pressed, std::vector<int> released)
+{
+  pimpl->scene->sendPacket("updateKeys", [=](Stormancer::bytestream *writer)
+  {
+    msgpack::packer<Stormancer::bytestream>(writer)
+      .pack_array(2)
+      .pack(pressed)
+      .pack(released);
+  }, PacketPriority::HIGH_PRIORITY, PacketReliability::RELIABLE_ORDERED);
 }
 
 } // namespace game
