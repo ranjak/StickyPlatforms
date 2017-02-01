@@ -83,7 +83,7 @@ public:
 
   const std::string &getName() const { return mName; }
 
-  void setRemote(bool isRemote);
+  void setShouldSendNetMessages(bool on);
 
   /**
    * @brief Whether this entity should send status updates to the server.
@@ -113,7 +113,7 @@ protected:
   bool mIsEnabled;
   bool mIsDead;
   // true if this entity is controlled from the network
-  bool mIsRemote;
+  bool mSendsNetMessages;
   Rect<float> mBoundingBox;
   EntityID mParent;
   std::vector<EntityID> mChildren;

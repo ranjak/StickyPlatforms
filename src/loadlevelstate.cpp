@@ -36,7 +36,9 @@ void LoadLevelState::update(uint32_t step)
   mTimeRemaining -= step;
 
   if (mTimeRemaining < 0) {
-    mGame.changeLevel(mNextLevel);
+    // In multiplayer, we never change the level, just respawn the player
+    //mGame.changeLevel(mNextLevel);
+    mGame.spawnHero();
     mGame.setState<PlayingState>();
   }
 }

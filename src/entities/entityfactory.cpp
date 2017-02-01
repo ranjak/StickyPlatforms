@@ -155,7 +155,6 @@ EntityID EntityFactory::createRemoteEntity(const std::string &type, const std::s
   if (type == "RemoteHero") {
 
     Entity *remoteHero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
-    remoteHero->setRemote(true);
 
     std::unique_ptr<MovingPhysicsComponent> physics = std::make_unique<MovingPhysicsComponent>(*remoteHero, false, true, vel);
     std::unique_ptr<InputComponent> input = std::make_unique<RemoteInputComponent>();
@@ -183,6 +182,7 @@ EntityID EntityFactory::createLocalHero(const std::string &name, const Vector<fl
   static Color color(getRandom(0, 255), getRandom(0, 255), getRandom(0, 255));
   
   Entity *hero = manager.makeEntity(Rect<float>(pos.x, pos.y, 32, 32), name, EntityGroup::ALLY);
+  hero->setShouldSendNetMessages(true);
 
   std::unique_ptr<InputComponent> input = std::make_unique<PlayerInputComponent>();
   std::unique_ptr<InputSenderComponent> inputUpdater(new InputSenderComponent(*input));

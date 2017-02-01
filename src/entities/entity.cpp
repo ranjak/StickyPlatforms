@@ -17,7 +17,7 @@ Entity::Entity(EntityID id, EntityManager &container, const Rect<float> &boundin
   group(group),
   mIsEnabled(true),
   mIsDead(false),
-  mIsRemote(false),
+  mSendsNetMessages(false),
   mBoundingBox(boundingBox),
   mParent(Entity::none),
   mChildren(),
@@ -53,14 +53,14 @@ void Entity::prepareRemoveChild(EntityID child)
   sendMessage(std::make_unique<ChildRemovedMsg>(child));
 }
 
-void Entity::setRemote(bool isRemote)
+void Entity::setShouldSendNetMessages(bool on)
 {
-  mIsRemote = isRemote;
+  mSendsNetMessages = on;
 }
 
 bool Entity::sendsNetworkMessages()
 {
-  return !mIsRemote;
+  return mSendsNetMessages;
 }
 
 Entity::~Entity()

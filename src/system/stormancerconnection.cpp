@@ -59,8 +59,9 @@ namespace
     std::string name;
     std::vector<int> pressed;
     std::vector<int> released;
+    Vector<float> pos;
 
-    MSGPACK_DEFINE(name, pressed, released)
+    MSGPACK_DEFINE(name, pressed, released, pos)
   };
 }
 
@@ -172,6 +173,8 @@ private:
         auto input = player->getComponent<RemoteInputComponent>();
         std::for_each(msg.pressed.begin(), msg.pressed.end(), [input](int key){ input->hitCommand(key); });
         std::for_each(msg.released.begin(), msg.released.end(), [input](int key) { input->releaseCommand(key); });
+        // Synchronize the position when the input changes
+        player->setGlobalPos(msg.pos);
       });
     });
   }
