@@ -98,6 +98,16 @@ public:
     {
       mapFile = unwrapResult(*joinResult, "Couldn't join the game: ");
       this->game.pushEvent([this] { this->game.changeLevel(mapFile); });
+    }
+    ).then([this](auto task)
+    {
+      try {
+        task.get();
+      }
+      catch (std::exception&) {
+        std::exception_ptr exp = std::current_exception();
+        this->game.pushEvent([exp] { std::rethrow_exception(exp); });
+      }
     });
   }
 
