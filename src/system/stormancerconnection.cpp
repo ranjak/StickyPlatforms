@@ -13,7 +13,7 @@ namespace game
 {
 namespace
 {
-  const std::string endpoint = "https://api.stormancer.com/";
+  const std::string endpoint = "http://api.stormancer.com/";
   const std::string account = "ranjak";
   const std::string application = "stickyplatforms";
 

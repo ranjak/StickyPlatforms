@@ -29,7 +29,7 @@ void HealthComponent::receiveMessageDelegate(Message &msg)
 
     Collision &col = static_cast<Collision &>(msg);
 
-    if (col.entity != Entity::none) {
+    if (col.entity != Entity::none && col.entity != mEntity.id) {
 
       Entity *other = Game::current().getLevel().entities().getEntity(col.entity);
 
@@ -38,7 +38,7 @@ void HealthComponent::receiveMessageDelegate(Message &msg)
 
       DamageComponent *damage = other->getComponent<DamageComponent>();
 
-      if (damage && (damage->target() & mEntity.group) && (damage->ignoresInvincibility() || Game::current().now() > mInvincibilityEnd)) {
+      if (damage && (other->getParent() != &mEntity) && (damage->ignoresInvincibility() || Game::current().now() > mInvincibilityEnd)) {
 
         mHealthPoints = std::max(mHealthPoints - damage->points(), 0);
 
