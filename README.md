@@ -63,7 +63,8 @@ So far, the game has been tested on Linux and Windows only, but it should work a
 
 ## License
 
-MIT
+The game is licensed under the MIT license.
+TMXParser/TSXParser, located in src/3rdparty/tmxparser, are licensed under the GPLv3 license.
 
 ## Credits
 
